@@ -27,14 +27,32 @@ class Sequence_Step{
 		this.elm.querySelector(".number").innerText = `#${this.opts.index}`;
 		this.elm.querySelector(".duration").innerText = `${this.opts.duration}`;
 
+		// Update handler for duration
+		this.elm.querySelector(".duration").addEventListener('keydown', function(e) {
+			if(e.key === 'Enter'){
+				e.preventDefault();
+			  	e.target.blur();
+			}
+		});
+		this.elm.querySelector(".duration").addEventListener("blur", (e) => {
+			e.preventDefault();
+			this.opts.duration = parseInt(e.target.innerHTML);
+			e.target.innerHTML = this.opts.duration;
+		});
+
+		// ////////////////
 		// Set handlers for toggling segments on and off
+
+		// When dragging _not_ from a segment, use mouse to toggle segments on/off
 		this.elm.querySelector(".watch_face").addEventListener("mousedown", (e) => {
 			e.preventDefault();
 			this._hover_drag.is_active = true;
 			this._hover_drag.setting_option = "toggle";
 		});
 
+
 		this.elm.querySelectorAll(".lcd_segment").forEach((segment) => {
+			// On mouse down, toggle and start drag based on state change that just occurred
 			segment.addEventListener("mousedown", (e) => {
 				e.preventDefault();
 				e.stopPropagation();

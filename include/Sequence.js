@@ -36,7 +36,6 @@ class Sequence{
 	get_step(start_time, time_now = Date.now()){
 		
 		const time_point = (time_now-start_time) % this._total_duration;
-		console.log(time_point);
 
 		let duration_before_this_step = 0;
 		for(let step of this._steps){
@@ -48,6 +47,7 @@ class Sequence{
 				duration_before_this_step += step.get_duration();
 			}
 		}
+		return step;
 	}
 
 	// Re-calculate the total sequence length
@@ -68,7 +68,13 @@ class Sequence{
 		});
 		
 		// Add to screen
-		this.opts.elm.querySelector(".sequence_steps").querySelector(".add_step").before(new_step.get_dom());
+		const new_step_dom = new_step.get_dom();
+		this.opts.elm.querySelector(".sequence_steps").querySelector(".add_step").before(new_step_dom);
+
+		// Add handler to capture duration changes
+		new_step_dom.querySelector(".duration").addEventListener("blur", (e) => {
+			this.update_total_duration();
+		});
 
 		// Save step
 		this._steps.push(new_step);
