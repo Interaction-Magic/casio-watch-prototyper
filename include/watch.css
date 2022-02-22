@@ -1,0 +1,138 @@
+/* ********************************************** */
+/* General */
+/* ********************************************** */
+.segment_components{
+	display: none;
+}
+
+/* ********************************************** */
+/* Live display of current animation in top right */
+/* ********************************************** */
+.live_output{
+	position: absolute;
+	top: 30px;
+	right: 30px;
+	width: 33%;
+	max-width: 600px;
+	padding: 0 20px;
+}
+.watch_wrapper{
+	width: 100%;
+}
+.watch_wrapper svg{
+	width: 100%;
+}
+.watch_wrapper .lcd_segment{
+	fill: #304246;
+}
+.watch_triggers{
+	position: absolute;
+	left: 20px;
+	top: 0;
+	bottom: 0;
+	right: 20px;
+}
+.watch_button{
+	border-radius: 100%;
+	background: white;
+	position: absolute;
+	width: 16%;
+	height: 16%;
+	opacity: 0;
+	mix-blend-mode: overlay;
+	transform: translate(-50%, -50%);
+}
+.watch_button:hover{
+	opacity: 0.5;
+}
+.watch_button:focus{
+	opacity: 1;
+	background: greenyellow;
+}
+.watch_button_light{left:    1%; top: 38.5%;}
+.watch_button_mode {left:    1%; top: 61.0%;}
+.watch_button_alarm{left: 98.5%; top: 61.0%;}
+
+
+/* ********************************************** */
+/* Animations */
+/* ********************************************** */
+main{
+	padding: 20px;
+}
+
+.animation_prototype{
+	display: none !important;
+}
+.animation_step_prototype{
+	display: none !important;
+}
+
+.animation{
+	background:rgba(255,255,255,0.1);
+	width: 100%;
+	min-height: 100px;
+	padding: 10px 0 0 10px;
+	display: flex;
+	flex-wrap: wrap;
+	border-radius: 22px;
+	margin-bottom: 10px;
+	align-items: center;
+}
+
+.add_step{
+	border-radius: 12px;
+	width:40px;
+	height: 40px;
+	color: rgba(255,255,255,0.2);
+	font-size: 28px;
+	font-weight: 500;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	background: rgba(0,0,0,0.2);
+}
+.add_step:hover{
+	background: rgba(0,0,0,0.6);
+	color: rgba(255,255,255,0.8);
+	cursor: pointer;
+}
+
+/* ********************************************** */
+/* Individual animation step */
+/* ********************************************** */
+
+.animation_step{
+	margin: 0 10px 40px 0;
+	position: relative;
+}
+.watch_face{
+	background: rgba(255,255,255,0.2);
+	width: 300px;
+	padding: 10px;
+	border-radius: 12px;
+	position: relative;
+	z-index: 20;
+}
+.step_data{
+	background: rgba(0,0,0,0.2);
+	border-radius: 12px;
+	padding: 5px 15px;
+	position: absolute;
+	left: 0;
+	top :0;
+	bottom: -30px;
+	right: 0;
+	z-index: 10;
+	display: flex;
+	align-items: end;
+	justify-content: space-between;
+}
+.step_data .duration{padding:2px 4px;}
+.step_data .duration:after{content: "ms";}
+.step_data .duration:hover{background: rgba(255,255,255,0.2);}
+.step_data .duration:focus{background: rgba(0,0,0,0.2); outline: none;}
+
+.watch_face .lcd_segment{opacity: 0.15;}
+.watch_face .lcd_segment.hover{opacity: 0.7;}
+.watch_face .lcd_segment.on{opacity: 1;}

@@ -1,0 +1,218 @@
+html, body{
+	width: 100%;
+	height: 100%;
+	margin: 0;
+	padding: 0;
+}
+a{
+	color:blue;
+}
+body{
+	background-color: rgb(19, 44, 61);
+	color: rgb(246, 246, 246);
+	font-family: "Roboto", sans-serif;
+}
+
+
+.wrapper{
+	position: relative;
+	width: 100%;
+	max-width: max(100% - 690px, calc(66% - 80px));
+}
+
+main{
+	position: relative;
+	display: flex;
+	align-items: center;
+	flex-direction: column;
+	flex-grow: 1;
+
+	-webkit-user-select: none;  
+	-moz-user-select: none;    
+	-ms-user-select: none;      
+	user-select: none;
+}
+
+/* Warning banner */
+
+.api_warning{
+	background:rgb(220, 43, 12);
+	color: white;
+	padding: 15px;
+	font-weight: 300;
+}
+.api_warning strong{
+	font-weight: 500;
+}
+.api_warning::before{
+	content: '⚠️ ';
+}
+
+/* Logo menu */
+.logo_menu{
+	display: flex;
+	flex-direction: column;
+	z-index: 200;
+	align-items: flex-start;
+	padding: 20px 20px 0 20px;
+}
+.logo_menu img{
+	width: 50px;
+	opacity: 0.4;
+	display: block;
+	margin-bottom: 0.4em;
+}
+.logo_menu a{
+	color: white;
+	background-color: rgba(0,0,0,0.4);
+	text-decoration: none;
+	font-weight: 500;
+	margin: 0.1em 0 0.4em 0em;
+	padding: 0.5em 0.7em;
+	font-size: 0.8em;
+	position: relative;
+}
+.logo_menu a:hover{
+	color: rgb(19, 44, 61);
+	background-color: white;
+}
+.logo_menu a:first-of-type{
+	margin-top: 0.4em;
+	border-top-right-radius: 40px;
+   border-bottom-right-radius: 40px;
+}
+a.connect{
+	padding-right: 25px;
+}
+a.connect::before{
+	content: '';
+	width: 10px;
+	height: 10px;
+	top: calc(50% - 5px);
+	right: 8px;
+	background: red;
+	position: absolute;
+	border-radius: 100%;
+}
+a.connect.connected::before{
+	background:greenyellow;
+}
+
+.notes{
+	font-family: "IBM Plex Mono", monospace;
+	font-size: 0.8em;
+	opacity: 1;
+	transition: opacity 0.2s ease-out;
+	max-width: 250px;
+}
+.notes.hide-notes{
+	opacity: 0;
+}
+
+/* Logger */
+.log-container{
+	width: 400px;
+	background: rgba(8,8,8,0.25);
+	display: flex;
+   flex-direction: column;
+	align-self: stretch;
+	transition: width 0.3s ease-out;
+	position: relative;
+
+
+	display: none;
+}
+
+.show_settings{
+	position: absolute;
+	background: rgba(8,8,8,0.25);
+	text-decoration: none;
+	width: 25px;
+	font-size: 0.8em;
+	left: -30px;
+	top: 18px;
+	height: 25px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+.show_settings:hover{
+	background: white;
+}
+
+.log-container.hide-log{
+	width: 0vw;
+}
+.log-container.hide-log .show_settings{
+	display: none;
+}
+
+
+.log{
+	padding: 20px;
+	overflow-y: scroll;
+	-ms-scrollbar-color: white rgba(8,8,8,0.4);
+	scrollbar-color: white rgba(8,8,8,0.4);
+	height: 100%;
+	font-family: "IBM Plex Mono", monospace;
+	font-size: 0.8em;
+	font-weight: 400;
+	overflow-x: hidden;
+	box-sizing: border-box;
+}
+.log p{
+	margin: 0;
+	height: 21px;
+	line-height: 21px;
+	white-space: nowrap;
+}
+.log::-webkit-scrollbar{background: rgba(8,8,8,0.4);}
+.log::-webkit-scrollbar-thumb, .log::-webkit-scrollbar-button{background: white;}
+.log::-webkit-scrollbar-button{height: 0px;}
+
+.log p.status span{color:white;}
+.log p.error span.msg{color:red;}
+.log p.error span.msg::before{content: "⚠️ ";}
+.log p.ping span{color:rgba(255,255,255,0.6);}
+.log p::after{padding-left: 7px;}
+.log p.is_validated::after{content: "✅";}
+.log p.is_retrying::after{content: "⏳";}
+.log p.is_failed{cursor: pointer;}
+.log p.is_failed:hover::after{content: "🔁"; color:lightblue;}
+.log p.is_failed::after{content: "❌";}
+
+.log .time{opacity: 0.3;}
+.log p:hover .time{opacity: 1;}
+.log p:not(.input) + p.input, .log p:not(.external_input) + p.external_input{margin-top: 0.8em;}
+
+.log p.error{display:none;}
+.log p.ping{display:none;}
+.log.show_errors p.error{display: block;}
+.log.show_pings p.ping{display: block;}
+
+.log .setting{display: none;}
+.filter-settings .setting{display: block;}
+
+/* Options buttons */
+.options{
+	display:flex;
+	justify-content: left;
+	margin: 0.5em 1em;
+}
+.options a{
+	color: white;
+	font-size: 0.8em;
+	margin: 0.5em;
+	text-decoration: none;
+	background: rgba(0,0,0,0.3);
+	padding: 0.4em 1em;
+	border-radius: 10px;
+	border: 2px solid rgba(0,0,0,0.4);
+}
+.options a:hover{
+	background: rgba(0,0,0,0.8);
+}
+.options a:focus{
+	background: rgba(241, 241, 241, 0.8);
+	color: black;
+}
