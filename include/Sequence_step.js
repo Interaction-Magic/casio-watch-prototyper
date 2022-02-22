@@ -24,7 +24,7 @@ class Sequence_Step{
 		// Create new sequence container in UI 
 		this.elm = document.querySelector(".sequence_step_prototype").cloneNode(true);
 		this.elm.classList.remove("sequence_step_prototype");
-		this.elm.querySelector(".number").innerText = `#${this.opts.index}`;
+		this.elm.querySelector(".number").innerText = `#${this.opts.index+1}`;
 		this.elm.querySelector(".duration").innerText = `${this.opts.duration}`;
 
 		// Update handler for duration
