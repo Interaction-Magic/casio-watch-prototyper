@@ -1,8 +1,8 @@
 //
-// Single animation step
+// Single sequence step
 //
 
-class Animation_Step{
+class Sequence_Step{
 
 	// Default options are below
 	_default_opts = {
@@ -21,9 +21,9 @@ class Animation_Step{
 		// Merge opts with defaults
 		this.opts = {...this._default_opts, ...opts};
 
-		// Create new animation container in UI 
-		this.elm = document.querySelector(".animation_step_prototype").cloneNode(true);
-		this.elm.classList.remove("animation_step_prototype");
+		// Create new sequence container in UI 
+		this.elm = document.querySelector(".sequence_step_prototype").cloneNode(true);
+		this.elm.classList.remove("sequence_step_prototype");
 		this.elm.querySelector(".number").innerText = `#${this.opts.index}`;
 		this.elm.querySelector(".duration").innerText = `${this.opts.duration}`;
 
@@ -79,6 +79,17 @@ class Animation_Step{
 		return this.elm;
 	}
 
+	//
+	// Returns an object with segment data stored in it
+	get_data(){
+		return this._segment_data;
+	}
+
+	// Other helpful getters
+	get_duration(){
+		return this.opts.duration;
+	}
+
 	// Returns the segment sequence for this step
 	update_sequence(){
 
@@ -110,7 +121,8 @@ class Animation_Step{
 			const digit_elm = this.elm.querySelector(`.${digit}`);
 
 			let digit_data = {
-				group: digit,
+				type: "digit",
+				digit: digit,
 				data: {}
 			};
 			for(let letter of digit_letters){
@@ -131,7 +143,7 @@ class Animation_Step{
 
 		// Get data for the "special" section
 		this._segment_data.push({
-			group: "special",
+			type: "special",
 			data: {
 				colon: 	this._is_segment_on(this.elm.querySelector('.colon')),
 				signal: 	this._is_segment_on(this.elm.querySelector('.signal')),
@@ -141,8 +153,6 @@ class Animation_Step{
 				lap: 		this._is_segment_on(this.elm.querySelector('.lap')),
 			}
 		});
-
-		console.log(this._segment_data);
 	}
 
 	_is_segment_on(segment){

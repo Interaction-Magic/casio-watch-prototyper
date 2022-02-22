@@ -6,7 +6,7 @@
 }
 
 /* ********************************************** */
-/* Live display of current animation in top right */
+/* Live display of current sequence in top right */
 /* ********************************************** */
 .live_output{
 	position: absolute;
@@ -23,7 +23,11 @@
 	width: 100%;
 }
 .watch_wrapper .lcd_segment{
+	opacity: 0.1;
 	fill: #304246;
+}
+.watch_wrapper .lcd_segment.on{
+	opacity: 1;
 }
 .watch_triggers{
 	position: absolute;
@@ -55,29 +59,51 @@
 
 
 /* ********************************************** */
-/* Animations */
+/* Sequences */
 /* ********************************************** */
 main{
 	padding: 20px;
 }
 
-.animation_prototype{
+.sequence_prototype{
 	display: none !important;
 }
-.animation_step_prototype{
+.sequence_step_prototype{
 	display: none !important;
 }
 
-.animation{
+.sequence{
 	background:rgba(255,255,255,0.1);
 	width: 100%;
 	min-height: 100px;
+	border-radius: 22px;
+	margin: 30px 0 10px;
+	position: relative;
+}
+.sequence_steps{
 	padding: 10px 0 0 10px;
 	display: flex;
 	flex-wrap: wrap;
-	border-radius: 22px;
-	margin-bottom: 10px;
 	align-items: center;
+	z-index: 50;
+	position: relative;
+}
+.sequence_data{
+	background: rgba(0,0,0,0.2);
+	border-radius: 22px;
+	padding: 5px 15px;
+	position: absolute;
+	left: 0;
+	top :-30px;
+	bottom: 0;
+	right: 0;
+	z-index: 10;
+	display: flex;
+	align-items: start;
+	justify-content: space-between;
+	border-top-left-radius: 0;
+	border-top-right-radius: 0;
+	z-index: 10;
 }
 
 .add_step{
@@ -98,11 +124,15 @@ main{
 	cursor: pointer;
 }
 
+.sequence_options a{
+	color: white;
+}
+
 /* ********************************************** */
-/* Individual animation step */
+/* Individual sequence step */
 /* ********************************************** */
 
-.animation_step{
+.sequence_step{
 	margin: 0 10px 40px 0;
 	position: relative;
 }

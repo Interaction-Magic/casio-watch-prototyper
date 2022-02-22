@@ -17,12 +17,13 @@
 		<div class="wrapper">
 			<div class="logo_menu">
 				<img src="assets/images/logo_black_square_trans.png" class="interaction_magic_logo">
+				<a href="write" class="run">Play!</a>
 			</div>
-			<main class="animations"></main>
+			<main class="sequences"></main>
 		</div>
 		<div class="live_output">
 			<div class="watch_wrapper">
-				<svg id="watch_outline" class="watch_outline" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 1271 1311">
+				<svg id="live_watch" class="live_watch" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 1271 1311">
 				<defs>
 				  <radialGradient id="Dégradé_sans_nom_3" data-name="Dégradé sans nom 3" cx="635" cy="687" fx="260.1751499985994" r="374.83" gradientUnits="userSpaceOnUse">
 					 <stop offset="0.28" stop-color="lime"/>
@@ -181,11 +182,19 @@
 		</div>
 
 		<!-- Elements that we re-use are stored below -->
-		<section class="animation animation_prototype">
-			<div class="add_step">+</div>
+		<section class="sequence sequence_prototype">
+			<div class="sequence_steps">
+				<div class="add_step">+</div>
+			</div>
+			<div class="sequence_data">
+				<span class="name">Test sequence</span>
+				<span class="sequence_options">
+					<a href="#play" class="play">test</a>
+				</span>
+			</div>
 		</section>
 
-		<div class="animation_step animation_step_prototype">
+		<div class="sequence_step sequence_step_prototype">
 			<div class="watch_face">
 				<svg class="segments" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="300 540 660 300"></svg>
 			</div>
@@ -336,8 +345,8 @@
 
 		<script src="include/Logger.js"></script>
 
-		<script src="include/Animation_step.js"></script>
-		<script src="include/Animation.js"></script>
+		<script src="include/Sequence_step.js"></script>
+		<script src="include/Sequence.js"></script>
 		<script src="include/Designer.js"></script>
 
 		<script src="include/scripts.js"></script>
