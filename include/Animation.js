@@ -44,10 +44,12 @@ class Animation{
 		
 		// Add to screen
 		this.opts.elm.querySelector(".add_step").before(new_step.get_dom());
-
-		console.log(new_step.get_dom());
-
+		
 		// Save step
 		this._steps.push(new_step);
 	}
+/*
+	play(){
+		console.log(this)
+	}*/
 }
