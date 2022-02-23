@@ -72,6 +72,10 @@ class Sequence{
 					this.step_delete(step_id);
 					this._fire_update();
 					break;
+				case "minimise":
+					this.opts.elm.classList.toggle("minimised");
+					e.target.blur();
+					break;
 			}
 		});
 	}

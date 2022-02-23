@@ -56,15 +56,28 @@ main{
 }
 .logo_menu{
 	display: flex;
-	flex-direction: column;
+	justify-content: start;
+	align-items: center;
 	z-index: 200;
-	align-items: flex-start;
 }
 .logo_menu img{
 	width: 50px;
-	opacity: 0.4;
+	opacity: 0.9;
 	display: block;
 	margin-bottom: 0.4em;
+	filter: invert(100%);
+}
+.logo_menu h1{
+	margin:0 0 0 10px;
+	font-size: 22px;
+	font-weight: 300;
+}
+.logo_menu h1 a{
+	color: white;
+	text-decoration: none;
+}
+.logo_menu h1 a:hover{
+	text-decoration: underline;
 }
 
 .primary_nav{
@@ -117,15 +130,6 @@ main{
 	background-image:url("../assets/images/pause.svg");
 }
 
-.logo_menu a:hover{
-	color: rgb(19, 44, 61);
-	background-color: white;
-}
-.logo_menu a:first-of-type{
-	margin-top: 0.4em;
-	border-top-right-radius: 40px;
-   border-bottom-right-radius: 40px;
-}
 a.connect{
 	padding-right: 25px;
 }
