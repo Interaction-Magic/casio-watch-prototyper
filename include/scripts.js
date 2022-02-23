@@ -18,9 +18,21 @@ document.addEventListener("DOMContentLoaded", () => {
 	});
 
 	// Add click handlers to menu buttons
-	document.querySelector(".run").addEventListener("click", (e) => {
+	document.querySelector(".play").addEventListener("click", (e) => {
 		e.preventDefault();
 		designer.play_pause();
+		e.target.classList.toggle("is_playing");
+		e.target.blur();
+	});
+	document.querySelector(".undo").addEventListener("click", (e) => {
+		e.preventDefault();
+		designer.history_undo();
+		e.target.blur();
+	});
+	document.querySelector(".undoundo").addEventListener("click", (e) => {
+		e.preventDefault();
+		designer.history_undoundo();
+		e.target.blur();
 	});
 	
 });

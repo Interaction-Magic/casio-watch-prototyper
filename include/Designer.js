@@ -27,12 +27,13 @@ class Designer{
 		// Create an undo handler
 		this.undo = new Undo();
 
-		// General handler for save states
-		this.opts.sequences_container.addEventListener("click", (e) => {
-			if(e.target.classList.contains("save_state")){
-				this.history_save();
-			}
-		})
+		// Save the starting state as the first one
+		this.history_save();
+
+		// Listener for "updated" triggers to initiate a state save
+		this.opts.sequences_container.addEventListener("updated", (e) => {
+			this.history_save();
+		});
 	}
 
 	add_sequence(sequence_data = null){
@@ -40,7 +41,8 @@ class Designer{
 		const sequence = new Sequence({
 			container: this.opts.sequences_container,
 			prototype_container: document.querySelector(".sequence_prototype"),
-			data: sequence_data
+			data: sequence_data,
+			name: `Sequence ${this._sequences.length}`
 		});
 
 		this._sequences.push(sequence);
@@ -49,7 +51,7 @@ class Designer{
 	play(){
 		this._animation.start_time = Date.now();
 		this._animation.is_playing = true;
-		window.requestAnimationFrame(() => this.render_loop());
+		window.requestAnimationFrame(() => this._render_loop());
 	}
 	pause(){
 		this._animation.is_playing = false;
@@ -62,8 +64,21 @@ class Designer{
 		}
 	}
 
+	// Undo events
 	history_save(){
 		this.undo.save(this.get_state());
+	}
+	history_undo(){
+		const undo_data = this.undo.undo();
+		if(undo_data){
+			this.put_state(undo_data);
+		}
+	}
+	history_undoundo(){
+		const undo_data = this.undo.undoundo();
+		if(undo_data){
+			this.put_state(undo_data);
+		}
 	}
 
 	// Retrieves array of all data for current setup
@@ -83,22 +98,25 @@ class Designer{
 		// Wipe all sequences
 		this._sequences.splice(0, this._sequences.length);
 
+		// Empy sequence holder
+		this.opts.sequences_container.innerHTML = "";
+
 		// Generate new sequences
 		for(let sequence_data of data.sequences){
 			this.add_sequence(sequence_data);
 		}
 	}
 
-	render_loop(){
+	_render_loop(){
 
 		// Get data for current step of active sequence
 		const step = this._animation.current_sequence.get_step(this._animation.start_time);
-		const sequence_data = step.get_state();
+		const step_data = step.get_state();
 
-		this.write(sequence_data);
+		this.write(step_data);
  
 		if(this._animation.is_playing){
-			window.requestAnimationFrame(() => this.render_loop());
+			window.requestAnimationFrame(() => this._render_loop());
 		}
 	}
 
@@ -107,7 +125,7 @@ class Designer{
 	write(data){
 		const watch = this.opts.live_watch;
 
-		for(let group of data.segment_data){
+		for(let group of data.segments){
 			switch(group.type){
 
 				case 'digit':

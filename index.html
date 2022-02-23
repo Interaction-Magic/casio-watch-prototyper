@@ -15,12 +15,16 @@
 	<body>
 		<div class="api_warning" style="display:none"></div>
 		<div class="wrapper">
-			<div class="logo_menu">
-				<img src="assets/images/logo_black_square_trans.png" class="interaction_magic_logo">
-				<a href="#play" class="run">Play!</a>
-				<a href="#undo" class="undo">Undo (-1)</a>
-				<a href="#undoundo" class="undoundo">Redo (+1)</a>
-			</div>
+			<header class="header">
+				<div class="logo_menu">
+					<img src="assets/images/logo_black_square_trans.png" class="interaction_magic_logo">
+				</div>
+				<nav class="primary_nav">
+					<a href="#play" class="play">Play</a>
+					<a href="#undo" class="undo">Undo (-1)</a>
+					<a href="#undoundo" class="undoundo">Redo (+1)</a>
+				</nav>
+			</header>
 			<main class="sequences"></main>
 		</div>
 		<div class="live_output">
@@ -192,7 +196,7 @@
 				</span>
 			</div>
 			<div class="sequence_steps">
-				<a href="#step_add" class="add_step save_state">+</a>
+				<a href="#step_add" class="add_step">+</a>
 			</div>
 		</section>
 
@@ -214,8 +218,8 @@
 					<span class="number">##</span>
 					<span class="duration editable" contenteditable="true">###</span>
 					<span class="edit_options">
-						<a class="save_state" href="#step_duplicate">➕</a>
-						<a class="save_state" href="#step_delete">❌</a>
+						<a href="#step_duplicate">➕</a>
+						<a href="#step_delete">❌</a>
 					</span>
 				</div>
 			</div>

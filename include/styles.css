@@ -49,12 +49,16 @@ main{
 }
 
 /* Logo menu */
+.header{
+	display: flex;
+	justify-content: space-between;
+	padding: 20px 20px 0 20px;
+}
 .logo_menu{
 	display: flex;
 	flex-direction: column;
 	z-index: 200;
 	align-items: flex-start;
-	padding: 20px 20px 0 20px;
 }
 .logo_menu img{
 	width: 50px;
@@ -62,16 +66,57 @@ main{
 	display: block;
 	margin-bottom: 0.4em;
 }
-.logo_menu a{
-	color: white;
-	background-color: rgba(0,0,0,0.4);
+
+.primary_nav{
+	display: flex;
+	align-items: center;
+}
+
+.primary_nav a{
+	color: black;
+	background-color: rgba(255, 255, 255, 0.6);
 	text-decoration: none;
 	font-weight: 500;
-	margin: 0.1em 0 0.4em 0em;
+	margin: 0 0 0 5px;
 	padding: 0.5em 0.7em;
-	font-size: 0.8em;
 	position: relative;
+	text-indent: -9767px;
+	background-size: 28px;
+	background-repeat: no-repeat;
+	background-position: 50% 50%;
+	display: block;
+	width: 20px;
+	height: 20px;
+	filter: invert(100%);
+	opacity: 0.9;
+	line-height: 20px;
+	font-size: 16px;
+	border-bottom: 3px solid transparent;
 }
+.primary_nav a:hover{
+	background-color: rgba(255, 255, 255, 1);
+	border-bottom-color:black;
+}
+.primary_nav a:focus{
+	filter: none;
+	opacity: 1;
+	border-bottom-color:black;
+	background-color: rgba(255,255,255,1);
+}
+
+.primary_nav .play{background-image:url("../assets/images/play.svg"); text-indent:0px; width: auto; padding-left: 38px; background-position-x: 8px; background-size: 25px;}
+.primary_nav .undo{background-image:url("../assets/images/undo.svg");}
+.primary_nav .undoundo{background-image:url("../assets/images/redo.svg");}
+
+.primary_nav .play.is_playing{
+	background-color: greenyellow;
+	filter: none;
+}
+.primary_nav .play.is_playing:hover{
+	border-bottom-color:white;
+	background-image:url("../assets/images/pause.svg");
+}
+
 .logo_menu a:hover{
 	color: rgb(19, 44, 61);
 	background-color: white;
