@@ -183,14 +183,14 @@
 
 		<!-- Elements that we re-use are stored below -->
 		<section class="sequence sequence_prototype">
-			<div class="sequence_steps">
-				<div class="add_step">+</div>
-			</div>
 			<div class="sequence_data">
-				<span class="name">Test sequence</span>
+				<span class="name editable" contenteditable="true">Test sequence</span>
 				<span class="sequence_options">
 					<a href="#play" class="play">test</a>
 				</span>
+			</div>
+			<div class="sequence_steps">
+				<a href="#step_add" class="add_step">+</a>
 			</div>
 		</section>
 
@@ -200,7 +200,11 @@
 			</div>
 			<div class="step_data">
 				<span class="number">##</span>
-				<span class="duration" contenteditable="true">###</span>
+				<span class="duration editable" contenteditable="true">###</span>
+				<span class="edit_options">
+					<a href="#step_duplicate">➕</a>
+					<a href="#step_delete">❌</a>
+				</span>
 			</div>
 		</div>
 

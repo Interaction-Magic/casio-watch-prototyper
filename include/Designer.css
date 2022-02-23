@@ -73,36 +73,27 @@ main{
 }
 
 .sequence{
-	background:rgba(255,255,255,0.1);
+	background:rgba(255,255,255,0.25);
 	width: 100%;
 	min-height: 100px;
-	border-radius: 22px;
-	margin: 30px 0 10px;
+	margin: 0 10px;
 	position: relative;
+	display: flex;
+	flex-direction: column;
 }
 .sequence_steps{
 	padding: 10px 0 0 10px;
 	display: flex;
 	flex-wrap: wrap;
 	align-items: center;
-	z-index: 50;
 	position: relative;
 }
 .sequence_data{
-	background: rgba(0,0,0,0.2);
-	border-radius: 22px;
-	padding: 5px 15px;
-	position: absolute;
-	left: 0;
-	top :-30px;
-	bottom: 0;
-	right: 0;
-	z-index: 10;
+	background: rgba(0,0,0,0.7);
+	padding: 10px 15px;
 	display: flex;
 	align-items: start;
 	justify-content: space-between;
-	border-top-left-radius: 0;
-	border-top-right-radius: 0;
 	z-index: 10;
 }
 
@@ -117,6 +108,7 @@ main{
 	justify-content: center;
 	align-items: center;
 	background: rgba(0,0,0,0.2);
+	text-decoration: none;
 }
 .add_step:hover{
 	background: rgba(0,0,0,0.6);
@@ -136,16 +128,21 @@ main{
 	margin: 0 10px 40px 0;
 	position: relative;
 }
+
 .watch_face{
-	background: rgba(255,255,255,0.2);
+	background: rgba(255,255,255,0.4);
 	width: 300px;
 	padding: 10px;
 	border-radius: 12px;
 	position: relative;
 	z-index: 20;
 }
+.watch_face .lcd_segment{opacity: 0.15;}
+.watch_face .lcd_segment.hover{opacity: 0.7;}
+.watch_face .lcd_segment.on{opacity: 1;}
+
 .step_data{
-	background: rgba(0,0,0,0.2);
+	background: rgba(0,0,0,0.4);
 	border-radius: 12px;
 	padding: 5px 15px;
 	position: absolute;
@@ -158,11 +155,21 @@ main{
 	align-items: end;
 	justify-content: space-between;
 }
-.step_data .duration{padding:2px 4px;}
-.step_data .duration:after{content: "ms";}
-.step_data .duration:hover{background: rgba(255,255,255,0.2);}
-.step_data .duration:focus{background: rgb(254, 255, 189); outline: none; color: black;}
+.duration{padding:2px 4px;}
+.duration:after{content: "ms";}
+.duration:hover{background: rgba(255,255,255,0.2);}
 
-.watch_face .lcd_segment{opacity: 0.15;}
-.watch_face .lcd_segment.hover{opacity: 0.7;}
-.watch_face .lcd_segment.on{opacity: 1;}
+.edit_options{display: flex;}
+.edit_options a{
+	display: block;
+	text-decoration: none;
+	padding: 2px;
+	background: rgba(255,255,255,0.3);
+	margin-right: 4px;
+	
+}
+
+
+.editable{padding:2px 4px;}
+.editable:hover{background: rgba(255,255,255,0.2);}
+.editable:focus{background: rgb(254, 255, 189); outline: none; color: black;}

@@ -23,12 +23,34 @@ class Sequence{
 		this.opts.container.append(this.opts.elm);
 
 		// Add the first step for the sequence
-		this.add_step();
+		this.step_add();
 
-		// Add some event handlers
-		this.opts.elm.querySelector(".add_step").addEventListener("click", () => {
-			this.add_step();
+		// Add some event handlers across the whole sequence
+		this.opts.elm.querySelector(".add_step").addEventListener("click", (e) => {
+			e.preventDefault();
+			this.step_add();
 		});
+		this.opts.elm.addEventListener("click", (e) => {
+			e.preventDefault();
+			const url_target = e.target.href;
+
+			if(!url_target){
+				return;
+			}
+			const hash = url_target.substring(url_target.indexOf('#') + 1);
+			
+			// TODO: Clean up this dodgy traverse!
+			const step_id = e.target.parentNode.parentNode.parentNode.dataset.index;
+
+			switch(hash){
+				case "step_duplicate":
+					this.step_insert_after(step_id, true);
+					break;
+				case "step_delete":
+					this.step_delete(step_id);
+					break;
+			}
+		})
 	}
 
 	//
@@ -60,26 +82,70 @@ class Sequence{
 	}
 
 	// Add a new step to the sequence
-	add_step(){
+	step_add(after_elm = null){
 
 		// Create step
 		const new_step = new Sequence_Step({
 			index: this._steps.length
 		});
-		
-		// Add to screen
-		const new_step_dom = new_step.get_dom();
-		this.opts.elm.querySelector(".sequence_steps").querySelector(".add_step").before(new_step_dom);
 
+		// Save step
+		if(after_elm){
+			this._steps.splice(after_elm.dataset.index+1,0,new_step);
+		}else{
+			this._steps.push(new_step);
+		}
+		
+		// //////////////
+		// Do DOM display stuff
+		// TODO: Move this to the step itself?
+
+		// Get DOM for new step
+		const new_step_dom = new_step.get_dom();
+
+		// Work out where to add it
+		if(after_elm){
+			// After a given element
+			after_elm.after(new_step_dom);
+		}else{
+			// Put it at the end
+			this.opts.elm.querySelector(".add_step").before(new_step_dom);
+		}
 		// Add handler to capture duration changes
 		new_step_dom.querySelector(".duration").addEventListener("blur", (e) => {
 			this.update_total_duration();
 		});
 
-		// Save step
-		this._steps.push(new_step);
-
-		// Re-calculate the length
+		// Re-calculate things
+		this.recalculate_step_indices();
 		this.update_total_duration();
 	}
+
+	step_insert_after(index, is_duplicate){
+	//	if(!is_duplicate){
+			this.step_add(this._steps[index].get_dom());
+	//	}
+	}
+
+	// Delete a step at a given index
+	step_delete(index){
+		this._steps[index].remove();
+		this._steps.splice(index, 1);
+
+		this.recalculate_step_indices();
+		this.update_total_duration();
+	}
+
+	// Re-calculate the index of all steps
+	recalculate_step_indices(){
+		let i=0;
+		for(let step of this._steps){
+			step.set_index(i);
+			i++;
+		}
+	}
+
+	// //////////////////////////////////////
+	// Helper functions
+
 }

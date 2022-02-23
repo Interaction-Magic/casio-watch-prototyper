@@ -24,7 +24,8 @@ class Sequence_Step{
 		// Create new sequence container in UI 
 		this.elm = document.querySelector(".sequence_step_prototype").cloneNode(true);
 		this.elm.classList.remove("sequence_step_prototype");
-		this.elm.querySelector(".number").innerText = `#${this.opts.index+1}`;
+
+		this.set_index(this.opts.index);
 		this.elm.querySelector(".duration").innerText = `${this.opts.duration}`;
 
 		// Update handler for duration
@@ -106,6 +107,17 @@ class Sequence_Step{
 	// Other helpful getters
 	get_duration(){
 		return this.opts.duration;
+	}
+
+	// Set the index data for this step
+	set_index(index){
+		this.elm.dataset.index = index;
+		this.elm.querySelector(".number").innerText = `#${index+1}`;
+	}
+
+	// Deletes this step from the DOM
+	remove(){
+		this.elm.remove();
 	}
 
 	// Returns the segment sequence for this step
