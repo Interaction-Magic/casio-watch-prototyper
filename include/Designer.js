@@ -13,8 +13,12 @@ class Designer{
 	_animation = {
 		is_playing: false,
 		start_time: 0,
-		current_sequence_index: 0
+		current_sequence_index: 0,
+		is_buzzing: false,
+		buzzing_freq: 0
 	};
+	
+	audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 
 	constructor(opts) {
 		// Merge opts with defaults
@@ -55,6 +59,7 @@ class Designer{
 	}
 	pause(){
 		this._animation.is_playing = false;
+		this._stop_oscillator();
 	}
 	play_pause(){
 		if(this._animation.is_playing){
@@ -116,6 +121,10 @@ class Designer{
 
 	_render_loop(){
 
+		if(!this._animation.is_playing){
+			return;
+		}
+
 		// Get data for current step of active sequence
 		const step = this._sequences[this._animation.current_sequence_index].get_step(this._animation.start_time);
 		const step_data = step.get_state();
@@ -130,8 +139,10 @@ class Designer{
 	//
 	// Writes the segment display to the live view of the watch on the screen 
 	write(data){
+		// Reference for watch element
 		const watch = this.opts.live_watch;
 
+		// Fill in all segments 
 		for(let group of data.segments){
 			switch(group.type){
 
@@ -148,5 +159,45 @@ class Designer{
 					break;
 			}
 		}
+
+		// Display lights
+		watch.querySelector(`.led_0`).classList.toggle('on',data.hardware.led_0);
+		watch.querySelector(`.led_1`).classList.toggle('on',data.hardware.led_1);
+
+		// Play tone
+		if(data.hardware.buzzer > 0){
+			if(this._animation.buzzing_freq == data.hardware.buzzer){
+				// Same frequency as before
+				if(!this._animation.is_buzzing){
+					// But not buzzing, so start again
+					this._create_oscillator(data.hardware.buzzer);
+				}
+			}else{
+				// New frequency, stop and start again
+				this._stop_oscillator();
+				this._create_oscillator(data.hardware.buzzer);
+			}
+		}else{
+			this._stop_oscillator();
+		}
+	}
+
+	//
+	// Oscillator helpers
+	_stop_oscillator(){
+		if(this._animation.is_buzzing){
+			this.oscillator.stop();
+			this._animation.is_buzzing = false;
+		}
+	}
+	_create_oscillator(frequency){
+		// Setup buzzer
+		this.oscillator = this.audioCtx.createOscillator();
+		this.oscillator.type = 'sine';
+		this.oscillator.connect(this.audioCtx.destination);
+		this.oscillator.frequency.setValueAtTime(frequency, this.audioCtx.currentTime);
+		this.oscillator.start();
+		this._animation.is_buzzing = true;
+		this._animation.buzzing_freq = frequency;
 	}
 }

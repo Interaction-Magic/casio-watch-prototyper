@@ -206,6 +206,7 @@ class Sequence_Step{
 	//
 	// Create handlers for clicks on this step
 	_add_handlers(){
+
 		// ////////////////
 		// Set handlers for hardware options
 		this.elm.querySelectorAll(".led_button").forEach((led_button) => {
@@ -217,10 +218,22 @@ class Sequence_Step{
 				this._fire_update();
 			});
 		});
+		
+		this.elm.querySelector(".buzzer").addEventListener("change", (e) => {
+			e.preventDefault();
+			this._data.hardware.buzzer = e.target.value;
+
+			// Temporarily play a sound to show what we selected
+			const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+			const oscillator = audioCtx.createOscillator();
+			oscillator.type = 'sine';
+			oscillator.frequency.setValueAtTime(e.target.value, audioCtx.currentTime);
+			oscillator.connect(audioCtx.destination);
+			oscillator.start();
+			oscillator.stop(audioCtx.currentTime + 0.25);
+		});
 
 
-		// ////////////////
-		// Set handlers for toggling segments on and off
 
 		// ////////////////
 		// Set handler for duration editing
@@ -238,6 +251,10 @@ class Sequence_Step{
 			e.target.innerHTML = this._data.duration; // update back 
 			this._fire_update();
 		});
+
+
+		// ////////////////
+		// Set handlers for toggling segments on and off
 
 		// When dragging _not_ from a segment, use mouse to toggle segments on/off
 		this.elm.querySelector(".watch_face").addEventListener("mousedown", (e) => {

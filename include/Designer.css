@@ -57,6 +57,9 @@
 .watch_button_mode {left:    1%; top: 61.0%;}
 .watch_button_alarm{left: 98.5%; top: 61.0%;}
 
+.watch_wrapper .led{opacity:0;}
+.watch_wrapper .led.on{opacity:0.7;}
+
 
 /* ********************************************** */
 /* Sequences */

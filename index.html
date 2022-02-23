@@ -32,12 +32,20 @@
 			<div class="watch_wrapper">
 				<svg id="live_watch" class="live_watch" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 1271 1311">
 				<defs>
-				  <radialGradient id="Dégradé_sans_nom_3" data-name="Dégradé sans nom 3" cx="635" cy="687" fx="260.1751499985994" r="374.83" gradientUnits="userSpaceOnUse">
+				  <radialGradient id="gradient_light_green" data-name="gradient_light_green" cx="635" cy="687" fx="260.1751499985994" r="374.83" gradientUnits="userSpaceOnUse">
 					 <stop offset="0.28" stop-color="lime"/>
 					 <stop offset="0.46" stop-color="#00b200" stop-opacity="0.7"/>
 					 <stop offset="0.65" stop-color="#006700" stop-opacity="0.4"/>
 					 <stop offset="0.82" stop-color="#002f00" stop-opacity="0.19"/>
 					 <stop offset="0.94" stop-color="#000d00" stop-opacity="0.05"/>
+					 <stop offset="1" stop-opacity="0"/>
+				  </radialGradient>
+				  <radialGradient id="gradient_light_red" data-name="gradient_light_red" cx="635" cy="687" fx="260.1751499985994" r="374.83" gradientUnits="userSpaceOnUse">
+					 <stop offset="0.28" stop-color="#ff0000"/>
+					 <stop offset="0.46" stop-color="#b20000" stop-opacity="0.7"/>
+					 <stop offset="0.65" stop-color="#670000" stop-opacity="0.4"/>
+					 <stop offset="0.82" stop-color="#2f0000" stop-opacity="0.19"/>
+					 <stop offset="0.94" stop-color="#0d0000" stop-opacity="0.05"/>
 					 <stop offset="1" stop-opacity="0"/>
 				  </radialGradient>
 				</defs>
@@ -59,8 +67,11 @@
 					 <g id="Ecran">
 						<rect x="293.5" y="520" width="683" height="334" rx="34.68" style="fill: #777b7a"/>
 					 </g>
-					 <g id="light" style="opacity: 0">
-						<rect x="293.5" y="520" width="683" height="334" rx="34.68" style="fill: url(#Dégradé_sans_nom_3)"/>
+					 <g id="led_0" class="led led_0">
+						<rect x="293.5" y="520" width="683" height="334" rx="34.68" style="fill: url(#gradient_light_green)"/>
+					 </g>
+					 <g id="led_1" class="led led_1">
+						<rect x="293.5" y="520" width="683" height="334" rx="34.68" style="fill: url(#gradient_light_red)"/>
 					 </g>
 				  </g>
 				  <g id="Textes">
@@ -209,10 +220,94 @@
 				<div class="step_hardware">
 					<a data-colour="led_0" class="led_button led_0" href="#led_0">LED 0</a>
 					<a data-colour="led_1" class="led_button led_1" href="#led_1">LED 1</a>
-					<select name="buzzer">
+					<select name="buzzer" class="buzzer">
 						<option value="0">No sound</option>
-						<option value="15">15kHz</option>
-						<option value="30">30kHz</option>
+						<option value=58.27>A1#</option>
+						<option value=61.74>B1</option>
+						<option value=65.41>C2</option>
+						<option value=69.30>C2#</option>
+						<option value=73.42>D2</option>
+						<option value=77.78>D2#</option>
+						<option value=82.41>E2</option>
+						<option value=87.31>F2</option>
+						<option value=92.50>F2#</option>
+						<option value=98.00>G2</option>
+						<option value=103.83>G2#</option>
+						<option value=110.00>A2</option>
+						<option value=116.54>A2#</option>
+						<option value=123.47>B2</option>
+						<option value=130.81>C3</option>
+						<option value=138.59>C3#</option>
+						<option value=146.83>D3</option>
+						<option value=155.56>D3#</option>
+						<option value=164.81>E3</option>
+						<option value=174.61>F3</option>
+						<option value=185.00>F3#</option>
+						<option value=196.00>G3</option>
+						<option value=207.65>G3#</option>
+						<option value=220.00>A3</option>
+						<option value=233.08>A3#</option>
+						<option value=246.94>B3</option>
+						<option value=261.63>C4</option>
+						<option value=277.18>C4#</option>
+						<option value=293.66>D4</option>
+						<option value=311.13>D4#</option>
+						<option value=329.63>E4</option>
+						<option value=349.23>F4</option>
+						<option value=369.99>F4#</option>
+						<option value=392.00>G4</option>
+						<option value=415.30>G4#</option>
+						<option value=440.00>A4</option>
+						<option value=466.16>A4#</option>
+						<option value=493.88>B4</option>
+						<option value=523.25>C5</option>
+						<option value=554.37>C5#</option>
+						<option value=587.33>D5</option>
+						<option value=622.25>D5#</option>
+						<option value=659.25>E5</option>
+						<option value=698.46>F5</option>
+						<option value=739.99>F5#</option>
+						<option value=783.99>G5</option>
+						<option value=830.61>G5#</option>
+						<option value=880.00>A5</option>
+						<option value=932.33>A5#</option>
+						<option value=987.77>B5</option>
+						<option value=1046.50>C6</option>
+						<option value=1108.73>C6#</option>
+						<option value=1174.66>D6</option>
+						<option value=1244.51>D6#</option>
+						<option value=1318.51>E6</option>
+						<option value=1396.91>F6</option>
+						<option value=1479.98>F6#</option>
+						<option value=1567.98>G6</option>
+						<option value=1661.22>G6#</option>
+						<option value=1760.00>A6</option>
+						<option value=1864.66>A6#</option>
+						<option value=1975.53>B6</option>
+						<option value=2093.00>C7</option>
+						<option value=2217.46>C7#</option>
+						<option value=2349.32>D7</option>
+						<option value=2489.02>D7#</option>
+						<option value=2637.02>E7</option>
+						<option value=2793.83>F7</option>
+						<option value=2959.96>F7#</option>
+						<option value=3135.96>G7</option>
+						<option value=3322.44>G7#</option>
+						<option value=3520.00>A7</option>
+						<option value=3729.31>A7#</option>
+						<option value=3951.07>B7</option>
+						<option value=4186.01>C8</option>
+						<option value=4434.92>C8#</option>
+						<option value=4698.63>D8</option>
+						<option value=4978.03>D8#</option>
+						<option value=5274.04>E8</option>
+						<option value=5587.65>F8</option>
+						<option value=5919.91>F8#</option>
+						<option value=6271.93>G8</option>
+						<option value=6644.88>G8#</option>
+						<option value=7040.00>A8</option>
+						<option value=7458.62>A8#</option>
+						<option value=7902.13>B8</option>
 					</select>
 				</div>
 				<div class="step_parameters">
