@@ -23,13 +23,24 @@ class Designer{
 		// Create first sequence
 		this.add_sequence();
 		this._animation.current_sequence = this._sequences[0];
+
+		// Create an undo handler
+		this.undo = new Undo();
+
+		// General handler for save states
+		this.opts.sequences_container.addEventListener("click", (e) => {
+			if(e.target.classList.contains("save_state")){
+				this.history_save();
+			}
+		})
 	}
 
-	add_sequence(){
+	add_sequence(sequence_data = null){
 
 		const sequence = new Sequence({
-			container: document.querySelector(".sequences"),
-			prototype_container: document.querySelector(".sequence_prototype")
+			container: this.opts.sequences_container,
+			prototype_container: document.querySelector(".sequence_prototype"),
+			data: sequence_data
 		});
 
 		this._sequences.push(sequence);
@@ -51,11 +62,38 @@ class Designer{
 		}
 	}
 
+	history_save(){
+		this.undo.save(this.get_state());
+	}
+
+	// Retrieves array of all data for current setup
+	get_state(){
+		const data = {
+			sequences: []
+		};
+		for(let sequence of this._sequences){
+			data.sequences.push(sequence.get_state());
+		}
+		return data;
+	}
+
+	// Overwrites the whole designer with all the provided data
+	put_state(data){
+
+		// Wipe all sequences
+		this._sequences.splice(0, this._sequences.length);
+
+		// Generate new sequences
+		for(let sequence_data of data.sequences){
+			this.add_sequence(sequence_data);
+		}
+	}
+
 	render_loop(){
 
 		// Get data for current step of active sequence
 		const step = this._animation.current_sequence.get_step(this._animation.start_time);
-		const sequence_data = step.get_data();
+		const sequence_data = step.get_state();
 
 		this.write(sequence_data);
  
@@ -66,10 +104,10 @@ class Designer{
 
 	//
 	// Writes the segment display to the live view of the watch on the screen 
-	write(segment_data){
+	write(data){
 		const watch = this.opts.live_watch;
 
-		for(let group of segment_data){
+		for(let group of data.segment_data){
 			switch(group.type){
 
 				case 'digit':

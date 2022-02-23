@@ -17,7 +17,9 @@
 		<div class="wrapper">
 			<div class="logo_menu">
 				<img src="assets/images/logo_black_square_trans.png" class="interaction_magic_logo">
-				<a href="write" class="run">Play!</a>
+				<a href="#play" class="run">Play!</a>
+				<a href="#undo" class="undo">Undo (-1)</a>
+				<a href="#undoundo" class="undoundo">Redo (+1)</a>
 			</div>
 			<main class="sequences"></main>
 		</div>
@@ -190,7 +192,7 @@
 				</span>
 			</div>
 			<div class="sequence_steps">
-				<a href="#step_add" class="add_step">+</a>
+				<a href="#step_add" class="add_step save_state">+</a>
 			</div>
 		</section>
 
@@ -199,12 +201,23 @@
 				<svg class="segments" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="300 540 660 300"></svg>
 			</div>
 			<div class="step_data">
-				<span class="number">##</span>
-				<span class="duration editable" contenteditable="true">###</span>
-				<span class="edit_options">
-					<a href="#step_duplicate">➕</a>
-					<a href="#step_delete">❌</a>
-				</span>
+				<div class="step_hardware">
+					<a data-colour="led_0" class="led_button led_0" href="#led_0">LED 0</a>
+					<a data-colour="led_1" class="led_button led_1" href="#led_1">LED 1</a>
+					<select name="buzzer">
+						<option value="0">None</option>
+						<option value="15">15kHz</option>
+						<option value="30">30kHz</option>
+					</select>
+				</div>
+				<div class="step_parameters">
+					<span class="number">##</span>
+					<span class="duration editable" contenteditable="true">###</span>
+					<span class="edit_options">
+						<a class="save_state" href="#step_duplicate">➕</a>
+						<a class="save_state" href="#step_delete">❌</a>
+					</span>
+				</div>
 			</div>
 		</div>
 
@@ -348,7 +361,8 @@
 		<script src="include/lib/Serial.js"></script>
 
 		<script src="include/Logger.js"></script>
-
+		<script src="include/Undo.js"></script>
+		
 		<script src="include/Sequence_step.js"></script>
 		<script src="include/Sequence.js"></script>
 		<script src="include/Designer.js"></script>

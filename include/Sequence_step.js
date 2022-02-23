@@ -16,6 +16,11 @@ class Sequence_Step{
 	};
 
 	_segment_data = [];
+	_hardware_data = {
+		led_0: false,
+		led_1: false,
+		buzzer: 0
+	};
 
 	constructor(opts) {
 		// Merge opts with defaults
@@ -40,6 +45,17 @@ class Sequence_Step{
 			this.opts.duration = parseInt(e.target.innerHTML);
 			e.target.innerHTML = this.opts.duration;
 		});
+
+		// ////////////////
+		// Set handlers for hardware options
+		this.elm.querySelectorAll(".led_button").forEach((led_button) => {
+			led_button.addEventListener("click", (e) => {
+				e.preventDefault();
+				led_button.classList.toggle("on");
+				this._hardware_data[led_button.dataset.colour] = led_button.classList.contains("on");
+			});
+		});
+
 
 		// ////////////////
 		// Set handlers for toggling segments on and off
@@ -100,8 +116,11 @@ class Sequence_Step{
 
 	//
 	// Returns an object with segment data stored in it
-	get_data(){
-		return this._segment_data;
+	get_state(){
+		return {
+			segment_data: this._segment_data,
+			hardware_data: this._hardware_data
+		};
 	}
 
 	// Other helpful getters

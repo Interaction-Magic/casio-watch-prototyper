@@ -13,6 +13,7 @@ document.addEventListener("DOMContentLoaded", () => {
 	
 	// Create a new instance of the Designer 
 	const designer = new Designer({
+		sequences_container: document.querySelector(".sequences"), 
 		live_watch : document.querySelector(".live_watch")
 	});
 

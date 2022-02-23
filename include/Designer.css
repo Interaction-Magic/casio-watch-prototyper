@@ -125,7 +125,7 @@ main{
 /* ********************************************** */
 
 .sequence_step{
-	margin: 0 10px 40px 0;
+	margin: 40px 10px 40px 0;
 	position: relative;
 }
 
@@ -144,18 +144,50 @@ main{
 .step_data{
 	background: rgba(0,0,0,0.4);
 	border-radius: 12px;
-	padding: 5px 15px;
 	position: absolute;
 	left: 0;
-	top :0;
+	top :-30px;
 	bottom: -30px;
 	right: 0;
 	z-index: 10;
 	display: flex;
-	align-items: end;
+	flex-direction: column;
 	justify-content: space-between;
 }
-.duration{padding:2px 4px;}
+
+.step_hardware{
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	height: 30px;
+}
+.led_button{
+	text-decoration: none;
+	text-indent: -9404px;
+	background: white;
+	width: 15px;
+	height: 15px;
+	border-radius: 100%;
+	border: 3px solid;
+	margin-right: 4px;
+}
+.led_0{border-color: rgb(172,255,48,0.3); background:rgba(172, 255, 48, 0.15);}
+.led_1{border-color: rgb(253,10,10,0.3); background:rgb(253, 10, 10, 0.15);}
+
+.led_0:hover, .led_0.on:hover{border-color: white;}
+.led_1:hover, .led_1.on:hover{border-color: white;}
+
+.led_0.on{border-color: rgb(172,255,48,1); background:rgba(172, 255, 48, 0.8);}
+.led_1.on{border-color: rgb(253,10,10,1); background:rgb(253, 10, 10, 0.8);}
+
+.step_parameters{
+	padding: 0 15px;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	height: 30px;
+
+}
 .duration:after{content: "ms";}
 .duration:hover{background: rgba(255,255,255,0.2);}
 

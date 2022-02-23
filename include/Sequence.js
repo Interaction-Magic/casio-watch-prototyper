@@ -22,8 +22,21 @@ class Sequence{
 		this.opts.elm.classList.remove("sequence_prototype");
 		this.opts.container.append(this.opts.elm);
 
-		// Add the first step for the sequence
-		this.step_add();
+
+		if(this.opts.data != null){
+			// We have incoming data to build from, so build from this
+
+			// Set sequence properties
+			this.set_name(data.name);
+
+			// Generate all the steps
+			for(let step_data of data.steps){
+				this.step_add(step_data);
+			}
+		}else{
+			// No incoming data, add defaults
+			this.step_add();
+		}
 
 		// Add some event handlers across the whole sequence
 		this.opts.elm.querySelector(".add_step").addEventListener("click", (e) => {
@@ -40,7 +53,7 @@ class Sequence{
 			const hash = url_target.substring(url_target.indexOf('#') + 1);
 			
 			// TODO: Clean up this dodgy traverse!
-			const step_id = e.target.parentNode.parentNode.parentNode.dataset.index;
+			const step_id = e.target.parentNode.parentNode.parentNode.parentNode.dataset.index;
 
 			switch(hash){
 				case "step_duplicate":
@@ -50,7 +63,19 @@ class Sequence{
 					this.step_delete(step_id);
 					break;
 			}
-		})
+		});
+	}
+
+	// Retrieves array of all the data for this sequence
+	get_state(){
+		const data = {
+			name: "",
+			steps: []
+		};
+		for(let step of this._steps){
+			data.steps.push(step.get_state());
+		}
+		return data;
 	}
 
 	//
@@ -81,12 +106,18 @@ class Sequence{
 		}
 	}
 
+	// Set the name of the sequence
+	set_name(name){
+		this.opts.container.querySelector(".name").innerHTML = name;
+	}
+
 	// Add a new step to the sequence
-	step_add(after_elm = null){
+	step_add(step_data = null, after_elm = null){
 
 		// Create step
 		const new_step = new Sequence_Step({
-			index: this._steps.length
+			index: this._steps.length,
+			data: step_data
 		});
 
 		// Save step
@@ -123,7 +154,7 @@ class Sequence{
 
 	step_insert_after(index, is_duplicate){
 	//	if(!is_duplicate){
-			this.step_add(this._steps[index].get_dom());
+			this.step_add(null, this._steps[index].get_dom());
 	//	}
 	}
 
