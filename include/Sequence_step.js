@@ -94,7 +94,7 @@ class Sequence_Step{
 
 	// Other helpful getters
 	get_duration(){
-		return this.opts.duration;
+		return this._data.duration;
 	}
 
 	//

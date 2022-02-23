@@ -26,7 +26,6 @@ class Undo{
 		}
 		this._stack.push(JSON.parse(JSON.stringify(data))); // Deep copy of object into stack
 		this._current_index++;
-		console.log([this._current_index, this._stack]);
 	}
 
 	// Step backwards in the stack

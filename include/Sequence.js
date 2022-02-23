@@ -53,8 +53,9 @@ class Sequence{
 		});
 		this.opts.elm.addEventListener("click", (e) => {
 			e.preventDefault();
-			const url_target = e.target.href;
 
+			// Get the hash, to work out what sort of switch it is
+			const url_target = e.target.href;
 			if(!url_target){
 				return;
 			}
@@ -159,6 +160,7 @@ class Sequence{
 		// Add special handler to capture duration changes and re-calculate total sequence duration
 		new_step.get_dom().querySelector(".duration").addEventListener("blur", (e) => {
 			this.update_total_duration();
+			console.log(this._total_duration);
 		});
 
 		// Re-calculate things
@@ -200,7 +202,7 @@ class Sequence{
 	}
 
 	_add_event_handlers(){
-		// Set handler for duration editing
+		// Set handler for name editing
 		this.opts.elm.querySelector(".name").addEventListener('keydown', (e) => {
 			if(e.key === 'Enter'){
 				e.preventDefault();
