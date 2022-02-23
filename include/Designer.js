@@ -13,7 +13,7 @@ class Designer{
 	_animation = {
 		is_playing: false,
 		start_time: 0,
-		current_sequence: null
+		current_sequence_index: 0
 	};
 
 	constructor(opts) {
@@ -22,7 +22,7 @@ class Designer{
 
 		// Create first sequence
 		this.add_sequence();
-		this._animation.current_sequence = this._sequences[0];
+		this._animation.current_sequence_index = 0;
 
 		// Create an undo handler
 		this.undo = new Undo();
@@ -84,6 +84,8 @@ class Designer{
 	// Retrieves array of all data for current setup
 	get_state(){
 		const data = {
+			start_time: this._animation.start_time,
+			current_sequence_index: this._animation.current_sequence_index,
 			sequences: []
 		};
 		for(let sequence of this._sequences){
@@ -105,12 +107,17 @@ class Designer{
 		for(let sequence_data of data.sequences){
 			this.add_sequence(sequence_data);
 		}
+
+		// Save animation properties
+		this._animation.start_time = data.start_time;
+		this._animation.current_sequence_index = data.current_sequence_index;
+
 	}
 
 	_render_loop(){
 
 		// Get data for current step of active sequence
-		const step = this._animation.current_sequence.get_step(this._animation.start_time);
+		const step = this._sequences[this._animation.current_sequence_index].get_step(this._animation.start_time);
 		const step_data = step.get_state();
 
 		this.write(step_data);
