@@ -40,7 +40,8 @@ class Sequence_Step{
 			led_0: false,
 			led_1: false,
 			buzzer: 0
-		}
+		},
+		duration: 0
 	};
 
 	_lcd_segments = {
@@ -107,12 +108,14 @@ class Sequence_Step{
 
 	// Set the duration of the step
 	set_duration(duration){
+		this._data.duration = duration;
 		this.elm.querySelector(".duration").innerText = `${duration}`;
 	}
 
 	// Set the whole state
 	set_state(data){
 		this.set_segments(data.segments);
+		this.set_duration(data.duration);
 	}
 
 	// Set the segments based on provided data
@@ -221,9 +224,10 @@ class Sequence_Step{
 
 		// ////////////////
 		// Set handler for duration editing
-		this.elm.querySelector(".duration").addEventListener('keydown', function(e) {
+		this.elm.querySelector(".duration").addEventListener('keydown', (e) => {
 			if(e.key === 'Enter'){
 				e.preventDefault();
+				this.set_duration(parseInt(e.target.innerHTML));
 			  	e.target.blur();
 				this._fire_update();
 			}
@@ -231,7 +235,7 @@ class Sequence_Step{
 		this.elm.querySelector(".duration").addEventListener("blur", (e) => {
 			e.preventDefault();
 			this.set_duration(parseInt(e.target.innerHTML));
-			e.target.innerHTML = this.opts.duration; // update back 
+			e.target.innerHTML = this._data.duration; // update back 
 			this._fire_update();
 		});
 

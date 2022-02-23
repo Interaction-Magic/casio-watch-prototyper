@@ -111,6 +111,10 @@ main{
 	align-items: center;
 	background: rgba(0,0,0,0.2);
 	text-decoration: none;
+	margin-bottom: 10px;
+}
+.sequence_step + .add_step{
+	margin-bottom: 0px;
 }
 .add_step:hover{
 	background: rgba(0,0,0,0.6);
@@ -215,7 +219,7 @@ main{
 .led_1.on{border-color: rgb(253,10,10,1); background:rgb(253, 10, 10, 0.8);}
 
 .step_parameters{
-	padding: 0 15px;
+	padding: 0 0 0 15px;
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
@@ -225,16 +229,38 @@ main{
 .duration:after{content: "ms";}
 .duration:hover{background: rgba(255,255,255,0.2);}
 
-.edit_options{display: flex;}
+.edit_options{display: flex; margin-right: 5px;}
 .edit_options a{
 	display: block;
 	text-decoration: none;
 	padding: 2px;
-	background: rgba(255,255,255,0.3);
-	margin-right: 4px;
-	
+	color: black;
+	text-decoration: none;
+	margin: 0;
+	position: relative;
+	text-indent: -9767px;
+	background-size: 20px;
+	background-repeat: no-repeat;
+	background-position: 50% 50%;
+	display: block;
+	width: 22px;
+	height: 22px;
+	filter: invert(100%);
+	opacity: 0.9;
+	line-height: 20px;
+	border-radius: 5px;
 }
-
+.edit_options a:hover{
+	background-color: rgba(255, 255, 255, 0.5);
+}
+.edit_options a:focus{
+	filter: none;
+	opacity: 1;
+	border-bottom-color:black;
+	background-color: rgba(255,255,255,1);
+}
+.edit_options .duplicate{background-image:url("../assets/images/copy.svg");}
+.edit_options .delete{background-image:url("../assets/images/delete.svg");}
 
 .editable{padding:2px 4px;}
 .editable:hover{background: rgba(255,255,255,0.2);}

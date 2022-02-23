@@ -67,10 +67,12 @@ class Sequence{
 				case "step_duplicate":
 					this.step_insert_after(step_id, true);
 					this._fire_update();
+					e.target.blur();
 					break;
 				case "step_delete":
 					this.step_delete(step_id);
 					this._fire_update();
+					e.target.blur();
 					break;
 				case "minimise":
 					this.opts.elm.classList.toggle("minimised");
@@ -164,10 +166,9 @@ class Sequence{
 		this.update_total_duration();
 	}
 
+	// Inserts a new step after the current one
 	step_insert_after(index, is_duplicate){
-	//	if(!is_duplicate){
-			this.step_add(null, this._steps[index].get_dom());
-	//	}
+		this.step_add(is_duplicate ? this._steps[index].get_state() : null, this._steps[index].get_dom());
 	}
 
 	// Delete a step at a given index
