@@ -112,10 +112,27 @@ class Sequence_Step{
 		this.elm.querySelector(".duration").innerText = `${duration}`;
 	}
 
+	// Set lights and buzzer for this step
+	set_hardware(hardware){
+		this._data.hardware = hardware;
+
+		this.elm.querySelector(`.led_0`).classList.toggle('on',hardware.led_0);
+		this.elm.querySelector(`.led_1`).classList.toggle('on',hardware.led_1);
+
+		this.elm.querySelectorAll(`.buzzer option`).forEach((option) => {
+			if(option.value == hardware.buzzer){
+				option.setAttribute("selected","selected");
+			}else{
+				option.removeAttribute("selected");
+			}
+		});
+	}
+
 	// Set the whole state
 	set_state(data){
 		this.set_segments(data.segments);
 		this.set_duration(data.duration);
+		this.set_hardware(data.hardware);
 	}
 
 	// Set the segments based on provided data
@@ -222,6 +239,8 @@ class Sequence_Step{
 		this.elm.querySelector(".buzzer").addEventListener("change", (e) => {
 			e.preventDefault();
 			this._data.hardware.buzzer = e.target.value;
+
+			this._fire_update();
 
 			// Temporarily play a sound to show what we selected
 			const audioCtx = new (window.AudioContext || window.webkitAudioContext)();

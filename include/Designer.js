@@ -29,7 +29,10 @@ class Designer{
 		this._animation.current_sequence_index = 0;
 
 		// Create an undo handler
-		this.undo = new Undo();
+		this.undo = new Undo({
+			undo_elm: document.querySelector(".undo"),
+			undoundo_elm: document.querySelector(".undoundo")
+		});
 
 		// Save the starting state as the first one
 		this.history_save();
