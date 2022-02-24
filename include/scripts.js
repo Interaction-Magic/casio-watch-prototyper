@@ -34,6 +34,28 @@ document.addEventListener("DOMContentLoaded", () => {
 		designer.history_undoundo();
 		e.target.blur();
 	});
+
+	// Add click handlers to sequences menu button
+	document.querySelector(".export").addEventListener("click", (e) => {
+		e.preventDefault();
+		download_file();
+		e.target.blur();
+	});
+
+
+	
+	// Generate downloadable text file of data
+	let download_file = () => {
+
+		let data = JSON.stringify(designer.get_state());
+	
+		// Trigger download
+		const helper_link = document.createElement('a');
+		helper_link.href = `data:text/plain;charset=utf-8,${encodeURI(data)}`;
+		helper_link.target = '_blank';
+		helper_link.download = `sensor_watch_ui_${Math.round(Date.now()/1000)}.txt`;
+		helper_link.click();
+	}
 	
 });
 

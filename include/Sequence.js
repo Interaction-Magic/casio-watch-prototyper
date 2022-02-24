@@ -126,7 +126,7 @@ class Sequence{
 	// Set the name of the sequence
 	set_name(name){
 		this._name = name;
-		this.opts.container.querySelector(".name").innerHTML = name;
+		this.opts.container.querySelector(".name").textContent = name;
 	}
 
 	//
@@ -208,7 +208,6 @@ class Sequence{
 				e.preventDefault();
 				e.target.blur();
 				if(e.target.innerHTML != this._name){
-					console.log([e.target.innerHTML,this._name]);
 					this.set_name(e.target.innerHTML);
 					this._fire_update();
 				}
@@ -217,7 +216,6 @@ class Sequence{
 		this.opts.elm.querySelector(".name").addEventListener("blur", (e) => {
 			e.preventDefault();
 			if(e.target.innerHTML != this._name){
-				console.log([e.target.innerHTML,this._name]);
 				this.set_name(e.target.innerHTML);
 				this._fire_update();
 			}

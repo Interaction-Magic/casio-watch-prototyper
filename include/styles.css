@@ -85,6 +85,11 @@ main{
 	align-items: center;
 }
 
+
+/* ********************************************** */
+/* Primary nav menu */
+/* ********************************************** */
+
 .primary_nav a{
 	color: black;
 	background-color: rgba(255, 255, 255, 0.6);
@@ -132,6 +137,54 @@ main{
 	background-image:url("../assets/images/pause.svg");
 }
 
+
+
+/* ********************************************** */
+/* Sequences nav menu */
+/* ********************************************** */
+
+.sequences_nav{
+	padding: 10px 20px 0 20px;
+	display: flex;
+}
+.sequences_nav a{
+	color: black;
+	background-color: rgba(255, 255, 255, 0.6);
+	text-decoration: none;
+	font-weight: 500;
+	margin: 0 5px 0 0;
+	padding: 0.5em 0.7em 0.5em 38px;
+	position: relative;
+	background-size: 25px;
+	background-repeat: no-repeat;
+	background-position: 8px 50%;
+	display: block;
+	height: 20px;
+	filter: invert(100%);
+	opacity: 0.9;
+	line-height: 20px;
+	font-size: 16px;
+	border-bottom: 3px solid transparent;
+}
+.sequences_nav .add_sequence{background-image:url("../assets/images/add.svg");}
+.sequences_nav .import{background-image:url("../assets/images/archive.svg");}
+.sequences_nav .export{background-image:url("../assets/images/share.svg");}
+
+.sequences_nav a:not(.disabled):hover{
+	background-color: rgba(255, 255, 255, 1);
+	border-bottom-color:black;
+}
+.sequences_nav a:not(.disabled):focus{
+	filter: none;
+	opacity: 1;
+	border-bottom-color:black;
+	background-color: rgba(255,255,255,1);
+}
+
+
+
+
+
 a.connect{
 	padding-right: 25px;
 }
@@ -149,16 +202,6 @@ a.connect.connected::before{
 	background:greenyellow;
 }
 
-.notes{
-	font-family: "IBM Plex Mono", monospace;
-	font-size: 0.8em;
-	opacity: 1;
-	transition: opacity 0.2s ease-out;
-	max-width: 250px;
-}
-.notes.hide-notes{
-	opacity: 0;
-}
 
 /* Logger */
 .log-container{
