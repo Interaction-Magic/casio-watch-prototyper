@@ -42,6 +42,11 @@ document.addEventListener("DOMContentLoaded", () => {
 		designer.history_save();
 		e.target.blur();
 	});
+	document.querySelector(".import").addEventListener("click", (e) => {
+		e.preventDefault();
+		upload_file();
+		e.target.blur();
+	});
 	document.querySelector(".export").addEventListener("click", (e) => {
 		e.preventDefault();
 		download_file();
@@ -49,6 +54,33 @@ document.addEventListener("DOMContentLoaded", () => {
 	});
 
 
+	// Receive input file from upload
+	let upload_file = () => {
+		const helper_link = document.createElement('input');
+		helper_link.type = "file";
+		helper_link.accept = "text/plain";
+		helper_link.addEventListener("change", (e) => {
+
+			if(e.target.files[0]){
+				console.log(e.target.files[0]);
+				let reader = new FileReader();
+				reader.readAsText(e.target.files[0]);
+
+				reader.onload = function() {
+					designer.put_state(JSON.parse(reader.result));
+					alert(`Imported: ${e.target.files[0].name}`);
+					designer.history_save();
+				};
+				
+				reader.onerror = function() {
+					alert("Error importing file");
+				};
+			}
+
+
+		});
+		helper_link.click();
+	}
 	
 	// Generate downloadable text file of data
 	let download_file = () => {
