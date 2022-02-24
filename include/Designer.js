@@ -27,20 +27,31 @@ class Designer{
 		// Create an undo handler
 		this.undo = new Undo({
 			undo_elm: document.querySelector(".undo"),
-			undoundo_elm: document.querySelector(".undoundo")
+			undoundo_elm: document.querySelector(".undoundo"),
+			save_to_storage: true
 		});
 
-		// Create first sequence
-		this.add_sequence();
-		this._animation.current_sequence_index = 0;
+		// Restore from whevere we want to
+		if(this.undo.has_retrieved_from_storage){
 
-		// Save the starting state as the first one
-		this.history_save();
+			// Load from storage data
+			this.put_state(this.undo.retrieve());
 
-		// Listener for "updated" triggers to initiate a state save
-		this.opts.sequences_container.addEventListener("updated", (e) => {
+		}else if(this.opts.data != null){
+
+			// Load from provided data
+			this.put_state(this.opts.data);
+
+		}else{
+
+			// Create a default sequence
+			this.add_sequence();
+			this._animation.current_sequence_index = 0;
 			this.history_save();
-		});
+
+		}
+
+		this._add_handlers();
 	}
 
 	add_sequence(sequence_data = null){
@@ -72,10 +83,13 @@ class Designer{
 		}
 	}
 
-	// Undo events
+	// Save the current state
 	history_save(){
-		this.undo.save(this.get_state());
+		const state = this.get_state();
+		this.undo.save(state);
 	}
+
+	// Undo events
 	history_undo(){
 		const undo_data = this.undo.undo();
 		if(undo_data){
@@ -202,5 +216,43 @@ class Designer{
 		this.oscillator.start();
 		this._animation.is_buzzing = true;
 		this._animation.buzzing_freq = frequency;
+	}
+
+	_add_handlers(){
+
+		// Listener for "updated" triggers to initiate a state save
+		this.opts.sequences_container.addEventListener("updated", (e) => {
+			this.history_save();
+		});
+
+		// Listener for duplicate / delete sequence buttons
+		this.opts.sequences_container.addEventListener("click", (e) => {
+			e.preventDefault();
+
+			// Get the hash, to work out what sort of switch it is
+			const url_target = e.target.href;
+			if(!url_target){
+				return;
+			}
+			const hash = url_target.substring(url_target.indexOf('#') + 1);
+			
+			// TODO: Clean up this dodgy traverse!
+			const sequence_id = e.target.parentNode.parentNode.parentNode.parentNode; //.dataset.index;
+
+			console.log(sequence_id);
+/*
+			switch(hash){
+				case "sequence_duplicate":
+					this.step_insert_after(step_id, true);
+					this._fire_update();
+					e.target.blur();
+					break;
+				case "sequence_delete":
+					this.step_delete(step_id);
+					this._fire_update();
+					e.target.blur();
+					break;
+			}*/
+		});
 	}
 }

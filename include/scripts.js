@@ -18,41 +18,49 @@ document.addEventListener("DOMContentLoaded", () => {
 	});
 
 	// Add click handlers to menu buttons
-	document.querySelector(".play").addEventListener("click", (e) => {
-		e.preventDefault();
-		designer.play_pause();
-		e.target.classList.toggle("is_playing");
-		e.target.blur();
-	});
-	document.querySelector(".undo").addEventListener("click", (e) => {
-		e.preventDefault();
-		designer.history_undo();
-		e.target.blur();
-	});
-	document.querySelector(".undoundo").addEventListener("click", (e) => {
-		e.preventDefault();
-		designer.history_undoundo();
-		e.target.blur();
-	});
+	document.querySelectorAll(".primary_nav a, .sequences_nav a").forEach((link) => {
+		link.addEventListener("click", (e) => {
+			e.preventDefault();
 
-	// Add click handlers to sequences menu button
-	document.querySelector(".add_sequence").addEventListener("click", (e) => {
-		e.preventDefault();
-		designer.add_sequence();
-		designer.history_save();
-		e.target.blur();
-	});
-	document.querySelector(".import").addEventListener("click", (e) => {
-		e.preventDefault();
-		upload_file();
-		e.target.blur();
-	});
-	document.querySelector(".export").addEventListener("click", (e) => {
-		e.preventDefault();
-		download_file();
-		e.target.blur();
-	});
+			// Get the hash, to work out what sort of switch it is
+			const url_target = link.href;
+			if(!url_target){
+				return;
+			}
+			const hash = url_target.substring(url_target.indexOf('#') + 1);
 
+			switch(hash){
+
+				case "play":
+					designer.play_pause();
+					e.target.classList.toggle("is_playing");
+					break;
+				
+				case "undo":
+					designer.history_undo();
+					break;
+				
+				case "undoundo":
+					designer.history_undoundo();
+					break;
+
+				case "add_sequence":
+					designer.add_sequence();
+					designer.history_save();
+					break;
+
+				case "import":
+					upload_file();
+					break;
+
+				case "export":
+					download_file();
+					break;
+			}
+			
+			link.blur();
+		});
+	});
 
 	// Receive input file from upload
 	let upload_file = () => {

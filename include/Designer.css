@@ -98,7 +98,7 @@ main{
 .sequence{
 	background:rgba(255,255,255,0.25);
 	width: 100%;
-	margin: 0 10px;
+	margin: 0 10px 20px;
 	position: relative;
 	display: flex;
 	flex-direction: column;
@@ -127,7 +127,7 @@ main{
 	padding-top: 8px;
 	display: flex;
 	align-items: center;
-	justify-content: flex-start;
+	justify-content: space-between;
 	font-weight: 300;
 	font-size: 14px;
 	border-top: 1px solid rgba(255,255,255,0.3);
@@ -141,6 +141,49 @@ main{
 .triggers_row select{
 	margin-left: 5px;
 }
+
+.button_actions{
+	display: flex;
+	align-items: center;
+}
+
+.sequence_editing{
+	display: flex;
+	margin-right: 5px;
+}
+.sequence_editing a{
+	display: block;
+	text-decoration: none;
+	padding: 2px;
+	color: black;
+	text-decoration: none;
+	margin: 0;
+	position: relative;
+	text-indent: -9767px;
+	background-size: 20px;
+	background-repeat: no-repeat;
+	background-position: 50% 50%;
+	display: block;
+	width: 22px;
+	height: 22px;
+	filter: invert(100%);
+	opacity: 0.9;
+	line-height: 20px;
+	border-radius: 5px;
+}
+.sequence_editing a:hover{
+	background-color: rgba(255, 255, 255, 0.5);
+}
+.sequence_editing a:focus{
+	filter: none;
+	opacity: 1;
+	border-bottom-color:black;
+	background-color: rgba(255,255,255,1);
+}
+.sequence_editing .duplicate{background-image:url("../assets/images/copy.svg");}
+.sequence_editing .delete{background-image:url("../assets/images/delete.svg");}
+
+
 
 .sequence_options{
 	margin: 5px;

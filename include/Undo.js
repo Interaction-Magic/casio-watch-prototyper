@@ -6,17 +6,41 @@ class Undo{
 
 	// Default options are below
 	_default_opts = {
-		disabled_class: "disabled"
+		disabled_class: "disabled",
+		save_to_storage: true			// Do we save stack to storage as we go
 	};
 
-	_stack = [];
+	has_retrieved_from_storage = false;
 
+	_stack = [];
 	_current_index = -1;
 
 	constructor(opts) {
 		// Merge opts with defaults
 		this.opts = {...this._default_opts, ...opts};
 
+		// Restore from provided data, if provided
+		if(this.opts.stack){
+			this._stack = this.opts.stack;
+		}
+		if(this.opts._current_index){
+			this._current_index = this.opts._current_index;
+		}
+
+		// Retrieve from storage
+		if(this.opts.save_to_storage){
+			try{
+				
+				this._stack = JSON.parse(localStorage.getItem('undo_stack'));
+				this._current_index =  localStorage.getItem('undo_stack_position');
+				this.has_retrieved_from_storage = true;
+
+			}catch{
+				console.warn("Could not retrieve from localStorage");
+			}
+		}
+
+		// Updated icons on screen
 		this._update_elms();
 	}
 
@@ -29,6 +53,7 @@ class Undo{
 		this._stack.push(JSON.parse(JSON.stringify(data))); // Deep copy of object into stack
 		this._current_index++;
 
+		this._save_to_storage();
 		this._update_elms();
 	}
 
@@ -52,6 +77,7 @@ class Undo{
 
 	// Fetch the current stack contents
 	retrieve(){
+		this._save_to_storage();
 		this._update_elms();
 		return this._stack[this._current_index];
 	}
@@ -72,6 +98,15 @@ class Undo{
 		}
 		if(this.opts.undoundo_elm){
 			this.opts.undoundo_elm.classList.toggle(`${this.opts.disabled_class}`, !states.undoundo);
+		}
+	}
+
+	// Save to localStorage if needed
+	_save_to_storage(){
+		if(this.opts.save_to_storage){
+			// Save to localStorage
+			localStorage.setItem('undo_stack', JSON.stringify(this._stack));
+			localStorage.setItem('undo_stack_position', this._current_index);
 		}
 	}
 }

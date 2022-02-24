@@ -14,6 +14,7 @@ class Sequence{
 	_total_duration = 0;
 
 	_name = "";
+	_index = 0;
 
 	constructor(opts) {
 		// Merge opts with defaults
@@ -25,12 +26,14 @@ class Sequence{
 		this.opts.container.append(this.opts.elm);
 
 		this.set_name(this.opts.name);
+		this.set_index(this.opts.index);
 
 		if(this.opts.data != null){
 			// We have incoming data to build from, so build from this
 
 			// Set sequence properties
 			this.set_name(this.opts.data.name);
+			this.set_index(this.opts.data.index);
 
 			// Generate all the steps
 			for(let step_data of this.opts.data.steps){
@@ -86,6 +89,7 @@ class Sequence{
 	// Retrieves array of all the data for this sequence
 	get_state(){
 		const data = {
+			index: this._index,
 			name: this._name,
 			steps: []
 		};
@@ -127,6 +131,12 @@ class Sequence{
 	set_name(name){
 		this._name = name;
 		this.opts.elm.querySelector(".name").textContent = name;
+	}
+
+	// Set the index for this step
+	set_index(index){
+		this._index = index;
+		this.opts.elm.dataset.index = index;
 	}
 
 	//
@@ -202,6 +212,10 @@ class Sequence{
 	}
 
 	_add_event_handlers(){
+
+
+
+		
 		// Set handler for name editing
 		this.opts.elm.querySelector(".name").addEventListener('keydown', (e) => {
 			if(e.key === 'Enter'){
