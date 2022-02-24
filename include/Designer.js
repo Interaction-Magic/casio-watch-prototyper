@@ -8,16 +8,22 @@ class Designer{
 	_default_opts = {
 	};
 
-	_sequences = [];
+	// Array of all sequences
+	_data = {
+		sequences: [],
+		current_sequence_index: -1
+	};
 
+	// Information related to current animation playback
 	_animation = {
 		is_playing: false,
 		start_time: 0,
-		current_sequence_index: 0,
+
 		is_buzzing: false,
 		buzzing_freq: 0
 	};
 	
+	// AudioContext for buzzer simulation playback
 	audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 
 	constructor(opts) {
@@ -31,7 +37,7 @@ class Designer{
 			save_to_storage: true
 		});
 
-		// Restore from whevere we want to
+		// Load the initial content
 		if(this.undo.has_retrieved_from_storage){
 
 			// Load from storage data
@@ -39,14 +45,15 @@ class Designer{
 
 		}else if(this.opts.data != null){
 
-			// Load from provided data
+			// Load from provided data to constructor
 			this.put_state(this.opts.data);
+			this.history_save();
 
 		}else{
 
-			// Create a default sequence
+			// Create a blank initial sequence
 			this.add_sequence();
-			this._animation.current_sequence_index = 0;
+			this._data.current_sequence_index = 0;
 			this.history_save();
 
 		}
@@ -54,16 +61,37 @@ class Designer{
 		this._add_handlers();
 	}
 
-	add_sequence(sequence_data = null){
+	// Add a new sequence to the prototyper
+	sequence_add(opts){sequence_data = null, after = null, position = this._sequences.length){
 
-		const sequence = new Sequence({
+		const sequence_opts = {
 			container: this.opts.sequences_container,
 			prototype_container: document.querySelector(".sequence_prototype"),
+			name: `Sequence ${this._sequences.length}`,
+			index: this._sequences.length,
+			after: after,
 			data: sequence_data,
-			name: `Sequence ${this._sequences.length}`
-		});
 
-		this._sequences.push(sequence);
+		};
+		const sequence = new Sequence({...this.sequence_opts, ...opts});
+
+		this._sequences.splice(position, 0, sequence);
+
+		console.log(this._sequences);
+	}
+
+	// Inserts a new sequence after the current one
+	sequence_insert_after(index, is_duplicate){
+		const s = this._get_sequence_from_index(index);
+		this.sequence_add(s.sequence.get_state(), s.sequence.get_dom(), s.position);
+	}
+
+	// Delete a sequence at a given index
+	sequence_delete(index){
+
+		const s = this._get_sequence_from_index(index)
+		s.sequence.remove();
+		this._sequences.splice(s.index, 1);
 	}
 
 	play(){
@@ -119,6 +147,8 @@ class Designer{
 	// Overwrites the whole designer with all the provided data
 	put_state(data){
 
+		console.log(data);
+
 		// Wipe all sequences
 		this._sequences.splice(0, this._sequences.length);
 
@@ -127,30 +157,13 @@ class Designer{
 
 		// Generate new sequences
 		for(let sequence_data of data.sequences){
-			this.add_sequence(sequence_data);
+			this.sequence_add(sequence_data);
 		}
 
 		// Save animation properties
 		this._animation.start_time = data.start_time;
 		this._animation.current_sequence_index = data.current_sequence_index;
 
-	}
-
-	_render_loop(){
-
-		if(!this._animation.is_playing){
-			return;
-		}
-
-		// Get data for current step of active sequence
-		const step = this._sequences[this._animation.current_sequence_index].get_step(this._animation.start_time);
-		const step_data = step.get_state();
-
-		this.write(step_data);
- 
-		if(this._animation.is_playing){
-			window.requestAnimationFrame(() => this._render_loop());
-		}
 	}
 
 	//
@@ -199,6 +212,37 @@ class Designer{
 		}
 	}
 
+
+	_render_loop(){
+
+		if(!this._animation.is_playing){
+			return;
+		}
+
+		// Get data for current step of active sequence
+		const step = this._sequences[this._animation.current_sequence_index].get_step(this._animation.start_time);
+		const step_data = step.get_state();
+
+		this.write(step_data);
+ 
+		if(this._animation.is_playing){
+			window.requestAnimationFrame(() => this._render_loop());
+		}
+	}
+
+	// Hunt for a sequence in the list from the given index
+	_get_sequence_from_index(index){
+		let i=0;
+		for(let sequence of this._sequences){
+			if(sequence.get_index() == index){
+				return {
+					index: i,
+					sequence: sequence
+				};
+			}
+		}
+	}
+
 	//
 	// Oscillator helpers
 	_stop_oscillator(){
@@ -237,22 +281,20 @@ class Designer{
 			const hash = url_target.substring(url_target.indexOf('#') + 1);
 			
 			// TODO: Clean up this dodgy traverse!
-			const sequence_id = e.target.parentNode.parentNode.parentNode.parentNode; //.dataset.index;
+			const sequence_id = e.target.parentNode.parentNode.parentNode.parentNode.dataset.index;
 
-			console.log(sequence_id);
-/*
 			switch(hash){
 				case "sequence_duplicate":
-					this.step_insert_after(step_id, true);
-					this._fire_update();
+					this.sequence_insert_after(sequence_id, true);
+					this.history_save();
 					e.target.blur();
 					break;
 				case "sequence_delete":
-					this.step_delete(step_id);
-					this._fire_update();
+					this.sequence_delete(sequence_id);
+					this.history_save();
 					e.target.blur();
 					break;
-			}*/
+			}
 		});
 	}
 }

@@ -4,11 +4,16 @@
 > Docs to follow...
 >
 
+BUGS:
+
++ Duplicate sequences IDs are possible: fix this and fix sequence duplication. Sort all index number references
++ Step splicing does not work in the correct place
+
 TODO:
 
 + ~Create a common styling for buttons and colours across all CSS~
 + Fix Sequence index saving and restorting (to enable duplicate & delete buttons to work)
-+ Code re-factor to reduce duplication
++ Code re-factor to reduce duplication (and clean up this.elm, this.opts_elm etc...)
 + Rename to sensor-watch-prototyper
 + Document all features, especially helper UI features (like hold down to drag through segments)
 
@@ -28,3 +33,5 @@ TODO Features:
 + ~Make UI a bit less chaotic with the menus?~
 + Add scroll wheel on duration boxes to count up/down in 50ms increments
 + Add highlighting for currently playing step and sequence in greenyellow?  
++ Give sequences random names not "1", "2" etc...
++ Ctrl+Z, Ctrl+Y for undo/redo

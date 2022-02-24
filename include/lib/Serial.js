@@ -1,3 +1,30 @@
+//  ***********************************************
+//  ***********************************************
+//  USBSerial Interface
+// 
+//  Author: George Cave @ Interaction Magic
+//  Date: February 2022
+// 
+//  ***********************************************
+//  
+//  Description TBD
+// 
+//  ***********************************************
+// 
+//  Usage:
+// 
+//  TBD
+// 
+//  Public methods:
+// 
+//  TBD
+// 
+//  Public parameters:
+//
+//  TBD
+// 
+//  ***********************************************
+
 class Serial{
 
 	// Constants for communication with device

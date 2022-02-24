@@ -1,6 +1,38 @@
-//
-// Undo / Redo handler
-//
+//  ***********************************************
+//  ***********************************************
+//  UNDO / REDO Handler
+// 
+//  Author: George Cave @ Interaction Magic
+//  Date: February 2022
+// 
+//  ***********************************************
+//  
+//  Provides a framework for saving and restoring items in the history
+// 
+//  ***********************************************
+// 
+//  Usage:
+// 
+//  const undo = new Undo({
+//  	undo_elm: 			DOM_item_for_undo_link,
+//  	undoundo_elm: 		DOM_item_for_undoundo_link,
+//  	save_to_storage: 	true, // set true to save to localStorage to preseve on page reload
+// 		disabled_class:	"disabled" // class to add to links when they are not available
+//  });
+// 
+//  Public methods:
+// 
+//  save(json_obj) -> save a new history state
+//  undo() -> step backwards one step in history (returns the obj from that position)
+//  undoundo() -> step forewards one step in history (returns the obj from that position)
+//  retrieve() -> returns the obj from the current position
+//  has_undo -> returns an obj with possibility for undo right now, e.g: {undo: true, undoundo: false}
+// 
+//  Public parameters:
+// 
+//  has_retrieved_from_storage -> is set true if success pulling data out of localStorage
+// 
+//  ***********************************************
 
 class Undo{
 

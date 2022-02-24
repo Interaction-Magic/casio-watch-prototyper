@@ -10,23 +10,38 @@ class Sequence{
 		prototype_container: null
 	};
 
-	_steps = [];
+	_data = {
+		name: "",
+		index: 0,
+		order: 0,
+
+		steps: [],
+
+		display: {
+			is_minimised: false
+		}
+	};
+
+//	_steps = [];
 	_total_duration = 0;
 
-	_name = "";
-	_index = 0;
+//	_name = "";
+//	_index = 0;
 
 	constructor(opts) {
 		// Merge opts with defaults
 		this.opts = {...this._default_opts, ...opts};
 
 		// Create new sequence container in UI 
-		this.opts.elm = this.opts.prototype_container.cloneNode(true);
-		this.opts.elm.classList.remove("sequence_prototype");
-		this.opts.container.append(this.opts.elm);
+		this.dom = this.opts.prototype_container.cloneNode(true);
+		this.dom.classList.remove("sequence_prototype");
 
-		this.set_name(this.opts.name);
-		this.set_index(this.opts.index);
+		// Attach to the DOM
+		if(this.opts.after){
+			this.opts.after.after(this.dom);
+		}else{
+			this.opts.container.append(this.dom);
+		}
 
 		if(this.opts.data != null){
 			// We have incoming data to build from, so build from this
@@ -44,17 +59,20 @@ class Sequence{
 			this.step_add();
 		}
 
+		this.set_name(this.opts.name);
+		this.set_index(this.opts.index);
+
 		// Event handlers for the sequence options
 		this._add_event_handlers();
 		
 
 		// Add some event handlers across the whole sequence
-		this.opts.elm.querySelector(".add_step").addEventListener("click", (e) => {
+		this.dom.querySelector(".add_step").addEventListener("click", (e) => {
 			e.preventDefault();
 			this.step_add();
 			this._fire_update();
 		});
-		this.opts.elm.addEventListener("click", (e) => {
+		this.dom.addEventListener("click", (e) => {
 			e.preventDefault();
 
 			// Get the hash, to work out what sort of switch it is
@@ -79,7 +97,7 @@ class Sequence{
 					e.target.blur();
 					break;
 				case "minimise":
-					this.opts.elm.classList.toggle("minimised");
+					this.dom.classList.toggle("minimised");
 					e.target.blur();
 					break;
 			}
@@ -97,6 +115,19 @@ class Sequence{
 			data.steps.push(step.get_state());
 		}
 		return data;
+	}
+
+	get_index(){
+		return this._index;
+	}
+
+	get_dom(){
+		return this.dom;
+	}
+
+	// Delete this sequence
+	remove(){
+		this.dom.remove();
 	}
 
 	//
@@ -130,13 +161,13 @@ class Sequence{
 	// Set the name of the sequence
 	set_name(name){
 		this._name = name;
-		this.opts.elm.querySelector(".name").textContent = name;
+		this.dom.querySelector(".name").textContent = name;
 	}
 
 	// Set the index for this step
 	set_index(index){
 		this._index = index;
-		this.opts.elm.dataset.index = index;
+		this.dom.dataset.index = index;
 	}
 
 	//
@@ -154,7 +185,7 @@ class Sequence{
 			step_opts.after = after_elm
 		}else{
 			// Put it at the end
-			step_opts.before = this.opts.elm.querySelector(".add_step");
+			step_opts.before = this.dom.querySelector(".add_step");
 		}
 
 		// Create step
@@ -206,7 +237,7 @@ class Sequence{
 
 	// Fires an event to trigger an update
 	_fire_update(){
-		this.opts.elm.dispatchEvent(new CustomEvent("updated", {
+		this.dom.dispatchEvent(new CustomEvent("updated", {
 			bubbles: true
 		}));
 	}
@@ -217,7 +248,7 @@ class Sequence{
 
 		
 		// Set handler for name editing
-		this.opts.elm.querySelector(".name").addEventListener('keydown', (e) => {
+		this.dom.querySelector(".name").addEventListener('keydown', (e) => {
 			if(e.key === 'Enter'){
 				e.preventDefault();
 				e.target.blur();
@@ -227,7 +258,7 @@ class Sequence{
 				}
 			}
 		});
-		this.opts.elm.querySelector(".name").addEventListener("blur", (e) => {
+		this.dom.querySelector(".name").addEventListener("blur", (e) => {
 			e.preventDefault();
 			if(e.target.innerHTML != this._name){
 				this.set_name(e.target.innerHTML);
