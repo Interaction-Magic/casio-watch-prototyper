@@ -13,27 +13,15 @@ body{
 	font-family: "Roboto", sans-serif;
 }
 
-
 .wrapper{
 	position: relative;
 	width: 100%;
 	max-width: max(100% - 690px, calc(66% - 80px));
 }
 
-main{
-	position: relative;
-	display: flex;
-	align-items: center;
-	flex-direction: column;
-	flex-grow: 1;
-
-	-webkit-user-select: none;  
-	-moz-user-select: none;    
-	-ms-user-select: none;      
-	user-select: none;
-}
-
+/* ********************************************** */
 /* Warning banner */
+/* ********************************************** */
 
 .api_warning{
 	background:rgb(220, 43, 12);
@@ -48,11 +36,100 @@ main{
 	content: '⚠️ ';
 }
 
+/* ********************************************** */
+/* Common button styling */
+/* ********************************************** */
+
+nav{display: flex; align-items: center;}
+
+nav a{
+	color: black;
+	background-color: rgba(255, 255, 255, 0.6);
+	text-decoration: none;
+	font-weight: 500;
+	margin: 0 5px 0 0;
+	padding: 0.5em 0.5em 0.5em 2.5em;
+	position: relative;
+	background-size: 1.5em;
+	background-repeat: no-repeat;
+	background-position: 0.5em 50%;
+	display: block;
+	height: 1.2em;
+	width: auto;
+	filter: invert(100%);
+	opacity: 0.9;
+	line-height: 1.2em;
+	border-bottom: 0.15em solid transparent;
+	font-size: 16px;
+}
+nav :not(.disabled):hover{
+	background-color: rgba(255, 255, 255, 1);
+	border-bottom-color:black;
+}
+nav :not(.disabled):focus{
+	filter: none;
+	opacity: 1;
+	border-bottom-color:white;
+	background-color: rgba(255,255,255,1);
+}
+
+nav .disabled{opacity:0.3; cursor: default; background-color:transparent;}
+
+nav.lighter a{background-color: rgba(255, 255, 255, 0.25);}
+
+nav.inverted a{filter:none; background-color: rgba(255,255,255,0.5); border: none;}
+nav.inverted a:not(.disabled):hover{filter:invert(100%); background-color: rgba(255,255,255,0.8);}
+
+nav.right_align{justify-content: flex-end;}
+nav.right_align a{margin: 0 0 0 5px;}
+
+nav .icon_only{text-indent: -9273px; width:1.2em; padding:0.5em 0.8em; background-position: 50% 50%; background-size: 1.6em;}
+
+nav .play{background-image:url("../assets/images/play.svg");}
+nav .undo{background-image:url("../assets/images/undo.svg");}
+nav .undoundo{background-image:url("../assets/images/redo.svg");}
+nav .add{background-image:url("../assets/images/add.svg");}
+nav .import{background-image:url("../assets/images/archive.svg");}
+nav .export{background-image:url("../assets/images/share.svg");}
+nav .copy{background-image:url("../assets/images/copy.svg");}
+nav .delete{background-image:url("../assets/images/delete.svg");}
+nav .settings{background-image:url("../assets/images/settings.svg");}
+
+nav
+select{
+	border-radius: 4px;
+	border: none;
+	font-family: "Roboto", sans-serif;
+	font-weight: 300;
+	background: rgba(255,255,255,0.2);
+	color: white;
+	padding: 4px 4px;
+	outline: none;
+}
+select option{
+	background: rgba(254, 255, 189); 
+	color: black;
+	font-family: "Roboto", sans-serif;
+}
+select:focus{
+	background: rgb(254, 255, 189); 
+	color: black;
+}
+
+/* ********************************************** */
 /* Logo menu */
+/* ********************************************** */
+
 .header{
 	display: flex;
 	justify-content: space-between;
-	padding: 20px 20px 0 20px;
+	padding: 15px 20px;
+	position: relative;
+	left: 0;
+	right: 0;
+	background: rgb(255,255,255,0.95);
+	color: black;
+	margin-bottom: 10px;
 }
 .logo_menu{
 	display: flex;
@@ -65,7 +142,6 @@ main{
 	opacity: 0.9;
 	display: block;
 	margin-bottom: 0.4em;
-	filter: invert(100%);
 }
 .logo_menu h1{
 	margin:0 0 0 10px;
@@ -73,71 +149,12 @@ main{
 	font-weight: 300;
 }
 .logo_menu h1 a{
-	color: white;
+	color: black;
 	text-decoration: none;
 }
 .logo_menu h1 a:hover{
 	text-decoration: underline;
 }
-
-.primary_nav{
-	display: flex;
-	align-items: center;
-}
-
-
-/* ********************************************** */
-/* Primary nav menu */
-/* ********************************************** */
-
-.primary_nav a{
-	color: black;
-	background-color: rgba(255, 255, 255, 0.6);
-	text-decoration: none;
-	font-weight: 500;
-	margin: 0 0 0 5px;
-	padding: 0.5em 0.7em;
-	position: relative;
-	text-indent: -9767px;
-	background-size: 28px;
-	background-repeat: no-repeat;
-	background-position: 50% 50%;
-	display: block;
-	width: 20px;
-	height: 20px;
-	filter: invert(100%);
-	opacity: 0.9;
-	line-height: 20px;
-	font-size: 16px;
-	border-bottom: 3px solid transparent;
-}
-.primary_nav a:not(.disabled):hover{
-	background-color: rgba(255, 255, 255, 1);
-	border-bottom-color:black;
-}
-.primary_nav a:not(.disabled):focus{
-	filter: none;
-	opacity: 1;
-	border-bottom-color:black;
-	background-color: rgba(255,255,255,1);
-}
-
-.primary_nav .play{background-image:url("../assets/images/play.svg"); text-indent:0px; width: auto; padding-left: 38px; background-position-x: 8px; background-size: 25px;}
-.primary_nav .undo{background-image:url("../assets/images/undo.svg");}
-.primary_nav .undoundo{background-image:url("../assets/images/redo.svg");}
-
-.primary_nav a.disabled{opacity:0.3; cursor: default;}
-
-.primary_nav .play.is_playing{
-	background-color: greenyellow;
-	filter: none;
-}
-.primary_nav .play.is_playing:hover{
-	border-bottom-color:white;
-	background-image:url("../assets/images/pause.svg");
-}
-
-
 
 /* ********************************************** */
 /* Sequences nav menu */
@@ -146,44 +163,15 @@ main{
 .sequences_nav{
 	padding: 10px 20px 0 20px;
 	display: flex;
+	justify-content: space-between;
 }
 .sequences_nav a{
-	color: black;
-	background-color: rgba(255, 255, 255, 0.6);
-	text-decoration: none;
-	font-weight: 500;
-	margin: 0 5px 0 0;
-	padding: 0.5em 0.7em 0.5em 38px;
-	position: relative;
-	background-size: 22px;
-	background-repeat: no-repeat;
-	background-position: 8px 50%;
-	display: block;
-	height: 18px;
-	filter: invert(100%);
-	opacity: 0.9;
-	line-height: 18px;
 	font-size: 14px;
-	border-bottom: 3px solid transparent;
-}
-.sequences_nav .add_sequence{background-image:url("../assets/images/add.svg"); background-size:20px;}
-.sequences_nav .import{background-image:url("../assets/images/archive.svg");}
-.sequences_nav .export{background-image:url("../assets/images/share.svg");}
-
-.sequences_nav a:not(.disabled):hover{
-	background-color: rgba(255, 255, 255, 1);
-	border-bottom-color:black;
-}
-.sequences_nav a:not(.disabled):focus{
-	filter: none;
-	opacity: 1;
-	border-bottom-color:black;
-	background-color: rgba(255,255,255,1);
 }
 
-
-
-
+/* ********************************************** */
+/* Connect menu */
+/* ********************************************** */
 
 a.connect{
 	padding-right: 25px;
@@ -202,8 +190,10 @@ a.connect.connected::before{
 	background:greenyellow;
 }
 
-
+/* ********************************************** */
 /* Logger */
+/* ********************************************** */
+
 .log-container{
 	width: 400px;
 	background: rgba(8,8,8,0.25);
@@ -212,8 +202,6 @@ a.connect.connected::before{
 	align-self: stretch;
 	transition: width 0.3s ease-out;
 	position: relative;
-
-
 	display: none;
 }
 
@@ -286,27 +274,3 @@ a.connect.connected::before{
 
 .log .setting{display: none;}
 .filter-settings .setting{display: block;}
-
-/* Options buttons */
-.options{
-	display:flex;
-	justify-content: left;
-	margin: 0.5em 1em;
-}
-.options a{
-	color: white;
-	font-size: 0.8em;
-	margin: 0.5em;
-	text-decoration: none;
-	background: rgba(0,0,0,0.3);
-	padding: 0.4em 1em;
-	border-radius: 10px;
-	border: 2px solid rgba(0,0,0,0.4);
-}
-.options a:hover{
-	background: rgba(0,0,0,0.8);
-}
-.options a:focus{
-	background: rgba(241, 241, 241, 0.8);
-	color: black;
-}

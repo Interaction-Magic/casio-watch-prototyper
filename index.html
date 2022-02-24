@@ -3,7 +3,7 @@
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=Utf-8">
 
-		<title>Sensor Watch Designer</title>
+		<title>Sensor Watch Prototyper</title>
 
 		<link rel="preconnect" href="https://fonts.gstatic.com">
 		<link href="https://fonts.googleapis.com/css2?IBM+Plex+Mono:wght@300&family=Poppins:wght@300;400;500;600;700&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet"> 
@@ -14,23 +14,25 @@
 
 	<body>
 		<div class="api_warning" style="display:none"></div>
-		<div class="wrapper">
-			<header class="header">
-				<div class="logo_menu">
-					<a href="https://interactionmagic.com/"><img src="assets/images/logo_black_square_trans.png" class="interaction_magic_logo"></a>
-					<h1><a href="https://www.crowdsupply.com/oddly-specific-objects/sensor-watch">Sensor Watch</a> UI Designer</h1>
-				</div>
-				<nav class="primary_nav">
-					<a href="#play" class="play">Play</a>
-					<a href="#undo" class="undo">Undo (-1)</a>
-					<a href="#undoundo" class="undoundo">Redo (+1)</a>
-				</nav>
-			</header>
-			<nav class="sequences_nav">
-				<a href="#add_sequence" class="add_sequence">Sequence</a>
-				<a href="#import" class="import">Import</a>
-				<a href="#export" class="export">Export</a>
+		<header class="header">
+			<div class="logo_menu">
+				<a href="https://interactionmagic.com/"><img src="assets/images/logo_black_square_trans.png" class="interaction_magic_logo"></a>
+				<h1><a href="https://www.crowdsupply.com/oddly-specific-objects/sensor-watch">Sensor Watch</a> Prototyper</h1>
+			</div>
+			<nav class="right_align inverted">
+				<a href="#undo" class="undo icon_only">Undo (-1)</a>
+				<a href="#undoundo" class="undoundo icon_only">Redo (+1)</a>
+				<a href="#settings" class="settings icon_only">Settings</a>
 			</nav>
+		</header>
+		<div class="wrapper">
+			<div class="sequences_nav">
+				<nav class="lighter">
+					<a href="#add_sequence" class="add">Sequence</a>
+					<a href="#import" class="import">Import</a>
+					<a href="#export" class="export">Export</a>
+				</nav>
+			</div>
 			<main class="sequences"></main>
 		</div>
 		<div class="live_output">
@@ -197,6 +199,9 @@
 				<a href="#" class="watch_button watch_button_mode"></a>
 				<a href="#" class="watch_button watch_button_alarm"></a>
 			</div>
+			<nav class="play_nav">
+				<a href="#play" class="play">Play</a>
+			</nav>
 		</div>
 
 		<div class="log-container hide-log">
@@ -209,9 +214,9 @@
 			<div class="sequence_data">
 				<div class="title_row">
 					<span class="name editable" contenteditable="true"></span>
-					<span class="sequence_options">
-						<a href="#minimise" class="minimise">Minimise</a>
-					</span>
+					<nav class="sequence_options right_align">
+						<a href="#minimise" class="minimise icon_only">Minimise</a>
+					</nav>
 				</div>
 				<div class="triggers_row">
 					<div class="button_actions">
@@ -229,10 +234,10 @@
 							<option value="-1">None</option>
 						</select>
 					</div>
-					<div class="sequence_editing">
-						<a href="#sequence_duplicate" class="duplicate" title="Duplicate this sequence"></a>
-						<a href="#sequence_delete" class="delete" title="Delete this sequence"></a>
-					</div>
+					<nav class="sequence_editing right_align">
+						<a href="#sequence_duplicate" class="copy icon_only" title="Duplicate this sequence"></a>
+						<a href="#sequence_delete" class="delete icon_only" title="Delete this sequence"></a>
+					</nav>
 				</div>
 			</div>
 			<div class="sequence_steps">
@@ -341,10 +346,10 @@
 				<div class="step_parameters">
 					<span class="number">##</span>
 					<span class="duration editable" contenteditable="true">###</span>
-					<span class="edit_options">
-						<a href="#step_duplicate" class="duplicate" title="Duplicate this step"></a>
-						<a href="#step_delete" class="delete" title="Delete this step"></a>
-					</span>
+					<nav class="edit_options right_align">
+						<a href="#step_duplicate" class="copy icon_only" title="Duplicate this step"></a>
+						<a href="#step_delete" class="delete icon_only" title="Delete this step"></a>
+					</nav>
 				</div>
 			</div>
 		</div>

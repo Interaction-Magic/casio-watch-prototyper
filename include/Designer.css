@@ -5,32 +5,12 @@
 	display: none;
 }
 
-select{
-	border-radius: 4px;
-	border: none;
-	font-family: "Roboto", sans-serif;
-	font-weight: 300;
-	background: rgba(255,255,255,0.2);
-	color: white;
-	padding: 4px 4px;
-	outline: none;
-}
-select option{
-	background: rgba(254, 255, 189); 
-	color: black;
-	font-family: "Roboto", sans-serif;
-}
-select:focus{
-	background: rgb(254, 255, 189); 
-	color: black;
-}
-
 /* ********************************************** */
 /* Live display of current sequence in top right */
 /* ********************************************** */
 .live_output{
-	position: absolute;
-	top: 30px;
+	position: fixed;
+	top: 120px;
 	right: 30px;
 	width: 33%;
 	max-width: 600px;
@@ -80,10 +60,25 @@ select:focus{
 .watch_wrapper .led{opacity:0;}
 .watch_wrapper .led.on{opacity:0.7;}
 
+nav.play_nav{display: flex; position: absolute; left:0; top:36px; right:0; justify-content: center;}
+.play{border: none; border-radius: 50px; padding-left: 2.8em; padding-right: 1.2em; background-position-x: 1em; margin:0; filter: none; background-color:rgba(255,255,255,1); opacity:1;}
+
+.play:hover{background-color:rgb(208, 255, 138) !important;}
+.play.is_playing{
+	background-color: greenyellow;
+	filter: none;
+}
+.play.is_playing:hover{
+	border-bottom-color:white;
+	background-image:url("../assets/images/pause.svg");
+}
+
+
 
 /* ********************************************** */
 /* Sequences */
 /* ********************************************** */
+
 main{
 	padding: 20px;
 }
@@ -98,7 +93,7 @@ main{
 .sequence{
 	background:rgba(255,255,255,0.25);
 	width: 100%;
-	margin: 0 10px 20px;
+	margin: 0 10px 20px 0;
 	position: relative;
 	display: flex;
 	flex-direction: column;
@@ -122,6 +117,11 @@ main{
 	justify-content: space-between;
 }
 
+
+/* ********************************************** */
+/* Triggers */
+/* ********************************************** */
+
 .triggers_row{
 	margin: 2px 5px 8px 17px;
 	padding-top: 8px;
@@ -132,96 +132,49 @@ main{
 	font-size: 14px;
 	border-top: 1px solid rgba(255,255,255,0.3);
 }
-.triggers_row .intro{
-	margin-right: 15px;
-}
-.triggers_row label{
-	margin-left: 10px;
-}
-.triggers_row select{
-	margin-left: 5px;
-}
+.triggers_row .intro{margin-right: 15px;}
+.triggers_row label{margin-left: 10px;}
+.triggers_row select{margin-left: 5px;}
 
 .button_actions{
 	display: flex;
 	align-items: center;
 }
 
+/* ********************************************** */
+/* Sequences menus */
+/* ********************************************** */
+
 .sequence_editing{
-	display: flex;
 	margin-right: 5px;
 }
 .sequence_editing a{
-	display: block;
-	text-decoration: none;
-	padding: 2px;
-	color: black;
-	text-decoration: none;
-	margin: 0;
-	position: relative;
-	text-indent: -9767px;
-	background-size: 20px;
-	background-repeat: no-repeat;
-	background-position: 50% 50%;
-	display: block;
-	width: 22px;
-	height: 22px;
-	filter: invert(100%);
-	opacity: 0.9;
-	line-height: 20px;
 	border-radius: 5px;
+	font-size: 14px;
+	background-color: transparent;
+	padding: 0.5em 0.5em;
+	border: none;
 }
-.sequence_editing a:hover{
-	background-color: rgba(255, 255, 255, 0.5);
-}
-.sequence_editing a:focus{
-	filter: none;
-	opacity: 1;
-	border-bottom-color:black;
-	background-color: rgba(255,255,255,1);
-}
-.sequence_editing .duplicate{background-image:url("../assets/images/copy.svg");}
-.sequence_editing .delete{background-image:url("../assets/images/delete.svg");}
-
-
 
 .sequence_options{
 	margin: 5px;
 }
 .sequence_options a{
-	color: black;
-	background-color: rgba(255, 255, 255, 0.3);
-	text-decoration: none;
-	margin: 0 0 0 5px;
-	position: relative;
-	text-indent: -9767px;
-	background-size: 20px;
-	background-repeat: no-repeat;
-	background-position: 50% 50%;
-	display: block;
-	width: 30px;
-	height: 30px;
-	filter: invert(100%);
-	opacity: 0.9;
-	line-height: 20px;
+	font-size: 16px;
+	background-color: transparent;
+	border: none;
+	padding:0.5em;
 }
-.sequence_options a:hover{
-	filter: none;
-	background-color: rgba(255, 255, 255, 0.7);
-}
-.sequence_options a:focus{
-	filter: none;
-	opacity: 1;
-	border-bottom-color:black;
-	background-color: rgba(255,255,255,1);
-}
-
 .sequence_options .minimise{background-image:url("../assets/images/up_arrow.svg");}
 
 .sequence.minimised .triggers_row{display: none;}
 .sequence.minimised .sequence_steps{display: none; height: 15px;}
 .sequence.minimised .sequence_data{border-bottom: 10px solid rgba(255,255,255,0.25);}
 .sequence.minimised .sequence_options .minimise{background-image:url("../assets/images/down_arrow.svg");}
+
+/* ********************************************** */
+/* Steps containers */
+/* ********************************************** */
 
 .sequence_steps{
 	padding: 10px 0 0 10px;
@@ -325,38 +278,17 @@ main{
 .duration:after{content: "ms";}
 .duration:hover{background: rgba(255,255,255,0.2);}
 
-.edit_options{display: flex; margin-right: 5px;}
-.edit_options a{
-	display: block;
-	text-decoration: none;
-	padding: 2px;
-	color: black;
-	text-decoration: none;
-	margin: 0;
-	position: relative;
-	text-indent: -9767px;
-	background-size: 20px;
-	background-repeat: no-repeat;
-	background-position: 50% 50%;
-	display: block;
-	width: 22px;
-	height: 22px;
-	filter: invert(100%);
-	opacity: 0.9;
-	line-height: 20px;
+.edit_options{
+	margin-right: 5px;
+}
+nav.edit_options a{
+	font-size: 12px;
+	background-color: transparent;
+	border: none;
+	padding:0.35em;
 	border-radius: 5px;
+	margin-left: 2px;
 }
-.edit_options a:hover{
-	background-color: rgba(255, 255, 255, 0.5);
-}
-.edit_options a:focus{
-	filter: none;
-	opacity: 1;
-	border-bottom-color:black;
-	background-color: rgba(255,255,255,1);
-}
-.edit_options .duplicate{background-image:url("../assets/images/copy.svg");}
-.edit_options .delete{background-image:url("../assets/images/delete.svg");}
 
 .editable{padding:2px 4px;}
 .editable:hover{background: rgba(255,255,255,0.2);}

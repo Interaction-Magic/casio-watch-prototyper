@@ -30,11 +30,13 @@ class Undo{
 		// Retrieve from storage
 		if(this.opts.save_to_storage){
 			try{
-				
-				this._stack = JSON.parse(localStorage.getItem('undo_stack'));
-				this._current_index =  localStorage.getItem('undo_stack_position');
-				this.has_retrieved_from_storage = true;
-
+				if(localStorage.getItem('undo_stack')){
+					this._stack = JSON.parse(localStorage.getItem('undo_stack'));
+					this._current_index =  localStorage.getItem('undo_stack_position');
+					this.has_retrieved_from_storage = true;
+				}else{
+					console.log("No localStorage to retrieve");
+				}
 			}catch{
 				console.warn("Could not retrieve from localStorage");
 			}
