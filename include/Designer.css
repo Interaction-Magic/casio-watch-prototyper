@@ -5,6 +5,26 @@
 	display: none;
 }
 
+select{
+	border-radius: 4px;
+	border: none;
+	font-family: "Roboto", sans-serif;
+	font-weight: 300;
+	background: rgba(255,255,255,0.2);
+	color: white;
+	padding: 4px 4px;
+	outline: none;
+}
+select option{
+	background: rgba(254, 255, 189); 
+	color: black;
+	font-family: "Roboto", sans-serif;
+}
+select:focus{
+	background: rgb(254, 255, 189); 
+	color: black;
+}
+
 /* ********************************************** */
 /* Live display of current sequence in top right */
 /* ********************************************** */
@@ -83,47 +103,45 @@ main{
 	display: flex;
 	flex-direction: column;
 }
-.sequence_steps{
-	padding: 10px 0 0 10px;
-	display: flex;
-	flex-wrap: wrap;
-	align-items: center;
-	position: relative;
-}
+
 .sequence_data{
 	background: rgba(0,0,0,0.7);
 	padding: 0;
 	display: flex;
-	align-items: center;
-	justify-content: space-between;
+	flex-direction: column;
 	z-index: 10;
 }
 .sequence_data .name{
 	margin-left: 15px;
+	font-weight: 500;
 }
 
-.add_step{
-	border-radius: 12px;
-	width:40px;
-	height: 40px;
-	color: rgba(255,255,255,0.2);
-	font-size: 28px;
-	font-weight: 500;
+.sequence_data .title_row{
 	display: flex;
-	justify-content: center;
 	align-items: center;
-	background: rgba(0,0,0,0.2);
-	text-decoration: none;
-	margin-bottom: 10px;
+	justify-content: space-between;
 }
-.sequence_step + .add_step{
-	margin-bottom: 0px;
+
+.triggers_row{
+	margin: 2px 5px 8px 17px;
+	padding-top: 8px;
+	display: flex;
+	align-items: center;
+	justify-content: flex-start;
+	font-weight: 300;
+	font-size: 14px;
+	border-top: 1px solid rgba(255,255,255,0.3);
 }
-.add_step:hover{
-	background: rgba(0,0,0,0.6);
-	color: rgba(255,255,255,0.8);
-	cursor: pointer;
+.triggers_row .intro{
+	margin-right: 15px;
 }
+.triggers_row label{
+	margin-left: 10px;
+}
+.triggers_row select{
+	margin-left: 5px;
+}
+
 .sequence_options{
 	margin: 5px;
 }
@@ -157,9 +175,41 @@ main{
 
 .sequence_options .minimise{background-image:url("../assets/images/up_arrow.svg");}
 
+.sequence.minimised .triggers_row{display: none;}
 .sequence.minimised .sequence_steps{display: none; height: 15px;}
 .sequence.minimised .sequence_data{border-bottom: 10px solid rgba(255,255,255,0.25);}
 .sequence.minimised .sequence_options .minimise{background-image:url("../assets/images/down_arrow.svg");}
+
+.sequence_steps{
+	padding: 10px 0 0 10px;
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	position: relative;
+}
+
+.add_step{
+	border-radius: 12px;
+	width:40px;
+	height: 40px;
+	color: rgba(255,255,255,0.2);
+	font-size: 28px;
+	font-weight: 500;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	background: rgba(0,0,0,0.2);
+	text-decoration: none;
+	margin-bottom: 10px;
+}
+.sequence_step + .add_step{
+	margin-bottom: 0px;
+}
+.add_step:hover{
+	background: rgba(0,0,0,0.6);
+	color: rgba(255,255,255,0.8);
+	cursor: pointer;
+}
 
 /* ********************************************** */
 /* Individual sequence step */

@@ -202,10 +202,27 @@
 		<!-- Elements that we re-use are stored below -->
 		<section class="sequence sequence_prototype">
 			<div class="sequence_data">
-				<span class="name editable" contenteditable="true">Test sequence</span>
-				<span class="sequence_options">
-					<a href="#minimise" class="minimise">Minimise</a>
-				</span>
+				<div class="title_row">
+					<span class="name editable" contenteditable="true"></span>
+					<span class="sequence_options">
+						<a href="#minimise" class="minimise">Minimise</a>
+					</span>
+				</div>
+				<div class="triggers_row">
+					<span class="intro">Button actions:</span>
+					<label for="mode">Mode</label>
+					<select name="mode" class="button_select">
+						<option value="-1">None</option>
+					</select>
+					<label for="mode">Light</label>
+					<select name="mode" class="button_select">
+						<option value="-1">None</option>
+					</select>
+					<label for="mode">Alarm</label>
+					<select name="mode" class="button_select">
+						<option value="-1">None</option>
+					</select>
+				</div>
 			</div>
 			<div class="sequence_steps">
 				<a href="#step_add" class="add_step">+</a>
