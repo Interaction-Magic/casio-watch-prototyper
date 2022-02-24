@@ -86,7 +86,7 @@ class Sequence{
 	// Retrieves array of all the data for this sequence
 	get_state(){
 		const data = {
-			name: this.opts.container.querySelector(".name").innerHTML,
+			name: this._name,
 			steps: []
 		};
 		for(let step of this._steps){
@@ -126,7 +126,7 @@ class Sequence{
 	// Set the name of the sequence
 	set_name(name){
 		this._name = name;
-		this.opts.container.querySelector(".name").textContent = name;
+		this.opts.elm.querySelector(".name").textContent = name;
 	}
 
 	//

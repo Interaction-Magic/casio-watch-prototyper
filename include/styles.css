@@ -155,18 +155,18 @@ main{
 	margin: 0 5px 0 0;
 	padding: 0.5em 0.7em 0.5em 38px;
 	position: relative;
-	background-size: 25px;
+	background-size: 22px;
 	background-repeat: no-repeat;
 	background-position: 8px 50%;
 	display: block;
-	height: 20px;
+	height: 18px;
 	filter: invert(100%);
 	opacity: 0.9;
-	line-height: 20px;
-	font-size: 16px;
+	line-height: 18px;
+	font-size: 14px;
 	border-bottom: 3px solid transparent;
 }
-.sequences_nav .add_sequence{background-image:url("../assets/images/add.svg");}
+.sequences_nav .add_sequence{background-image:url("../assets/images/add.svg"); background-size:20px;}
 .sequences_nav .import{background-image:url("../assets/images/archive.svg");}
 .sequences_nav .export{background-image:url("../assets/images/share.svg");}
 

@@ -36,6 +36,12 @@ document.addEventListener("DOMContentLoaded", () => {
 	});
 
 	// Add click handlers to sequences menu button
+	document.querySelector(".add_sequence").addEventListener("click", (e) => {
+		e.preventDefault();
+		designer.add_sequence();
+		designer.history_save();
+		e.target.blur();
+	});
 	document.querySelector(".export").addEventListener("click", (e) => {
 		e.preventDefault();
 		download_file();
