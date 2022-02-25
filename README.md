@@ -1,4 +1,4 @@
-# Sensor Watch Designer
+# Sensor Watch Prototyper
 
 >
 > Docs to follow...
