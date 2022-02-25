@@ -138,13 +138,13 @@ class Designer{
 	play(){
 		this._animation.start_time = Date.now();
 		this._animation.is_playing = true;
-		this.opts.live_watch.classList.add("is_playing"); 
+		document.querySelector("body").classList.add("is_playing"); 
 		window.requestAnimationFrame(() => this._render_loop());
 	}
 	pause(){
 		this._animation.is_playing = false;
 
-		this.opts.live_watch.classList.remove("is_playing"); 
+		document.querySelector("body").classList.remove("is_playing"); 
 		document.querySelectorAll('.sequence_step').forEach((step_dom) => {
 			step_dom.classList.remove('active');
 		});
