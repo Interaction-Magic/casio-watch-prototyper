@@ -138,7 +138,7 @@ main{
 }
 .triggers_row .intro{margin-right: 15px;}
 .triggers_row label{margin-left: 10px;}
-.triggers_row select{margin-left: 5px;}
+.triggers_row select{margin-left: 5px; max-width: 100px;}
 
 .button_actions{
 	display: flex;

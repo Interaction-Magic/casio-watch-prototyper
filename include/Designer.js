@@ -52,7 +52,9 @@ class Designer{
 
 			// Load from provided data to constructor
 			this.load_in_data(this.opts.data);
-			this.history_save();
+
+			// Make this the first history entry
+			this.undo.overwrite(this.get_data());
 
 		}else{
 
@@ -79,30 +81,34 @@ class Designer{
 		const sequence = new Sequence({...sequence_opts, ...opts});
 
 		this._data.sequences.push(sequence);	// Save to the array
-		this.sequence_select(sequence);	   	// Select the newly formed sequence
 
 		this._recalculate_sequence_order();		// We do this whenever the sequence order in the DOM might change
+		this._update_trigger_lists();				// Same
+
+		this.sequence_select(sequence, false);	   	// Select the newly formed sequence
 
 		return sequence;
 	}
 
-	sequence_select(sequence){
+	sequence_select(sequence, save_to_history = true){
 		if(sequence != this._data.current_sequence){
 			document.querySelectorAll('.sequence_step').forEach((step_dom) => {
 				step_dom.classList.remove('active');
 			});
+
+			this._data.current_sequence = sequence;
+			
+			// Highlight the step
+			document.querySelectorAll('.sequence').forEach((sq) => {
+				sq.classList.remove('active');
+			});
+			sequence.get_dom().classList.add('active');
+
+			// Save into history but don't make a new step out of it
+			if(save_to_history){
+				this.undo.overwrite(this.get_data());
+			}
 		}
-
-		this._data.current_sequence = sequence;
-		
-		// Highlight the step
-		document.querySelectorAll('.sequence').forEach((sq) => {
-			sq.classList.remove('active');
-		});
-		sequence.get_dom().classList.add('active');
-
-		// Save into history but don't make a new step out of it
-		this.undo.overwrite(this.get_data());
 	}
 
 	// Delete a sequence at a given index
@@ -115,6 +121,7 @@ class Designer{
 		}
 
 		this._recalculate_sequence_order();
+		this._update_trigger_lists();
 
 		if(this._data.current_sequence == sequence){
 			this._data.current_sequence = null;
@@ -200,6 +207,12 @@ class Designer{
 		}
 
 		this._recalculate_sequence_order();
+
+		// Update trigger references
+		this._update_trigger_lists();
+		for(let sequence of this._data.sequences){
+			sequence.set_all_triggers();
+		}
 	}
 
 	//
@@ -247,6 +260,54 @@ class Designer{
 		}else{
 			this._stop_oscillator();
 		}
+	}
+
+	// //////////////////////////////////////
+	// Trigger handling functions
+
+	_update_trigger_lists(){
+
+		// Generate list of triggers
+		const options = this._data.sequences.map(item => ({
+			name: `➡ ${item.get_name()}`,
+			index: item.get_index(),
+			order: item.get_order()
+		}));
+		options.sort((a, b) => (a.order > b.order) ? 1 : -1);
+		options.splice(0,0,{
+			name: "None",
+			index: -1,
+			order: 0
+		});
+
+		// Push list to all select dropdowns
+		this._data.sequences.forEach((sequence) => {
+			sequence.get_dom().querySelectorAll(".button_select").forEach((select) => {
+
+				// Save current value and wipe
+				const current_value = select.value;
+				select.innerHTML = "";
+	
+				// Add all items
+				let has_value_now = false;
+				for(let option of options){
+					if(option.index == sequence.get_index()){
+						// Do not put this sequence in itself
+						continue;
+					}
+					const option_tag = document.createElement('option');
+					option_tag.value = option.index;
+					option_tag.textContent = option.name;
+					if(''+option.index == current_value){
+						has_value_now = true;
+					} 
+					select.append(option_tag);
+				}
+				// Set the value back
+				select.value = has_value_now ? current_value : -1;
+				sequence.set_trigger(select.name, select.value);
+			});
+		});
 	}
 
 	// //////////////////////////////////////
@@ -347,6 +408,11 @@ class Designer{
 				}
 				node = node.parentNode;
 			}
+		});
+
+		// Listener for sequence name changes to update trigger lists
+		this.dom.addEventListener("updated_name", (e) => {
+			this._update_trigger_lists();
 		});
 
 		// Listener for duplicate / delete sequence buttons

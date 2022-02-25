@@ -18,8 +18,10 @@ class Sequence{
 
 		steps: [],
 
-		display: {
-			is_minimised: false
+		triggers: {
+			mode: -1,
+			light: -1,
+			alarm: -1
 		}
 	};
 
@@ -48,6 +50,10 @@ class Sequence{
 			this.set_name(this.opts.data.name);
 			this.set_index(this.opts.data.index);
 
+			// Save the triggers, we will use these later after all sequences have been loaded
+			if(this.opts.data.triggers){
+				this._data.triggers = this.opts.data.triggers;
+			}
 
 			// Sort array by index to get into correct order for DOM
 			this.opts.data.steps.sort((a, b) => (a.order > b.order) ? 1 : -1);
@@ -75,9 +81,10 @@ class Sequence{
 	// Retrieves array of all the data for this sequence
 	get_data(){
 		const data = {
-			name: this._data.name,
-			index: this._data.index,
-			order: this._data.order,
+			name: 		this._data.name,
+			index: 		this._data.index,
+			order: 		this._data.order,
+			triggers: 	this._data.triggers,
 			steps: []
 		};
 		for(let step of this._data.steps){
@@ -95,6 +102,9 @@ class Sequence{
 	}
 	get_order(){
 		return this._data.order;
+	}
+	get_name(){
+		return this._data.name;
 	}
 
 	//
@@ -134,6 +144,19 @@ class Sequence{
 	// Set the order
 	set_order(order){
 		this._data.order = order;
+	}
+
+	// Set triggers
+	set_trigger(button, action){
+		this._data.triggers[button] = action;
+		this.dom.querySelector(`.button_${button}`).value = action;
+	}
+
+	// Set all triggers
+	set_all_triggers(){
+		this.set_trigger('mode', this._data.triggers.mode);
+		this.set_trigger('alarm', this._data.triggers.alarm);
+		this.set_trigger('light', this._data.triggers.light);
 	}
 
 	//
@@ -268,6 +291,15 @@ class Sequence{
 		});
 
 		
+		// Set handler for trigger changes
+		this.dom.querySelectorAll(".button_select").forEach((select) => {
+			select.addEventListener('change', (e) => {
+				e.preventDefault();
+				this.set_trigger(e.target.name, parseInt(e.target.value));
+				this._fire_update();
+			});
+		});
+
 		// Set handler for name editing
 		this.dom.querySelector(".name").addEventListener('keydown', (e) => {
 			if(e.key === 'Enter'){
@@ -275,6 +307,7 @@ class Sequence{
 				e.target.blur();
 				if(e.target.innerHTML != this._name){
 					this.set_name(e.target.innerHTML);
+					e.target.dispatchEvent(new CustomEvent("updated_name", {bubbles: true}));
 					this._fire_update();
 				}
 			}
@@ -283,6 +316,7 @@ class Sequence{
 			e.preventDefault();
 			if(e.target.innerHTML != this._name){
 				this.set_name(e.target.innerHTML);
+				e.target.dispatchEvent(new CustomEvent("updated_name", {bubbles: true}));
 				this._fire_update();
 			}
 		});

@@ -40,7 +40,8 @@ class Undo{
 	// Default options are below
 	_default_opts = {
 		disabled_class: "disabled",
-		save_to_storage: true			// Do we save stack to storage as we go
+		save_to_storage: true,			// Do we save stack to storage as we go
+		debug: false
 	};
 
 	has_retrieved_from_storage = false;
@@ -88,6 +89,8 @@ class Undo{
 		this._stack.push(JSON.parse(JSON.stringify(data))); // Deep copy of object into stack
 		this._current_index++;
 
+		if(this.opts.debug) console.log([this._current_index, this._stack]);
+
 		this._save_to_storage();
 		this._update_elms();
 	}
@@ -124,6 +127,9 @@ class Undo{
 	retrieve(){
 		this._save_to_storage();
 		this._update_elms();
+
+		if(this.opts.debug) console.log([this._current_index, this._stack]);
+
 		return this._stack[this._current_index];
 	}
 
