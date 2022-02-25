@@ -1,8 +1,17 @@
 # Sensor Watch Prototyper
 
->
-> Docs to follow...
->
+## Clever features
+
++ Import / export of sequence data to share designs
++ Continuous auto-save in case of accidental page reload
++ Keyboard shortcuts for watch buttons (q=light, a=mode, s=alarm)
++ Full undo/redo history, access via icons of Ctrl+Z, Ctrl+Y
+
+## Coming soon
+
++ WebBluetooth integration with watch hardware itself
+
+### WIP notes from George:
 
 BUGS:
 
@@ -14,7 +23,7 @@ TODO:
 + ~Create a common styling for buttons and colours across all CSS~
 + ~Fix Sequence index saving and restorting (to enable duplicate & delete buttons to work)~
 + ~Code re-factor to reduce duplication (and clean up this.elm, this.opts_elm etc...)~
-+ Rename to sensor-watch-prototyper
++ ~Rename to sensor-watch-prototyper~
 + Document all features, especially helper UI features (like hold down to drag through segments)
 
 TODO Features:
