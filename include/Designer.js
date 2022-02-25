@@ -86,8 +86,22 @@ class Designer{
 	}
 
 	sequence_select(sequence){
+		if(sequence != this._data.current_sequence){
+			document.querySelectorAll('.sequence_step').forEach((step_dom) => {
+				step_dom.classList.remove('active');
+			});
+		}
+
 		this._data.current_sequence = sequence;
-		// TODO: Add highlighting in here
+		
+		// Highlight the step
+		document.querySelectorAll('.sequence').forEach((sq) => {
+			sq.classList.remove('active');
+		});
+		sequence.get_dom().classList.add('active');
+
+		// Save into history but don't make a new step out of it
+		this.undo.overwrite(this.get_data());
 	}
 
 	// Delete a sequence at a given index
@@ -243,6 +257,14 @@ class Designer{
 
 		// Get data for current step of active sequence and display it
 		const step = this._data.current_sequence.get_current_step(this._animation.start_time);
+		
+		// Highlight the step
+		document.querySelectorAll('.sequence_step').forEach((step_dom) => {
+			step_dom.classList.remove('active');
+		});
+		step.get_dom().classList.add('active');
+
+		// Render this step
 		const step_data = step.get_data();
 		this.render_to_live_view(step_data);
  
@@ -303,6 +325,22 @@ class Designer{
 			this.history_save();
 		});
 
+		// Listener for clicking on a sequence to select it
+		this.dom.addEventListener("click", (e) => {
+
+			let node = e.target;
+			while(node != this.dom){
+				if(!node) break;
+				if(node.classList.contains('sequence')){
+
+					// Select this one
+					this.sequence_select(this._get_sequence_from_index(node.dataset.index));
+					break;
+				}
+				node = node.parentNode;
+			}
+		});
+
 		// Listener for duplicate / delete sequence buttons
 		this.dom.addEventListener("click", (e) => {
 
@@ -313,8 +351,17 @@ class Designer{
 			}
 			const hash = url_target.substring(url_target.indexOf('#') + 1);
 			
-			// TODO: Clean up this dodgy traverse!
-			const this_sequence = e.target.parentNode.parentNode.parentNode.parentNode;
+			// TODO: Make a common function for this
+			let this_sequence = e.target;
+			while(this_sequence != this.dom){
+				if(!this_sequence){
+					return;
+				}
+				if(this_sequence.classList.contains('sequence')){
+					break;
+				}
+				this_sequence = this_sequence.parentNode;
+			}
 
 			switch(hash){
 

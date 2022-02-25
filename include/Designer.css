@@ -99,6 +99,10 @@ main{
 	flex-direction: column;
 }
 
+.sequence.active{
+	border-left: 2px solid greenyellow;
+}
+
 .sequence_data{
 	background: rgba(0,0,0,0.7);
 	padding: 0;
@@ -240,6 +244,10 @@ main{
 	display: flex;
 	flex-direction: column;
 	justify-content: space-between;
+}
+
+.sequence_step.active .step_data{
+	outline: 2px solid greenyellow;
 }
 
 .step_hardware{

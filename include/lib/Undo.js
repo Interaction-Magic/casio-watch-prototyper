@@ -26,6 +26,7 @@
 //  undo() -> step backwards one step in history (returns the obj from that position)
 //  undoundo() -> step forewards one step in history (returns the obj from that position)
 //  retrieve() -> returns the obj from the current position
+//  overwrite() -> update data in current position without creating a new history entry
 //  has_undo -> returns an obj with possibility for undo right now, e.g: {undo: true, undoundo: false}
 // 
 //  Public parameters:
@@ -107,6 +108,16 @@ class Undo{
 			return this.retrieve();
 		}
 		return false;
+	}
+
+	// Overwrite the current stack location without moving the stack
+	overwrite(data){
+		if(this._current_index < 0){
+			// If stack is empty, save instead
+			this.save(data);
+		}
+		this._stack[this._current_index] = JSON.parse(JSON.stringify(data));
+		this._save_to_storage();
 	}
 
 	// Fetch the current stack contents
