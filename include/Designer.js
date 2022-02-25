@@ -22,6 +22,7 @@ class Designer{
 		buzzing_freq: 0
 	};
 
+	_version = '0.1';
 	_index_counter = 0;
 	
 	// AudioContext for buzzer simulation playback
@@ -114,7 +115,10 @@ class Designer{
 		}
 
 		this._recalculate_sequence_order();
-		// TODO: Update current_sequence if needed
+
+		if(this._data.current_sequence == sequence){
+			this._data.current_sequence = null;
+		}
 	}
 
 	// Animation playback
@@ -154,8 +158,9 @@ class Designer{
 	// Retrieves array of all data for current setup
 	get_data(){
 		const data = {
+			version: this._version,
 			start_time: this._animation.start_time,
-			current_sequence_index: this._data.current_sequence.get_index(),
+			current_sequence_index: this._data.current_sequence?.get_index(),
 			sequences: []
 		};
 		for(let sequence of this._data.sequences){
@@ -190,7 +195,7 @@ class Designer{
 		// Set the current sequence
 		if(data.current_sequence_index && this._get_sequence_from_index(data.current_sequence_index)){
 			this.sequence_select(this._get_sequence_from_index(data.current_sequence_index));
-		}else{
+		}else if(this._data.sequences.length > 0){
 			this.sequence_select(this._data.sequences[0]);
 		}
 
@@ -252,6 +257,9 @@ class Designer{
 	_render_loop(){
 
 		if(!this._animation.is_playing){
+			return;
+		}
+		if(!this._data.current_sequence){
 			return;
 		}
 
