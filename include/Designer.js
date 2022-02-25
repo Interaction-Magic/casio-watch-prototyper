@@ -88,6 +88,9 @@ class Designer{
 			});
 
 			this._data.current_sequence = sequence;
+			if(this._animation.is_playing){
+				this._animation.start_time = Date.now(); // Update start time so we start this sequence from the beginning
+			}
 			
 			// Highlight the step
 			document.querySelectorAll('.sequence').forEach((sq) => {
