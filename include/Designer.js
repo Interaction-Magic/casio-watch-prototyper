@@ -279,12 +279,19 @@ class Designer{
 
 			case 'play':
 				// Play
+				this.play();
 				break;
 
 			case 'pause':
 				// Pause
+				this.pause();
 				break;
 
+			case 'playpause':
+				// Pause
+				this.play_pause();
+				break;
+	
 			default:
 				// It's a number, so see if we can move to that sequence
 				const next_sequence = this._get_sequence_from_index(action);
@@ -299,17 +306,19 @@ class Designer{
 	_update_trigger_lists(){
 
 		// Generate list of triggers
-		const options = this._data.sequences.map(item => ({
+		const sequence_options = this._data.sequences.map(item => ({
 			name: `➡ ${item.get_name()}`,
 			index: item.get_index(),
 			order: item.get_order()
 		}));
-		options.sort((a, b) => (a.order > b.order) ? 1 : -1);
-		options.splice(0,0,{
-			name: "None",
-			index: -1,
-			order: 0
-		});
+		sequence_options.sort((a, b) => (a.order > b.order) ? 1 : -1);
+
+		const options = [...[
+			{name: "None",	 		index: -1,				order: 0},
+			{name: "Play",	 		index: "play",			order: 0},
+			{name: "Pause", 		index: "pause",		order: 0},
+			{name: "Play/Pause", index: "playpause",	order: 0}
+		],...sequence_options];
 
 		// Push list to all select dropdowns
 		this._data.sequences.forEach((sequence) => {

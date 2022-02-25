@@ -298,7 +298,7 @@ class Sequence{
 		this.dom.querySelectorAll(".button_select").forEach((select) => {
 			select.addEventListener('change', (e) => {
 				e.preventDefault();
-				this.set_trigger(e.target.name, parseInt(e.target.value));
+				this.set_trigger(e.target.name, e.target.value);
 				this._fire_update();
 			});
 		});
