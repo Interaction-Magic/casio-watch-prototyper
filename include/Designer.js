@@ -369,6 +369,7 @@ class Designer{
 					e.preventDefault();
 					const sq_clone_data = JSON.parse(JSON.stringify(this._get_sequence_from_index(this_sequence.dataset.index).get_data()));
 					sq_clone_data.index = ++this._index_counter;
+					sq_clone_data.name += ` [${this._index_counter}]`;
 					this.sequence_add({
 						after: this_sequence,
 						data: sq_clone_data
