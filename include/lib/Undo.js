@@ -29,7 +29,7 @@
 //  overwrite() -> update data in current position without creating a new history entry
 //  has_undo -> returns an obj with possibility for undo right now, e.g: {undo: true, undoundo: false}
 // 
-//  Public parameters:
+//  Public properties:
 // 
 //  has_retrieved_from_storage -> is set true if success pulling data out of localStorage
 // 

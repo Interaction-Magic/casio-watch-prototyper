@@ -71,16 +71,7 @@ class Designer{
 	// Add a new sequence to the prototyper
 	sequence_add(opts = {}){
 
-		const sequence_opts = {
-			container:		this.dom,
-			name: 			`Sequence ${this._index_counter}`,
-			data: 			null,
-			index:			++this._index_counter
-		};
-
-		const sequence = new Sequence({...sequence_opts, ...opts});
-
-		this._data.sequences.push(sequence);	// Save to the array
+		const sequence = this._sequence_add(opts);
 
 		this._recalculate_sequence_order();		// We do this whenever the sequence order in the DOM might change
 		this._update_trigger_lists();				// Same
@@ -113,12 +104,24 @@ class Designer{
 
 	// Delete a sequence at a given index
 	sequence_delete(sequence){
+
+		const deleted_id = sequence.get_index();
 		sequence.delete();
 		for(let i=0; i<this._data.sequences.length; i++){
 			if(this._data.sequences[i] == sequence){
 				this._data.sequences.splice(i, 1);
 			}
 		}
+		
+		// Check if any triggers were pointing towards this and clear them if so
+		this._data.sequences.forEach((sequence) => {
+			sequence.get_dom().querySelectorAll(".button_select").forEach((select) => {
+
+				if(select.value == deleted_id){
+					sequence.set_trigger(select.name, -1);
+				}
+			});
+		});
 
 		this._recalculate_sequence_order();
 		this._update_trigger_lists();
@@ -189,7 +192,7 @@ class Designer{
 		data.sequences.sort((a, b) => (a.order > b.order) ? 1 : -1);
 
 		for(let sequence_data of data.sequences){
-			const new_sequence = this.sequence_add({
+			const new_sequence = this._sequence_add({
 				data: sequence_data
 			});
 			this._index_counter = Math.max(this._index_counter, new_sequence.get_index());
@@ -265,6 +268,34 @@ class Designer{
 	// //////////////////////////////////////
 	// Trigger handling functions
 
+	// Process an incoming button press
+	handle_input(button, press_type){
+		const action = this._data.current_sequence.get_trigger(button);
+		switch(action){
+
+			case '-1':
+				// Do nothing
+				break;
+
+			case 'play':
+				// Play
+				break;
+
+			case 'pause':
+				// Pause
+				break;
+
+			default:
+				// It's a number, so see if we can move to that sequence
+				const next_sequence = this._get_sequence_from_index(action);
+				if(next_sequence){
+					this.sequence_select(next_sequence);
+				}
+				break;
+		}
+	}
+
+	// Update all trigger <select> items with correct data
 	_update_trigger_lists(){
 
 		// Generate list of triggers
@@ -287,7 +318,7 @@ class Designer{
 				// Save current value and wipe
 				const current_value = select.value;
 				select.innerHTML = "";
-	
+
 				// Add all items
 				let has_value_now = false;
 				for(let option of options){
@@ -305,7 +336,6 @@ class Designer{
 				}
 				// Set the value back
 				select.value = has_value_now ? current_value : -1;
-				sequence.set_trigger(select.name, select.value);
 			});
 		});
 	}
@@ -341,6 +371,21 @@ class Designer{
 		if(this._animation.is_playing){
 			window.requestAnimationFrame(() => this._render_loop());
 		}
+	}
+	
+	// Helper to do the actual add, without triggering anything as well
+	_sequence_add(opts){
+
+		const sequence_opts = {
+			container:		this.dom,
+			name: 			`Sequence ${this._index_counter}`,
+			data: 			null,
+			index:			++this._index_counter
+		};
+		const sequence = new Sequence({...sequence_opts, ...opts});
+		this._data.sequences.push(sequence);	// Save to the array
+
+		return sequence;
 	}
 
 	// Hunt for a sequence in the list from the given index

@@ -91,14 +91,15 @@ class Input{
 
 		// Attach handlers to main key
 		if(this.opts.key){
+			console.log("key");
 			document.addEventListener('keydown', (e) => {
 				// Avoid repeat firing by checking if already pressed
-				if( (e.code == this.opts.key) && (!this._click.pressed) ){
+				if( (e.key == this.opts.key) && (!this._click.pressed) ){
 					this.down();
 				}
 			});
 			document.addEventListener('keyup', (e) => {
-				if(e.code == this.opts.key){
+				if(e.key == this.opts.key){
 					this.up();
 				}
 			});

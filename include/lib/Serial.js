@@ -19,7 +19,7 @@
 // 
 //  TBD
 // 
-//  Public parameters:
+//  Public properties:
 //
 //  TBD
 // 

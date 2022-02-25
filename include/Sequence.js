@@ -106,6 +106,9 @@ class Sequence{
 	get_name(){
 		return this._data.name;
 	}
+	get_trigger(button){
+		return this._data.triggers[button];
+	}
 
 	//
 	// Calculate which step of the animation we are on, based on the start time and current time

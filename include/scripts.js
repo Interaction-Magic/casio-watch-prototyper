@@ -10,12 +10,37 @@ document.addEventListener("DOMContentLoaded", () => {
 	};
 	copy_watch_display(document.querySelector(".live_watch"));
 	copy_watch_display(document.querySelector(".segments"));
-	
+
 	// Create a new instance of the Designer 
 	const designer = new Designer({
 		dom: document.querySelector(".sequences"), 
 		live_watch: document.querySelector(".live_watch"),
 		data: sample_sequence
+	});
+	
+	// Create three buttons
+	const light = new Input({
+		name: "light",
+		key: "q",
+		no_double_press: true,
+		elm: document.querySelector(`.watch_button_light`),
+		fire: (press) => {
+			designer.handle_input("light", press)
+		} 
+	});
+	const mode = new Input({
+		name: "mode",
+		key: "a",
+		no_double_press: true,
+		elm: document.querySelector(`.watch_button_mode`),
+		fire: (press) => designer.handle_input("mode", press)
+	});
+	const alarm = new Input({
+		name: "alarm",
+		key: "s",
+		no_double_press: true,
+		elm: document.querySelector(`.watch_button_alarm`),
+		fire: (press) => designer.handle_input("alarm", press) 
 	});
 
 	// Add click handlers to menu buttons
