@@ -64,11 +64,12 @@ nav.play_nav{display: flex; position: absolute; left:0; top:36px; right:0; justi
 .play{border: none; border-radius: 50px; padding-left: 2.8em; padding-right: 1.2em; background-position-x: 1em; margin:0; filter: none; background-color:rgba(255,255,255,1); opacity:1;}
 
 .play:hover{background-color:rgb(208, 255, 138) !important;}
-.play.is_playing{
+
+.live_output.is_playing .play{
 	background-color: greenyellow;
 	filter: none;
 }
-.play.is_playing:hover{
+.live_output.is_playing .play:hover{
 	border-bottom-color:white;
 	background-image:url("../assets/images/pause.svg");
 }

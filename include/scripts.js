@@ -14,7 +14,7 @@ document.addEventListener("DOMContentLoaded", () => {
 	// Create a new instance of the Designer 
 	const designer = new Designer({
 		dom: document.querySelector(".sequences"), 
-		live_watch: document.querySelector(".live_watch"),
+		live_watch: document.querySelector(".live_output"),
 		data: sample_sequence
 	});
 	
@@ -59,7 +59,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
 				case "play":
 					designer.play_pause();
-					e.target.classList.toggle("is_playing");
 					break;
 				
 				case "undo":

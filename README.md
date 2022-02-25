@@ -24,14 +24,14 @@ TODO Features:
 + Help?
 + Settings (toggles for segment coupling restriction and LED colours)
 + Drag-drop re-ordering of steps
-+ Make button actions work
-+ Make clicking on 3x buttons on UI work
-+ Add sequence names to dropdowns for button actions
-+ Save button actions to state each time
++ ~Make button actions work~
++ ~Make clicking on 3x buttons on UI work~
++ ~Add sequence names to dropdowns for button actions~
++ ~Save button actions to state each time~
 + ~Add versioning to designer to save in import/export files~
 + Add "clear localstorage" option in settings
 + ~Make UI a bit less chaotic with the menus?~
 + Add scroll wheel on duration boxes to count up/down in 50ms increments
 + ~Add highlighting for currently playing step and sequence in greenyellow?~  
-+ Ctrl+Z, Ctrl+Y for undo/redo
++ ~Ctrl+Z, Ctrl+Y for undo/redo~
 + ~Ensure sequences have unique names~

@@ -138,10 +138,17 @@ class Designer{
 	play(){
 		this._animation.start_time = Date.now();
 		this._animation.is_playing = true;
+		this.opts.live_watch.classList.add("is_playing"); 
 		window.requestAnimationFrame(() => this._render_loop());
 	}
 	pause(){
 		this._animation.is_playing = false;
+
+		this.opts.live_watch.classList.remove("is_playing"); 
+		document.querySelectorAll('.sequence_step').forEach((step_dom) => {
+			step_dom.classList.remove('active');
+		});
+
 		this._stop_oscillator();
 	}
 	play_pause(){
@@ -226,7 +233,7 @@ class Designer{
 	render_to_live_view(data){
 
 		// Reference for watch element
-		const watch = this.opts.live_watch;
+		const watch = this.opts.live_watch.querySelector(".live_watch");
 
 		// Fill in all segments 
 		for(let group of data.segments){
@@ -300,9 +307,13 @@ class Designer{
 				const next_sequence = this._get_sequence_from_index(action);
 				if(next_sequence){
 					this.sequence_select(next_sequence);
+					if(!this._animation.is_playing){
+						this.play();
+					}
 				}
 				break;
 		}
+
 	}
 
 	// Update all trigger <select> items with correct data
@@ -445,6 +456,15 @@ class Designer{
 	// Helper functions
 
 	_add_handlers(){
+
+		// Undo & redo keyboard handlers
+		document.addEventListener("keydown", (e) =>{
+			if (e.key == 'z' && e.ctrlKey){
+				this.history_undo();
+			}else	if (e.key == 'y' && e.ctrlKey){
+				this.history_undoundo();
+			}
+		});
 
 		// Listener for "updated" triggers to initiate a state save
 		this.dom.addEventListener("updated", (e) => {
