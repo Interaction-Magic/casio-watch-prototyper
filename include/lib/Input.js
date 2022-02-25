@@ -91,7 +91,6 @@ class Input{
 
 		// Attach handlers to main key
 		if(this.opts.key){
-			console.log("key");
 			document.addEventListener('keydown', (e) => {
 				// Avoid repeat firing by checking if already pressed
 				if( (e.key == this.opts.key) && (!this._click.pressed) ){
