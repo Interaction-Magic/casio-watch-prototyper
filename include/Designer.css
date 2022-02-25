@@ -83,10 +83,10 @@ main{
 	padding: 20px;
 }
 
-.sequence_prototype{
+.sequence_template{
 	display: none !important;
 }
-.sequence_step_prototype{
+.sequence_step_template{
 	display: none !important;
 }
 

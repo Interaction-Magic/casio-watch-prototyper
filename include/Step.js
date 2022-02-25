@@ -2,12 +2,12 @@
 // Single sequence step
 //
 
-class Sequence_Step{
+class Step{
 
 	// Default options are below
 	_default_opts = {
 		duration: 500,
-		index: 0
+		template_class: 'sequence_step_template'
 	};
 
 	_hover_drag = {
@@ -35,6 +35,8 @@ class Sequence_Step{
 	//  + LAP
 
 	_data = {
+		index: -1,
+		order: -1,
 		segments: [],
 		hardware : {
 			led_0: false,
@@ -54,29 +56,28 @@ class Sequence_Step{
 		this.opts = {...this._default_opts, ...opts};
 
 		// Create new sequence container in UI 
-		this.elm = document.querySelector(".sequence_step_prototype").cloneNode(true);
-		this.elm.classList.remove("sequence_step_prototype");
-
-		this.set_index(this.opts.index);
-		this.set_duration(this.opts.duration);
+		this.dom = document.querySelector(`.${this.opts.template_class}`).cloneNode(true);
+		this.dom.classList.remove(this.opts.template_class);
 
 		// Insert into DOM
-		if(opts.after){
-			this.opts.after.after(this.get_dom());
-		}else if(opts.before){
-			this.opts.before.before(this.get_dom());
+		if(this.opts.after){
+			this.opts.after.after(this.dom);
+		}else{
+			this.opts.before.before(this.dom);
 		}
 
 		// Add all handlers
 		this._add_handlers();
 
-		// Populate sequence data array from segments (probably blank at this stage)
-		this.update_sequence_from_segments()
+		// Populate sequence data array from segments (blank at this stage)
+		this._update_sequence_from_segments()
 
 		// Push the provided data to the whole step
-		if(this.opts.data){
-			this.set_state(this.opts.data);
-		}
+		this.set_index(this.opts.index);
+		this.set_order(this.opts.order);
+		this.set_segments(this.opts.segments);
+		this.set_duration(this.opts.duration);
+		this.set_hardware(this.opts.hardware);
 	}
 
 	//
@@ -84,11 +85,11 @@ class Sequence_Step{
 
 	// Returns the DOM contents for this step
 	get_dom(){
-		return this.elm;
+		return this.dom;
 	}
 
 	// Returns an object with segment data stored in it
-	get_state(){
+	get_data(){
 		return this._data;
 	}
 
@@ -96,30 +97,46 @@ class Sequence_Step{
 	get_duration(){
 		return this._data.duration;
 	}
+	get_index(){
+		return this._data.index;
+	}
+	get_order(){
+		return this._data.order;
+	}
 
 	//
 	// Helpful setters
 
 	// Set the index data for this step
 	set_index(index){
-		this.elm.dataset.index = index;
-		this.elm.querySelector(".number").innerText = `#${index+1}`;
+		if(!isFinite(index)) return;
+		this._data.index = index;
+		this.dom.dataset.index = index;
+	}
+
+	// Set the order for this step
+	set_order(order){
+		if(!isFinite(order)) return;
+		this._data.order = order;
+		this.dom.querySelector(".number").innerText = `#${order+1}`;
 	}
 
 	// Set the duration of the step
 	set_duration(duration){
+		if(!duration) return;
 		this._data.duration = duration;
-		this.elm.querySelector(".duration").innerText = `${duration}`;
+		this.dom.querySelector(".duration").innerText = `${duration}`;
 	}
 
 	// Set lights and buzzer for this step
 	set_hardware(hardware){
+		if(!hardware) return;
 		this._data.hardware = hardware;
 
-		this.elm.querySelector(`.led_0`).classList.toggle('on',hardware.led_0);
-		this.elm.querySelector(`.led_1`).classList.toggle('on',hardware.led_1);
+		this.dom.querySelector(`.led_0`).classList.toggle('on',hardware.led_0);
+		this.dom.querySelector(`.led_1`).classList.toggle('on',hardware.led_1);
 
-		this.elm.querySelectorAll(`.buzzer option`).forEach((option) => {
+		this.dom.querySelectorAll(`.buzzer option`).forEach((option) => {
 			if(option.value == hardware.buzzer){
 				option.setAttribute("selected","selected");
 			}else{
@@ -128,15 +145,9 @@ class Sequence_Step{
 		});
 	}
 
-	// Set the whole state
-	set_state(data){
-		this.set_segments(data.segments);
-		this.set_duration(data.duration);
-		this.set_hardware(data.hardware);
-	}
-
 	// Set the segments based on provided data
 	set_segments(segment_data){
+		if(!segment_data) return;
 		this._data.segments = segment_data;
 
 		for(let group of segment_data){
@@ -144,13 +155,13 @@ class Sequence_Step{
 
 				case 'digit':
 					for(let segment in group.data){
-						this.elm.querySelector(`.${group.digit}`).querySelector(`.${segment}`).classList.toggle('on',group.data[segment]);
+						this.dom.querySelector(`.${group.digit}`).querySelector(`.${segment}`).classList.toggle('on',group.data[segment]);
 					}
 					break;
 
 				case 'special':
 					for(let segment in group.data){
-						this.elm.querySelector(`.${segment}`).classList.toggle('on',group.data[segment]);
+						this.dom.querySelector(`.${segment}`).classList.toggle('on',group.data[segment]);
 					}
 					break;
 			}
@@ -158,19 +169,19 @@ class Sequence_Step{
 	}
 
 	// Deletes this step from the DOM
-	remove(){
-		this.elm.remove();
+	delete(){
+		this.dom.remove();
 	}
 
 
 	// Returns the segment sequence for this step
-	update_sequence_from_segments(){
+	_update_sequence_from_segments(){
 
 		this._data.segments = [];
 
 		// Iterate over all digits
 		for(let digit of this._lcd_segments.digits){
-			const digit_elm = this.elm.querySelector(`.${digit}`);
+			const digit_elm = this.dom.querySelector(`.${digit}`);
 
 			let digit_data = {
 				type: "digit",
@@ -197,12 +208,12 @@ class Sequence_Step{
 		this._data.segments.push({
 			type: "special",
 			data: {
-				colon: 	this._is_segment_on(this.elm.querySelector('.colon')),
-				signal: 	this._is_segment_on(this.elm.querySelector('.signal')),
-				bell: 	this._is_segment_on(this.elm.querySelector('.bell')),
-				pm: 		this._is_segment_on(this.elm.querySelector('.pm')),
-				hr: 		this._is_segment_on(this.elm.querySelector('.hr')),
-				lap: 		this._is_segment_on(this.elm.querySelector('.lap')),
+				colon: 	this._is_segment_on(this.dom.querySelector('.colon')),
+				signal: 	this._is_segment_on(this.dom.querySelector('.signal')),
+				bell: 	this._is_segment_on(this.dom.querySelector('.bell')),
+				pm: 		this._is_segment_on(this.dom.querySelector('.pm')),
+				hr: 		this._is_segment_on(this.dom.querySelector('.hr')),
+				lap: 		this._is_segment_on(this.dom.querySelector('.lap')),
 			}
 		});
 	}
@@ -214,7 +225,7 @@ class Sequence_Step{
 
 	// Fires an event to trigger an update
 	_fire_update(){
-		this.elm.dispatchEvent(new CustomEvent("updated", {
+		this.dom.dispatchEvent(new CustomEvent("updated", {
 			bubbles: true
 		}));
 	}
@@ -226,7 +237,7 @@ class Sequence_Step{
 
 		// ////////////////
 		// Set handlers for hardware options
-		this.elm.querySelectorAll(".led_button").forEach((led_button) => {
+		this.dom.querySelectorAll(".led_button").forEach((led_button) => {
 			led_button.addEventListener("click", (e) => {
 				e.preventDefault();
 				led_button.classList.toggle("on");
@@ -236,7 +247,7 @@ class Sequence_Step{
 			});
 		});
 		
-		this.elm.querySelector(".buzzer").addEventListener("change", (e) => {
+		this.dom.querySelector(".buzzer").addEventListener("change", (e) => {
 			e.preventDefault();
 			this._data.hardware.buzzer = e.target.value;
 
@@ -256,7 +267,7 @@ class Sequence_Step{
 
 		// ////////////////
 		// Set handler for duration editing
-		this.elm.querySelector(".duration").addEventListener('keydown', (e) => {
+		this.dom.querySelector(".duration").addEventListener('keydown', (e) => {
 			if(e.key === 'Enter'){
 				e.preventDefault();
 				this.set_duration(parseInt(e.target.innerHTML));
@@ -264,7 +275,7 @@ class Sequence_Step{
 				this._fire_update();
 			}
 		});
-		this.elm.querySelector(".duration").addEventListener("blur", (e) => {
+		this.dom.querySelector(".duration").addEventListener("blur", (e) => {
 			e.preventDefault();
 			this.set_duration(parseInt(e.target.innerHTML));
 			e.target.innerHTML = this._data.duration; // update back 
@@ -276,14 +287,14 @@ class Sequence_Step{
 		// Set handlers for toggling segments on and off
 
 		// When dragging _not_ from a segment, use mouse to toggle segments on/off
-		this.elm.querySelector(".watch_face").addEventListener("mousedown", (e) => {
+		this.dom.querySelector(".watch_face").addEventListener("mousedown", (e) => {
 			e.preventDefault();
 			this._hover_drag.is_active = true;
 			this._hover_drag.setting_option = "toggle";
 		});
 
 
-		this.elm.querySelectorAll(".lcd_segment").forEach((segment) => {
+		this.dom.querySelectorAll(".lcd_segment").forEach((segment) => {
 			// On mouse down, toggle and start drag based on state change that just occurred
 			segment.addEventListener("mousedown", (e) => {
 				e.preventDefault();
@@ -295,7 +306,7 @@ class Sequence_Step{
 				segment.classList.remove("hover");
 				this._hover_drag.setting_option = segment.classList.contains("on");
 
-				this.update_sequence_from_segments();
+				this._update_sequence_from_segments();
 				this._fire_update();
 			});
 			segment.addEventListener("mouseenter", (e) => {
@@ -304,11 +315,11 @@ class Sequence_Step{
 					if(this._hover_drag.setting_option == "toggle"){
 						segment.classList.toggle("on");
 						this._hover_drag.something_changed = true;
-						this.update_sequence_from_segments();
+						this._update_sequence_from_segments();
 					}else{
 						segment.classList.toggle("on", this._hover_drag.setting_option);
 						this._hover_drag.something_changed = true;
-						this.update_sequence_from_segments();
+						this._update_sequence_from_segments();
 					}
 				}else{
 					segment.classList.add("hover");

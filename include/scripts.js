@@ -13,8 +13,8 @@ document.addEventListener("DOMContentLoaded", () => {
 	
 	// Create a new instance of the Designer 
 	const designer = new Designer({
-		sequences_container: document.querySelector(".sequences"), 
-		live_watch : document.querySelector(".live_watch"),
+		dom: document.querySelector(".sequences"), 
+		live_watch: document.querySelector(".live_watch"),
 		data: sample_sequence
 	});
 
@@ -82,7 +82,7 @@ document.addEventListener("DOMContentLoaded", () => {
 				reader.readAsText(e.target.files[0]);
 
 				reader.onload = function() {
-					designer.put_state(JSON.parse(reader.result));
+					designer.load_in_data(JSON.parse(reader.result));
 					alert(`Imported: ${e.target.files[0].name}`);
 					designer.history_save();
 				};
@@ -100,7 +100,7 @@ document.addEventListener("DOMContentLoaded", () => {
 	// Generate downloadable text file of data
 	let download_file = () => {
 
-		let data = JSON.stringify(designer.get_state());
+		let data = JSON.stringify(designer.get_data());
 	
 		// Trigger download
 		const helper_link = document.createElement('a');

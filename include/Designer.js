@@ -8,10 +8,9 @@ class Designer{
 	_default_opts = {
 	};
 
-	// Array of all sequences
 	_data = {
-		sequences: [],
-		current_sequence_index: -1
+		sequences: [], // Array of all sequences, order does not matter
+		current_sequence: null
 	};
 
 	// Information related to current animation playback
@@ -22,6 +21,8 @@ class Designer{
 		is_buzzing: false,
 		buzzing_freq: 0
 	};
+
+	_index_counter = 0;
 	
 	// AudioContext for buzzer simulation playback
 	audioCtx = new (window.AudioContext || window.webkitAudioContext)();
@@ -30,30 +31,33 @@ class Designer{
 		// Merge opts with defaults
 		this.opts = {...this._default_opts, ...opts};
 
+		// Save container reference
+		this.dom = this.opts.dom;
+
 		// Create an undo handler
 		this.undo = new Undo({
-			undo_elm: document.querySelector(".undo"),
-			undoundo_elm: document.querySelector(".undoundo"),
-			save_to_storage: true
+			undo_elm: 			document.querySelector(".undo"),
+			undoundo_elm: 		document.querySelector(".undoundo"),
+			save_to_storage: 	true
 		});
 
 		// Load the initial content
 		if(this.undo.has_retrieved_from_storage){
 
 			// Load from storage data
-			this.put_state(this.undo.retrieve());
+			this.load_in_data(this.undo.retrieve());
 
 		}else if(this.opts.data != null){
 
 			// Load from provided data to constructor
-			this.put_state(this.opts.data);
+			this.load_in_data(this.opts.data);
 			this.history_save();
 
 		}else{
 
 			// Create a blank initial sequence
 			this.add_sequence();
-			this._data.current_sequence_index = 0;
+			this.select_sequence(this._data.sequences[0]);
 			this.history_save();
 
 		}
@@ -62,38 +66,44 @@ class Designer{
 	}
 
 	// Add a new sequence to the prototyper
-	sequence_add(opts){sequence_data = null, after = null, position = this._sequences.length){
+	sequence_add(opts = {}){
 
 		const sequence_opts = {
-			container: this.opts.sequences_container,
-			prototype_container: document.querySelector(".sequence_prototype"),
-			name: `Sequence ${this._sequences.length}`,
-			index: this._sequences.length,
-			after: after,
-			data: sequence_data,
-
+			container:		this.dom,
+			name: 			`Sequence ${this._index_counter}`,
+			data: 			null,
+			index:			++this._index_counter
 		};
-		const sequence = new Sequence({...this.sequence_opts, ...opts});
 
-		this._sequences.splice(position, 0, sequence);
+		const sequence = new Sequence({...sequence_opts, ...opts});
 
-		console.log(this._sequences);
+		this._data.sequences.push(sequence);	// Save to the array
+		this.sequence_select(sequence);	   	// Select the newly formed sequence
+
+		this._recalculate_sequence_order();		// We do this whenever the sequence order in the DOM might change
+
+		return sequence;
 	}
 
-	// Inserts a new sequence after the current one
-	sequence_insert_after(index, is_duplicate){
-		const s = this._get_sequence_from_index(index);
-		this.sequence_add(s.sequence.get_state(), s.sequence.get_dom(), s.position);
+	sequence_select(sequence){
+		this._data.current_sequence = sequence;
+		// TODO: Add highlighting in here
 	}
 
 	// Delete a sequence at a given index
-	sequence_delete(index){
+	sequence_delete(sequence){
+		sequence.delete();
+		for(let i=0; i<this._data.sequences.length; i++){
+			if(this._data.sequences[i] == sequence){
+				this._data.sequences.splice(i, 1);
+			}
+		}
 
-		const s = this._get_sequence_from_index(index)
-		s.sequence.remove();
-		this._sequences.splice(s.index, 1);
+		this._recalculate_sequence_order();
+		// TODO: Update current_sequence if needed
 	}
 
+	// Animation playback
 	play(){
 		this._animation.start_time = Date.now();
 		this._animation.is_playing = true;
@@ -104,71 +114,79 @@ class Designer{
 		this._stop_oscillator();
 	}
 	play_pause(){
-		if(this._animation.is_playing){
-			this.pause();
-		}else{
-			this.play();
-		}
+		this._animation.is_playing ? this.pause() : this.play();
 	}
 
-	// Save the current state
+	// Save the current data
 	history_save(){
-		const state = this.get_state();
-		this.undo.save(state);
+		const data = this.get_data();
+		this.undo.save(data);
 	}
 
 	// Undo events
 	history_undo(){
 		const undo_data = this.undo.undo();
 		if(undo_data){
-			this.put_state(undo_data);
+			this.load_in_data(undo_data);
 		}
 	}
 	history_undoundo(){
-		const undo_data = this.undo.undoundo();
-		if(undo_data){
-			this.put_state(undo_data);
+		const undoundo_data = this.undo.undoundo();
+		if(undoundo_data){
+			this.load_in_data(undoundo_data);
 		}
 	}
 
 	// Retrieves array of all data for current setup
-	get_state(){
+	get_data(){
 		const data = {
 			start_time: this._animation.start_time,
-			current_sequence_index: this._animation.current_sequence_index,
+			current_sequence_index: this._data.current_sequence.get_index(),
 			sequences: []
 		};
-		for(let sequence of this._sequences){
-			data.sequences.push(sequence.get_state());
+		for(let sequence of this._data.sequences){
+			data.sequences.push(sequence.get_data());
 		}
 		return data;
 	}
 
 	// Overwrites the whole designer with all the provided data
-	put_state(data){
+	load_in_data(data){
 
-		console.log(data);
-
-		// Wipe all sequences
-		this._sequences.splice(0, this._sequences.length);
-
-		// Empy sequence holder
-		this.opts.sequences_container.innerHTML = "";
+		// Reset everything
+		this._data.sequences.splice(0, this._data.sequences.length);	// Wipe all sequences
+		this.dom.innerHTML = "";													// Empy sequences holder
 
 		// Generate new sequences
+
+		// Sort array by order to get into correct order for DOM
+		data.sequences.sort((a, b) => (a.order > b.order) ? 1 : -1);
+
 		for(let sequence_data of data.sequences){
-			this.sequence_add(sequence_data);
+			const new_sequence = this.sequence_add({
+				data: sequence_data
+			});
+			this._index_counter = Math.max(this._index_counter, new_sequence.get_index());
 		}
+		this._index_counter++;
 
 		// Save animation properties
 		this._animation.start_time = data.start_time;
-		this._animation.current_sequence_index = data.current_sequence_index;
 
+		// Set the current sequence
+		if(data.current_sequence_index && this._get_sequence_from_index(data.current_sequence_index)){
+			this.sequence_select(this._get_sequence_from_index(data.current_sequence_index));
+		}else{
+			this.sequence_select(this._data.sequences[0]);
+		}
+
+		this._recalculate_sequence_order();
 	}
 
 	//
 	// Writes the segment display to the live view of the watch on the screen 
-	write(data){
+	render_to_live_view(data){
+
 		// Reference for watch element
 		const watch = this.opts.live_watch;
 
@@ -212,19 +230,23 @@ class Designer{
 		}
 	}
 
+	// //////////////////////////////////////
+	// Private functions
 
+	//
+	// Called via window.requestAnimationFrame()
 	_render_loop(){
 
 		if(!this._animation.is_playing){
 			return;
 		}
 
-		// Get data for current step of active sequence
-		const step = this._sequences[this._animation.current_sequence_index].get_step(this._animation.start_time);
-		const step_data = step.get_state();
-
-		this.write(step_data);
+		// Get data for current step of active sequence and display it
+		const step = this._data.current_sequence.get_current_step(this._animation.start_time);
+		const step_data = step.get_data();
+		this.render_to_live_view(step_data);
  
+		// Call again if we want to :)
 		if(this._animation.is_playing){
 			window.requestAnimationFrame(() => this._render_loop());
 		}
@@ -232,16 +254,25 @@ class Designer{
 
 	// Hunt for a sequence in the list from the given index
 	_get_sequence_from_index(index){
-		let i=0;
-		for(let sequence of this._sequences){
+		for(let sequence of this._data.sequences){
 			if(sequence.get_index() == index){
-				return {
-					index: i,
-					sequence: sequence
-				};
+				return sequence;
 			}
 		}
 	}
+
+	// Re-assigns order property to each sequence based on current DOM order
+	_recalculate_sequence_order(){
+		let o=0;
+		this.dom.querySelectorAll(".sequence").forEach((sequence) => {
+			let sq = this._get_sequence_from_index(sequence.dataset.index);
+			sq.set_order(o);
+			o++;
+		});
+	}
+
+	// //////////////////////////////////////
+	// Oscillator helpers
 
 	//
 	// Oscillator helpers
@@ -262,16 +293,18 @@ class Designer{
 		this._animation.buzzing_freq = frequency;
 	}
 
+	// //////////////////////////////////////
+	// Helper functions
+
 	_add_handlers(){
 
 		// Listener for "updated" triggers to initiate a state save
-		this.opts.sequences_container.addEventListener("updated", (e) => {
+		this.dom.addEventListener("updated", (e) => {
 			this.history_save();
 		});
 
 		// Listener for duplicate / delete sequence buttons
-		this.opts.sequences_container.addEventListener("click", (e) => {
-			e.preventDefault();
+		this.dom.addEventListener("click", (e) => {
 
 			// Get the hash, to work out what sort of switch it is
 			const url_target = e.target.href;
@@ -281,16 +314,25 @@ class Designer{
 			const hash = url_target.substring(url_target.indexOf('#') + 1);
 			
 			// TODO: Clean up this dodgy traverse!
-			const sequence_id = e.target.parentNode.parentNode.parentNode.parentNode.dataset.index;
+			const this_sequence = e.target.parentNode.parentNode.parentNode.parentNode;
 
 			switch(hash){
+
 				case "sequence_duplicate":
-					this.sequence_insert_after(sequence_id, true);
+					e.preventDefault();
+					const sq_clone_data = JSON.parse(JSON.stringify(this._get_sequence_from_index(this_sequence.dataset.index).get_data()));
+					sq_clone_data.index = ++this._index_counter;
+					this.sequence_add({
+						after: this_sequence,
+						data: sq_clone_data
+					});
 					this.history_save();
 					e.target.blur();
 					break;
+
 				case "sequence_delete":
-					this.sequence_delete(sequence_id);
+					e.preventDefault();
+					this.sequence_delete(this._get_sequence_from_index(this_sequence.dataset.index));
 					this.history_save();
 					e.target.blur();
 					break;

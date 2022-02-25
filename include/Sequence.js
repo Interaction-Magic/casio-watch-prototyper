@@ -6,14 +6,15 @@ class Sequence{
 
 	// Default options are below
 	_default_opts = {
-		container: null,
-		prototype_container: null
+		name: 				"New sequence",
+		template_class: 	'sequence_template',
+		index: 				0
 	};
 
 	_data = {
 		name: "",
-		index: 0,
-		order: 0,
+		index: -1,
+		order: -1,
 
 		steps: [],
 
@@ -22,19 +23,16 @@ class Sequence{
 		}
 	};
 
-//	_steps = [];
 	_total_duration = 0;
-
-//	_name = "";
-//	_index = 0;
+	_index_counter = 0;
 
 	constructor(opts) {
 		// Merge opts with defaults
 		this.opts = {...this._default_opts, ...opts};
 
 		// Create new sequence container in UI 
-		this.dom = this.opts.prototype_container.cloneNode(true);
-		this.dom.classList.remove("sequence_prototype");
+		this.dom = document.querySelector(`.${this.opts.template_class}`).cloneNode(true);
+		this.dom.classList.remove(this.opts.template_class);
 
 		// Attach to the DOM
 		if(this.opts.after){
@@ -44,27 +42,190 @@ class Sequence{
 		}
 
 		if(this.opts.data != null){
-			// We have incoming data to build from, so build from this
+			// We have incoming data to build from, so build from this instead
 
 			// Set sequence properties
 			this.set_name(this.opts.data.name);
 			this.set_index(this.opts.data.index);
 
+
+			// Sort array by index to get into correct order for DOM
+			this.opts.data.steps.sort((a, b) => (a.order > b.order) ? 1 : -1);
+
 			// Generate all the steps
 			for(let step_data of this.opts.data.steps){
-				this.step_add(step_data);
+				const new_step = this.step_add(step_data);
+				this._index_counter = Math.max(this._index_counter, new_step.get_index());
 			}
+			this._index_counter++;
+
 		}else{
-			// No incoming data, add defaults
+			// No incoming data, add some defaults
+			this.set_name(this.opts.name);
+			this.set_index(this.opts.index);
 			this.step_add();
 		}
 
-		this.set_name(this.opts.name);
-		this.set_index(this.opts.index);
-
-		// Event handlers for the sequence options
+		// Create event handlers
 		this._add_event_handlers();
+
+		this._recalculate_step_order();
+	}
+
+	// Retrieves array of all the data for this sequence
+	get_data(){
+		const data = {
+			name: this._data.name,
+			index: this._data.index,
+			order: this._data.order,
+			steps: []
+		};
+		for(let step of this._data.steps){
+			data.steps.push(step.get_data());
+		}
+		return data;
+	}
+
+	// Some handy getters
+	get_index(){
+		return this._data.index;
+	}
+	get_dom(){
+		return this.dom;
+	}
+	get_order(){
+		return this._data.order;
+	}
+
+	//
+	// Calculate which step of the animation we are on, based on the start time and current time
+	get_current_step(start_time, time_now = Date.now()){
 		
+		const time_point = (time_now-start_time) % this._total_duration;
+
+		let duration_before_this_step = 0;
+		for(let step of this._data.steps){
+			if(time_point < (duration_before_this_step + step.get_duration())){
+				// It's this step
+				return step;
+
+			}else{
+				duration_before_this_step += step.get_duration();
+			}
+		}
+		return step;
+	}
+
+	//
+	// Setters
+
+	// Set the name of the sequence
+	set_name(name){
+		this._data.name = name;
+		this.dom.querySelector(".name").textContent = name;
+	}
+
+	// Set the index for this step
+	set_index(index){
+		this._data.index = index;
+		this.dom.dataset.index = index;
+	}
+
+	// Set the order
+	set_order(order){
+		this._data.order = order;
+	}
+
+	//
+	// Add a new step to the sequence
+	step_add(opts){
+
+		// New step data
+		const step_opts = {
+			before: this.dom.querySelector('.add_step'),
+			index:	++this._index_counter
+		};
+
+		// Create step
+		const new_step = new Step({...step_opts, ...opts});
+
+		// Save step to list
+		this._data.steps.push(new_step);
+		
+		// Add special handler to capture duration changes and re-calculate total sequence duration
+		new_step.get_dom().querySelector(".duration").addEventListener("blur", (e) => {
+			this._update_total_duration();
+		});
+
+		// Re-calculate things
+		this._recalculate_step_order();
+		this._update_total_duration();
+
+		return new_step;
+	}
+
+	// Delete a step at a given index
+	step_delete(step){
+		step.delete();
+		for(let i=0; i<this._data.steps.length; i++){
+			if(this._data.steps[i] == step){
+				this._data.steps.splice(i, 1);
+			}
+		}
+
+		this._recalculate_step_order();
+		this._update_total_duration();
+	}
+
+	// Delete this sequence
+	delete(){
+		this.dom.remove();
+	}
+
+	// //////////////////////////////////////
+	// Helper functions
+
+
+	//
+	// Re-calculate the total sequence length
+	_update_total_duration(){
+		
+		this._total_duration = 0;
+		for(let step of this._data.steps){
+			this._total_duration += step.get_duration();
+		}
+	}
+
+	// Re-calculate the index of all steps
+	_recalculate_step_order(){
+		let o=0;
+		this.dom.querySelectorAll(".sequence_step").forEach((step_dom) => {
+			let step = this._get_step_from_index(step_dom.dataset.index);
+			step.set_order(o);
+			o++;
+		});
+
+		// Sort array now so animation will play in correct order
+		this._data.steps.sort((a, b) => (a.get_order() > b.get_order()) ? 1 : -1);
+	}
+
+	// Fires an event to trigger an update
+	_fire_update(){
+		this.dom.dispatchEvent(new CustomEvent("updated", {
+			bubbles: true
+		}));
+	}
+
+	// Hunt for a step in the list from the given index
+	_get_step_from_index(index){
+		for(let step of this._data.steps){
+			if(step.get_index() == index){
+				return step;
+			}
+		}
+	}
+
+	_add_event_handlers(){
 
 		// Add some event handlers across the whole sequence
 		this.dom.querySelector(".add_step").addEventListener("click", (e) => {
@@ -83,16 +244,19 @@ class Sequence{
 			const hash = url_target.substring(url_target.indexOf('#') + 1);
 			
 			// TODO: Clean up this dodgy traverse!
-			const step_id = e.target.parentNode.parentNode.parentNode.parentNode.dataset.index;
+			const this_step = e.target.parentNode.parentNode.parentNode.parentNode;
 
 			switch(hash){
 				case "step_duplicate":
-					this.step_insert_after(step_id, true);
+					const step_clone_data = JSON.parse(JSON.stringify(this._get_step_from_index(this_step.dataset.index).get_data()));
+					step_clone_data.index = ++this._index_counter;
+					step_clone_data.after = this_step;
+					this.step_add(step_clone_data);
 					this._fire_update();
 					e.target.blur();
 					break;
 				case "step_delete":
-					this.step_delete(step_id);
+					this.step_delete(this._get_step_from_index(this_step.dataset.index));
 					this._fire_update();
 					e.target.blur();
 					break;
@@ -102,149 +266,6 @@ class Sequence{
 					break;
 			}
 		});
-	}
-
-	// Retrieves array of all the data for this sequence
-	get_state(){
-		const data = {
-			index: this._index,
-			name: this._name,
-			steps: []
-		};
-		for(let step of this._steps){
-			data.steps.push(step.get_state());
-		}
-		return data;
-	}
-
-	get_index(){
-		return this._index;
-	}
-
-	get_dom(){
-		return this.dom;
-	}
-
-	// Delete this sequence
-	remove(){
-		this.dom.remove();
-	}
-
-	//
-	// Calculate which step of the animation we are on, based on the start time and current time
-	get_step(start_time, time_now = Date.now()){
-		
-		const time_point = (time_now-start_time) % this._total_duration;
-
-		let duration_before_this_step = 0;
-		for(let step of this._steps){
-			if(time_point < (duration_before_this_step + step.get_duration())){
-				// It's this step
-				return step;
-
-			}else{
-				duration_before_this_step += step.get_duration();
-			}
-		}
-		return step;
-	}
-
-	// Re-calculate the total sequence length
-	update_total_duration(){
-		
-		this._total_duration = 0;
-		for(let step of this._steps){
-			this._total_duration += step.get_duration();
-		}
-	}
-
-	// Set the name of the sequence
-	set_name(name){
-		this._name = name;
-		this.dom.querySelector(".name").textContent = name;
-	}
-
-	// Set the index for this step
-	set_index(index){
-		this._index = index;
-		this.dom.dataset.index = index;
-	}
-
-	//
-	// Add a new step to the sequence
-	step_add(step_data = null, after_elm = null){
-
-		// Placeholder for new step data
-		const step_opts = {
-			index: this._steps.length,
-			data: step_data
-		};
-
-		if(after_elm){
-			// After a given element
-			step_opts.after = after_elm
-		}else{
-			// Put it at the end
-			step_opts.before = this.dom.querySelector(".add_step");
-		}
-
-		// Create step
-		const new_step = new Sequence_Step(step_opts);
-
-		// Save step to list
-		if(after_elm){
-			this._steps.splice(after_elm.dataset.index+1,0,new_step);
-		}else{
-			this._steps.push(new_step);
-		}
-		
-		// Add special handler to capture duration changes and re-calculate total sequence duration
-		new_step.get_dom().querySelector(".duration").addEventListener("blur", (e) => {
-			this.update_total_duration();
-			console.log(this._total_duration);
-		});
-
-		// Re-calculate things
-		this.recalculate_step_indices();
-		this.update_total_duration();
-	}
-
-	// Inserts a new step after the current one
-	step_insert_after(index, is_duplicate){
-		this.step_add(is_duplicate ? this._steps[index].get_state() : null, this._steps[index].get_dom());
-	}
-
-	// Delete a step at a given index
-	step_delete(index){
-		this._steps[index].remove();
-		this._steps.splice(index, 1);
-
-		this.recalculate_step_indices();
-		this.update_total_duration();
-	}
-
-	// Re-calculate the index of all steps
-	recalculate_step_indices(){
-		let i=0;
-		for(let step of this._steps){
-			step.set_index(i);
-			i++;
-		}
-	}
-
-	// //////////////////////////////////////
-	// Helper functions
-
-	// Fires an event to trigger an update
-	_fire_update(){
-		this.dom.dispatchEvent(new CustomEvent("updated", {
-			bubbles: true
-		}));
-	}
-
-	_add_event_handlers(){
-
-
 
 		
 		// Set handler for name editing
