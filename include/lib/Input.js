@@ -13,15 +13,24 @@
 // 
 //  Usage:
 // 
-//  TBD
+//  const input = new Input({
+//		name: "Button1",			// Human readable name
+//		key: "q",					// Keyboard key to check for all press types on
+//		no_double_press: true,	// Disable check for double press
+//		dom: null,					// DOM element (e.g. <a>) representing the button
+//    discrete_keys: {			// Individual trigger keys e.g. for hardware keyboard emulators
+//    	single: 'e',
+//    	double: 'r',
+//    	long: 't'
+//    },
+//		fire: (press) => console.log(press)	// Callback for when button is pressed
+//	 });
 // 
 //  Public methods:
 // 
-//  TBD
-//
-//  Public properties:
-// 
-//  TBD
+//  These are designed for external triggers, e.g. from a Serial device sending commands
+//    down()	-> Call when button is pressed down
+//    up()		-> Call when button gets released
 // 
 //  ***********************************************
 
@@ -30,22 +39,22 @@ class Input{
 
 	// Default options are below
 	_default_opts = {
-		log: (msg, opts) => {},	// Handler to log messages
-		fire: (type) => {},		// Handler for when the input is triggered
+		fire: 						(type) => {},	// Handler for when the input is triggered
 		
-      long_press_threshold: 500,
+      long_press_threshold: 	500,
+		double_press_threshold: 100,	// gap between end of first click and start of next
+		
+		pressed_class: 			'pressed',
+		discrete_keys_animate: 	true			// flash a press effect on DOM button for discrete keys?
 	};
 
 	_click = {
-		double_press_threshold: 100,	// gap between end of first click and start of next
       last_press: 0,
       long_press_fired: false,
 		half_double_press_fired: false,
 		half_double_press: 0,
 		pressed: false
 	};
-
-
 
 	// Requires a reference to div to put the messages in
 	constructor(opts){
@@ -54,29 +63,41 @@ class Input{
 		this.opts = {...this._default_opts, ...opts};
 
 		// Attach click handling
-		this.attach_handlers();
+		this._attach_handlers();
 
 		// Start checking for button presses!
 		window.requestAnimationFrame(() => this._press_check_loop());
 	}
 
-	attach_handlers(){
+	// Call when there's a push/release down on the button
+	down(){
+		this.opts.dom.classList.add(this.opts.pressed_class);
+		this._press();
+	}
+	up(){
+		this.opts.dom.classList.remove(this.opts.pressed_class);
+		this._release()
+	}
+
+	// /////////////////////////////////////////////////////////////////
+
+	_attach_handlers(){
 
 		// Attach handlers to object on screen
-		if(this.opts.elm){
-			this.opts.elm.addEventListener("mousedown",() => {
+		if(this.opts.dom){
+			this.opts.dom.addEventListener("mousedown",() => {
 				this.down();
 			});
 
-			this.opts.elm.addEventListener("mouseout",() => {
-				this.opts.elm.classList.remove("pressed");
+			this.opts.dom.addEventListener("mouseout",() => {
+				this.opts.dom.classList.remove(this.opts.pressed_class);
 				this._release(false);
-				this.opts.elm.blur();
+				this.opts.dom.blur();
 			})
 
-			this.opts.elm.addEventListener("mouseup",() => {
+			this.opts.dom.addEventListener("mouseup",() => {
 				this.up();
-				this.opts.elm.blur();
+				this.opts.dom.blur();
 			});
 		}
 
@@ -96,55 +117,45 @@ class Input{
 		}
 
 		// Setup detection for keyboard inputs for hardware  prototyping
-		if(this.opts.proto_letters){
-			const keys = this.opts.proto_letters;
+		if(this.opts.discrete_keys){
+			const keys = this.opts.discrete_keys;
 			document.addEventListener('keydown', (e) => {
 				const key = e.key.toLowerCase();
 
-				let animate = false;
 				switch(key){
 					case keys.single:
 						this._handle_press("single");
-						animate = true;
+						if(this.opts.discrete_keys_animate){
+							this.opts.dom.classList.add(this.opts.pressed_class);
+							setTimeout(() => {this.opts.dom.classList.remove(this.opts.pressed_class);}, 100);
+						}
 						break;
 					
 					case keys.double:
 						this._handle_press("double");
-						animate = true;
+						if(this.opts.discrete_keys_animate){
+							this.opts.dom.classList.add(this.opts.pressed_class);
+							setTimeout(() => {this.opts.dom.classList.remove(this.opts.pressed_class);}, 100);
+							setTimeout(() => {this.opts.dom.classList.add(this.opts.pressed_class);}, 170);
+							setTimeout(() => {this.opts.dom.classList.remove(this.opts.pressed_class);}, 270);
+						}
 						break;
 					
 					case keys.long:
 						this._handle_press("long");
-						animate = true;
+						if(this.opts.discrete_keys_animate){
+							this.opts.dom.classList.add(this.opts.pressed_class);
+							setTimeout(() => {this.opts.dom.classList.remove(this.opts.pressed_class);}, 300);
+						}
 						break;
 				}
 
-				if(animate){
-					// Animate once
-					this.opts.elm.classList.remove("single-press");
-					setTimeout(() => {
-						this.opts.elm.classList.add("single-press");
-					}, 1)
-				}
 			});
 		}
 	}
 
-	// Call when there's a push/release down on the button
-	down(){
-		this.opts.elm.classList.add("pressed");
-		this._press();
-	}
-	up(){
-		this.opts.elm.classList.remove("pressed");
-		this._release()
-	}
-
 	// Handle all button activations
 	_handle_press(type){
-		this.opts.log(`🕹️ ${this.opts.name.toCapitalized()} button ${type} press`,{
-			class: "input"
-		});
 		this.opts.fire(type);
 	}
 
@@ -165,7 +176,7 @@ class Input{
 		if(!this._click.pressed && !this.opts.no_double_press){
 			if(
 				this._click.half_double_press_fired
-				&& (Date.now() > (this._click.half_double_press + this._click.double_press_threshold))
+				&& (Date.now() > (this._click.half_double_press + this.opts.double_press_threshold))
 			){
 				// Given up, lets just register a normal press!
 				this._handle_press("single");
@@ -223,12 +234,3 @@ class Input{
 		
 	}
 }
-
-// Helper function for formatting strings with first letter as a capital
-Object.defineProperty(String.prototype, 'toCapitalized', {
-	value: function () {
-		return this.charAt(0).toUpperCase() + this.slice(1);
-	},
-	writable: true, // so that one can overwrite it later
-	configurable: true // so that it can be deleted later
-});
