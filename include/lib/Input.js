@@ -56,17 +56,8 @@ class Input{
 		// Attach click handling
 		this.attach_handlers();
 
-		// Save context
-		let self = this;
-
-		// Call first time
-		window.requestAnimationFrame(check_for_clicks);
-
-		function check_for_clicks(){
-			self._press_check_loop();
-			// Do check again!
-			window.requestAnimationFrame(check_for_clicks);
-		}
+		// Start checking for button presses!
+		window.requestAnimationFrame(() => this._press_check_loop());
 	}
 
 	attach_handlers(){
@@ -195,6 +186,9 @@ class Input{
 			this._handle_press("long");
 			this._click.long_press_fired = true;
 		}
+
+		// Go again
+		window.requestAnimationFrame(() => this._press_check_loop());
 	}
 
 	// Call when the press is released on the input
