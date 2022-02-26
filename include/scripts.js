@@ -22,24 +22,22 @@ document.addEventListener("DOMContentLoaded", () => {
 	const light = new Input({
 		name: "light",
 		key: "q",
-		no_double_press: true,
-		elm: document.querySelector(`.watch_button_light`),
-		fire: (press) => {
-			designer.handle_input("light", press)
-		} 
+		has_double_press: false,
+		dom: document.querySelector(`.watch_button_light`),
+		fire: (press) => designer.handle_input("light", press)
 	});
 	const mode = new Input({
 		name: "mode",
 		key: "a",
-		no_double_press: true,
-		elm: document.querySelector(`.watch_button_mode`),
+		has_double_press: false,
+		dom: document.querySelector(`.watch_button_mode`),
 		fire: (press) => designer.handle_input("mode", press)
 	});
 	const alarm = new Input({
 		name: "alarm",
 		key: "s",
-		no_double_press: true,
-		elm: document.querySelector(`.watch_button_alarm`),
+		has_double_press: false,
+		dom: document.querySelector(`.watch_button_alarm`),
 		fire: (press) => designer.handle_input("alarm", press) 
 	});
 
