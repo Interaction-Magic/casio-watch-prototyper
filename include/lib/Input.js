@@ -16,7 +16,7 @@
 //  const input = new Input({
 //		name: "Button1",			// Human readable name
 //		key: "q",					// Keyboard key to check for all press types on
-//		no_double_press: true,	// Disable check for double press
+//		has_double_press: true,	// Enable check for double press
 //		dom: null,					// DOM element (e.g. <a>) representing the button
 //    discrete_keys: {			// Individual trigger keys e.g. for hardware keyboard emulators
 //    	single: 'e',
@@ -41,11 +41,14 @@ class Input{
 	_default_opts = {
 		fire: 						(type) => {},	// Handler for when the input is triggered
 		
+		has_double_press:			true,
+
       long_press_threshold: 	500,
 		double_press_threshold: 100,	// gap between end of first click and start of next
 		
 		pressed_class: 			'pressed',
 		discrete_keys_animate: 	true			// flash a press effect on DOM button for discrete keys?
+	
 	};
 
 	_click = {
@@ -173,7 +176,7 @@ class Input{
 	_press_check_loop(){
 		// Check if we should give up waiting for a second press of the double press
 		// Only do this if we are not currently pressed
-		if(!this._click.pressed && !this.opts.no_double_press){
+		if(!this._click.pressed && this.opts.has_double_press){
 			if(
 				this._click.half_double_press_fired
 				&& (Date.now() > (this._click.half_double_press + this.opts.double_press_threshold))
@@ -207,7 +210,7 @@ class Input{
 		this._click.pressed = false;
 
 		if(do_checks){
-			if(this.opts.no_double_press){
+			if(!this.opts.has_double_press){
 			
 				if(!this._click.long_press_fired){
 					// Just fire a single press!
