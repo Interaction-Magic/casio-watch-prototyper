@@ -126,8 +126,12 @@ document.addEventListener("DOMContentLoaded", () => {
 					break;
 
 				case "settings":
-					localStorage.removeItem('undo_stack');
-					localStorage.removeItem('undo_stack_position');
+					document.querySelector('.settings_panel').classList.toggle('hide_settings');
+					break;
+
+				case "clear_cache":	
+					//localStorage.removeItem('undo_stack');
+					//localStorage.removeItem('undo_stack_position');
 					break;
 					
 			}

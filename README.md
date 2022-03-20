@@ -26,11 +26,12 @@ TODO:
 + ~Code re-factor to reduce duplication (and clean up this.elm, this.opts_elm etc...)~
 + ~Rename to sensor-watch-prototyper~
 + Document all features, especially helper UI features (like hold down to drag through segments)
++ Tidy up ordering and naming of LEDs
 
 TODO Features:
 
-+ Connect button for Bluetooth comms
-+ Warning for not having web bluetooth in browser
++ ~Connect button for Bluetooth comms~
++ ~Warning for not having web bluetooth in browser~
 + Help?
 + Settings (toggles for segment coupling restriction and LED colours)
 + Drag-drop re-ordering of steps

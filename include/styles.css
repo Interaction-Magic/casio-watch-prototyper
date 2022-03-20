@@ -128,9 +128,10 @@ select:focus{
 	position: relative;
 	left: 0;
 	right: 0;
-	background: rgb(255,255,255,0.95);
+	background: rgb(255,255,255,0.9);
 	color: black;
 	margin-bottom: 10px;
+	z-index: 500;
 }
 .logo_menu{
 	display: flex;
@@ -158,6 +159,24 @@ select:focus{
 }
 
 /* ********************************************** */
+/* Settings panel */
+/* ********************************************** */
+
+.settings_panel{
+	position: absolute;
+	background: rgb(255,255,255,0.9);
+   inset: 100px 10px auto auto;
+	padding: 10px;
+}
+.settings_panel.hide_settings{
+	display: none;
+}
+.settings_panel nav{
+	flex-direction: column;
+	align-items: flex-start;
+}
+
+/* ********************************************** */
 /* Sequences nav menu */
 /* ********************************************** */
 
@@ -169,88 +188,3 @@ select:focus{
 .sequences_nav a{
 	font-size: 14px;
 }
-
-/* ********************************************** */
-/* Logger */
-/* ********************************************** */
-
-.log-container{
-	width: 400px;
-	background: rgba(8,8,8,0.25);
-	display: flex;
-   flex-direction: column;
-	align-self: stretch;
-	transition: width 0.3s ease-out;
-	position: relative;
-	display: none;
-}
-
-.show_settings{
-	position: absolute;
-	background: rgba(8,8,8,0.25);
-	text-decoration: none;
-	width: 25px;
-	font-size: 0.8em;
-	left: -30px;
-	top: 18px;
-	height: 25px;
-	display: flex;
-	justify-content: center;
-	align-items: center;
-}
-.show_settings:hover{
-	background: white;
-}
-
-.log-container.hide-log{
-	width: 0vw;
-}
-.log-container.hide-log .show_settings{
-	display: none;
-}
-
-
-.log{
-	padding: 20px;
-	overflow-y: scroll;
-	-ms-scrollbar-color: white rgba(8,8,8,0.4);
-	scrollbar-color: white rgba(8,8,8,0.4);
-	height: 100%;
-	font-family: "IBM Plex Mono", monospace;
-	font-size: 0.8em;
-	font-weight: 400;
-	overflow-x: hidden;
-	box-sizing: border-box;
-}
-.log p{
-	margin: 0;
-	height: 21px;
-	line-height: 21px;
-	white-space: nowrap;
-}
-.log::-webkit-scrollbar{background: rgba(8,8,8,0.4);}
-.log::-webkit-scrollbar-thumb, .log::-webkit-scrollbar-button{background: white;}
-.log::-webkit-scrollbar-button{height: 0px;}
-
-.log p.status span{color:white;}
-.log p.error span.msg{color:red;}
-.log p.error span.msg::before{content: "⚠️ ";}
-.log p.ping span{color:rgba(255,255,255,0.6);}
-.log p::after{padding-left: 7px;}
-.log p.is_validated::after{content: "✅";}
-.log p.is_retrying::after{content: "⏳";}
-.log p.is_failed{cursor: pointer;}
-.log p.is_failed:hover::after{content: "🔁"; color:lightblue;}
-.log p.is_failed::after{content: "❌";}
-
-.log .time{opacity: 0.3;}
-.log p:hover .time{opacity: 1;}
-.log p:not(.input) + p.input, .log p:not(.external_input) + p.external_input{margin-top: 0.8em;}
-
-.log p.error{display:none;}
-.log p.ping{display:none;}
-.log.show_errors p.error{display: block;}
-.log.show_pings p.ping{display: block;}
-
-.log .setting{display: none;}
-.filter-settings .setting{display: block;}

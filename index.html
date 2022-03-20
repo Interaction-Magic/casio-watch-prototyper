@@ -22,7 +22,15 @@
 			<nav class="right_align inverted">
 				<a href="#undo" class="undo icon_only">Undo (-1)</a>
 				<a href="#undoundo" class="undoundo icon_only">Redo (+1)</a>
+				<a href="#settings" class="settings icon_only">Settings</a>
 			</nav>
+			<section class="settings_panel hide_settings">
+				<nav class="inverted">
+					<a href="#couple_segments" class="toggle no_icon">Apply segment coupling</a>
+					<a href="#red_blue_leds" class="toggle no_icon">Use Red/Blue LEDs</a>
+					<a href="#clear_cache" class="clear_cache no_icon">Clear auto-saved sequences</a>
+				</nav>
+			</section>
 		</header>
 		<div class="wrapper">
 			<div class="sequences_nav">
@@ -202,11 +210,6 @@
 				<a href="#" class="watch_button watch_button_mode"></a>
 				<a href="#" class="watch_button watch_button_alarm"></a>
 			</div>
-		</div>
-
-		<div class="log-container hide-log">
-			<a href="#show_settings" class="show_settings filter-btn" data-filter="settings">⚙️</a>
-			<div class="log show_errors"></div>
 		</div>
 
 		<!-- Elements that we re-use are stored below -->
@@ -496,8 +499,6 @@
 		<script src="include/lib/Serial.js"></script>
 		<script src="include/lib/Undo.js"></script>
 		<script src="include/lib/Input.js"></script>
-
-		<script src="include/Logger.js"></script>
 		
 		<script src="include/Step.js"></script>
 		<script src="include/Sequence.js"></script>
