@@ -24,7 +24,9 @@ class Designer{
 
 	_version = '0.1';
 	_index_counter = 0;
-	
+
+	_last_rendered_data = null;
+
 	// AudioContext for buzzer simulation playback
 	audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 
@@ -232,14 +234,24 @@ class Designer{
 	// Writes the segment display to the live view of the watch on the screen 
 	render_to_live_view(data){
 
-		// Reference for watch element
-		const watch = this.opts.live_watch.querySelector(".live_watch");
+		// If nothing changed, no need to re-render
+		// Especially good to save on BT comms overload
+		if(JSON.stringify(data) == this._last_rendered_data){
+			return;
+		}
+		
+		// Save record for comparison next time
+		this._last_rendered_data = JSON.stringify(data);
 
-		// Write out via BT, if that exists
+		// Do Bluetooth stuff...
 		if(this.opts.bt_write){
-			const bytes = this._build_display_byte_array(data);
+			// Write out data
+			const bytes = this._build_byte_array(data);
 			this.opts.bt_write(bytes);
 		}
+
+		// Reference for watch element
+		const watch = this.opts.live_watch.querySelector(".live_watch");
 
 		// Fill in all segments 
 		for(let group of data.segments){
@@ -279,6 +291,7 @@ class Designer{
 		}else{
 			this._stop_oscillator();
 		}
+
 	}
 
 	// //////////////////////////////////////
@@ -373,11 +386,11 @@ class Designer{
 	// Private functions
 
 	//
-	// Creates a correctly ordered byte array for the segments
-	_build_display_byte_array(data){
+	// Creates a correctly ordered byte array for the watch
+	_build_byte_array(data){
 
 		// Generate array of weird sequence of bytes that the display needs
-		const segment_byte_sequence = [
+		const pixel_bit_sequence = [
 			data.segments[7].data.segment_D, // 0,0
 			data.segments[7].data.segment_C,
 			data.segments[8].data.segment_E,
@@ -461,16 +474,21 @@ class Designer{
 		];
 
 		// Array to store return data in
-		let bytes = new Uint8Array(['d'.charCodeAt(0),0,0,0,0,0,0,0,0,0]);
+		let bytes = new Uint8Array(['d'.charCodeAt(0),0,0,0,0,0,0,0,0,0,'l'.charCodeAt(0),0]);
 
-		// Loop through the 9 bytes
+		// Loop through the 9 bytes of pixel data
 		for(let byte_block=0; byte_block<9; byte_block++){
 			let sum = 0;
 			for(let i=0; i<8; i++){
-				sum += ((segment_byte_sequence[(byte_block*8)+i] & 1)<<i);
+				sum += ((pixel_bit_sequence[(byte_block*8)+i] & 1)<<i);
 			}
 			bytes[byte_block+1] = sum;
 		}
+
+		// Generate LED config
+		const leds_state = (data.hardware.led_0 & 1) + ((data.hardware.led_1 & 1)<<1);
+		const led_chars = ['0','R','G','Y'];
+		bytes[11] = led_chars[leds_state].charCodeAt(0);
 
 		// Return the Uint8Array()
 		return bytes;
