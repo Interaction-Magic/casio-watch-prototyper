@@ -17,7 +17,7 @@ BUGS:
 
 + ~Duplicate sequences IDs are possible: fix this and fix sequence duplication. Sort all index number references~
 + ~Step splicing does not work in the correct place~
-+ Add leading 0 to segment_0
++ Add leading dot to segment_0
 
 TODO:
 
