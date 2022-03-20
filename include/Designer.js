@@ -378,22 +378,99 @@ class Designer{
 
 		// Generate array of weird sequence of bytes that the display needs
 		const segment_byte_sequence = [
-			data.segments[7].data.segment_D,
+			data.segments[7].data.segment_D, // 0,0
 			data.segments[7].data.segment_C,
-			data.segments[8].data.segment_E
+			data.segments[8].data.segment_E,
+			data.segments[8].data.segment_D,
+			data.segments[8].data.segment_C,
+			data.segments[9].data.segment_E,
+			data.segments[9].data.segment_D,
+			data.segments[3].data.segment_A,
+			data.segments[3].data.segment_F,
+			data.segments[2].data.segment_B,
+
+			data.segments[2].data.segment_E, // 0,10
+			data.segments[1].data.segment_A,
+			data.segments[1].data.segment_dot,
+			data.segments[0].data.segment_A,
+			data.segments[0].data.segment_F,
+			false,									// TODO: Add this leading dot to the emulator
+			data.segments[10].data.signal,
+			data.segments[10].data.bell,
+			data.segments[4].data.segment_E,
+			data.segments[4].data.segment_C,
+
+			data.segments[5].data.segment_E, // 0,20
+			data.segments[5].data.segment_D,
+			data.segments[6].data.segment_D,
+			data.segments[6].data.segment_C,
+
+			data.segments[7].data.segment_E, // 1,0
+			data.segments[7].data.segment_G,
+			data.segments[8].data.segment_F,
+			data.segments[8].data.segment_G,
+			data.segments[9].data.segment_F,
+			data.segments[9].data.segment_G,
+			data.segments[9].data.segment_C,
+			data.segments[3].data.segment_B,
+			data.segments[3].data.segment_G,
+			data.segments[2].data.segment_A,
+
+			data.segments[10].data.lap,      // 1,10
+			data.segments[1].data.segment_B,
+			data.segments[1].data.segment_F,
+			data.segments[0].data.segment_B,
+			data.segments[0].data.segment_H,
+			data.segments[0].data.segment_G,
+			data.segments[10].data.colon,
+			data.segments[5].data.segment_F,
+			data.segments[4].data.segment_A,
+			data.segments[4].data.segment_G,
+
+			data.segments[5].data.segment_G, // 1,20
+			data.segments[5].data.segment_C,
+			data.segments[6].data.segment_E,
+			data.segments[6].data.segment_G,
+
+			data.segments[7].data.segment_F, // 2,0
+			data.segments[7].data.segment_A,
+			data.segments[8].data.segment_A,
+			data.segments[8].data.segment_B,
+			data.segments[9].data.segment_A,
+			data.segments[9].data.segment_B,
+			data.segments[3].data.segment_D,
+			data.segments[3].data.segment_C,
+			data.segments[3].data.segment_E,
+			data.segments[2].data.segment_C,
+
+			data.segments[7].data.segment_B, // 2,10
+			data.segments[1].data.segment_D,
+			data.segments[1].data.segment_G,
+			data.segments[0].data.segment_C,
+			data.segments[0].data.segment_E,
+			data.segments[0].data.segment_D,
+			data.segments[10].data.hr,
+			data.segments[10].data.pm,
+			data.segments[4].data.segment_F,
+			data.segments[4].data.segment_B,
+
+			data.segments[5].data.segment_A, // 2,20
+			data.segments[5].data.segment_B,
+			data.segments[6].data.segment_F,
+			data.segments[6].data.segment_B
 		];
 
 		// Array to store return data in
 		let bytes = new Uint8Array(['d'.charCodeAt(0),0,0,0,0,0,0,0,0,0]);
 
-		let return_num = 0;
-
-		// Loop over some bytes and generate the number 
-		let index=0;
-		for(let b of segment_byte_sequence){
-			return_num += ((b & 1)<<(index++));
+		// Loop through the 9 bytes
+		for(let byte_block=0; byte_block<9; byte_block++){
+			let sum = 0;
+			for(let i=0; i<8; i++){
+				sum += ((segment_byte_sequence[(byte_block*8)+i] & 1)<<i);
+			}
+			bytes[byte_block+1] = sum;
 		}
-		bytes[1] = return_num;
 
 		// Return the Uint8Array()
 		return bytes;
