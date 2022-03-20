@@ -20,6 +20,7 @@ document.addEventListener("DOMContentLoaded", () => {
 		onDisconnect: () => {
 			console.log(`BT disconnected!`);
 			document.querySelector('.connect').classList.remove('is-connected');
+			document.querySelector('.connect').title = "";
 		},
 		onStatusChange: (msg) => {
 			console.log(`BT status: ${msg}`);
@@ -44,10 +45,12 @@ document.addEventListener("DOMContentLoaded", () => {
 	connect_btn.addEventListener('click', async (e) => {
 		e.preventDefault();
 		connect_btn.classList.add('is-connecting');
-		if(await BT.connect()){
+		const ble_device = await BT.connect();
+		if(ble_device){
 			console.log(`BT connected!`);
 			connect_btn.classList.remove('is-connecting');
 			connect_btn.classList.add('is-connected');
+			connect_btn.title = ble_device;
 		}else{
 			connect_btn.classList.remove('is-connecting');
 		}
