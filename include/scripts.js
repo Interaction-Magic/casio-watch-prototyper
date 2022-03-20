@@ -44,6 +44,13 @@ document.addEventListener("DOMContentLoaded", () => {
 	const connect_btn = document.querySelector('.connect');
 	connect_btn.addEventListener('click', async (e) => {
 		e.preventDefault();
+
+		if (!navigator.bluetooth) {
+			document.querySelector('.api_warning').textContent = 'WebBluetooth API is not available. Try using Chrome or Edge';
+			document.querySelector('.api_warning').style.display = 'block';
+			return;
+		}
+
 		connect_btn.classList.add('is-connecting');
 		const ble_device = await BT.connect();
 		if(ble_device){
