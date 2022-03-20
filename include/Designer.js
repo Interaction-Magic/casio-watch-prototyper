@@ -235,6 +235,12 @@ class Designer{
 		// Reference for watch element
 		const watch = this.opts.live_watch.querySelector(".live_watch");
 
+		// Write out via BT, if that exists
+		if(this.opts.bt_write){
+			const bytes = this._build_display_byte_array(data);
+			this.opts.bt_write(bytes);
+		}
+
 		// Fill in all segments 
 		for(let group of data.segments){
 			switch(group.type){
@@ -365,6 +371,33 @@ class Designer{
 
 	// //////////////////////////////////////
 	// Private functions
+
+	//
+	// Creates a correctly ordered byte array for the segments
+	_build_display_byte_array(data){
+
+		// Generate array of weird sequence of bytes that the display needs
+		const segment_byte_sequence = [
+			data.segments[7].data.segment_D,
+			data.segments[7].data.segment_C,
+			data.segments[8].data.segment_E
+		];
+
+		// Array to store return data in
+		let bytes = new Uint8Array(['d'.charCodeAt(0),0,0,0,0,0,0,0,0,0]);
+
+		let return_num = 0;
+
+		// Loop over some bytes and generate the number 
+		let index=0;
+		for(let b of segment_byte_sequence){
+			return_num += ((b & 1)<<(index++));
+		}
+		bytes[1] = return_num;
+
+		// Return the Uint8Array()
+		return bytes;
+	}
 
 	//
 	// Called via window.requestAnimationFrame()

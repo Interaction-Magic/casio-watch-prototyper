@@ -95,6 +95,7 @@ nav .copy{background-image:url("../assets/images/copy.svg");}
 nav .delete{background-image:url("../assets/images/delete.svg");}
 nav .settings{background-image:url("../assets/images/settings.svg");}
 
+
 select{
 	border-radius: 4px;
 	border: none;
@@ -166,27 +167,6 @@ select:focus{
 }
 .sequences_nav a{
 	font-size: 14px;
-}
-
-/* ********************************************** */
-/* Connect menu */
-/* ********************************************** */
-
-a.connect{
-	padding-right: 25px;
-}
-a.connect::before{
-	content: '';
-	width: 10px;
-	height: 10px;
-	top: calc(50% - 5px);
-	right: 8px;
-	background: red;
-	position: absolute;
-	border-radius: 100%;
-}
-a.connect.connected::before{
-	background:greenyellow;
 }
 
 /* ********************************************** */

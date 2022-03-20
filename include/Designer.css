@@ -73,6 +73,28 @@
 	background-image:url("../assets/images/pause.svg");
 }
 
+/* ********************************************** */
+/* Connect button */
+/* ********************************************** */
+
+.connect{
+	padding-right: 25px;
+	display: block;
+}
+.connect::before{
+	content: '';
+	width: 10px;
+	height: 10px;
+	top: calc(50% - 5px);
+	right: 8px;
+	background: red;
+	position: absolute;
+	border-radius: 100%;
+}
+.connect.connected::before{
+	background:greenyellow;
+}
+
 
 
 /* ********************************************** */

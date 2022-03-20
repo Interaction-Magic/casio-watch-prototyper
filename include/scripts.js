@@ -11,11 +11,45 @@ document.addEventListener("DOMContentLoaded", () => {
 	copy_watch_display(document.querySelector(".live_watch"));
 	copy_watch_display(document.querySelector(".segments"));
 
+	// Create new Bluetooth connection
+	const BT = new BTConnector({
+		namePrefix: "SensorWatch",  // Filter for devices with this name
+		onReceive: (msg) => {
+			console.log(`BT msg: ${msg}`);
+		},
+		onDisconnect: () => {
+			console.log(`BT disconnected!`);
+		},
+		onStatusChange: (msg) => {
+			console.log(`BT status: ${msg}`);
+		},
+		onBatteryChange: (msg) => {
+			console.log(`BT battery: ${msg}`);
+		}, 
+	 });
+
 	// Create a new instance of the Designer 
 	const designer = new Designer({
-		dom: document.querySelector(".sequences"), 
-		live_watch: document.querySelector(".live_output"),
-		data: sample_sequence
+		dom: 				document.querySelector(".sequences"), 
+		live_watch: 	document.querySelector(".live_output"),
+		data: 			sample_sequence,
+		bt_write: 		(bytes) => {
+			BT.sendBytes(bytes);
+		}
+	});
+
+	 
+	const connect_btn = document.querySelector('.connect');
+	connect_btn.addEventListener('click', async (e) => {
+		e.preventDefault();
+		connect_btn.classList.add('is-connecting');
+		if(await BT.connect()){
+			console.log(`BT connected!`);
+			connect_btn.classList.remove('is-connecting');
+			connect_btn.classList.add('is-connected');
+		}else{
+			connect_btn.classList.remove('is-connecting');
+		}
 	});
 	
 	// Create three buttons
