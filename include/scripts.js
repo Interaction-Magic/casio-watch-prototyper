@@ -19,6 +19,7 @@ document.addEventListener("DOMContentLoaded", () => {
 		},
 		onDisconnect: () => {
 			console.log(`BT disconnected!`);
+			document.querySelector('.connect').classList.remove('is-connected');
 		},
 		onStatusChange: (msg) => {
 			console.log(`BT status: ${msg}`);

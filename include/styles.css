@@ -84,6 +84,7 @@ nav.right_align{justify-content: flex-end;}
 nav.right_align a{margin: 0 0 0 5px;}
 
 nav .icon_only{text-indent: -9273px; width:1.2em; padding:0.5em 0.8em; background-position: 50% 50%; background-size: 1.6em;}
+nav .no_icon{padding-left: 0.8em;}
 
 nav .play{background-image:url("../assets/images/play.svg");}
 nav .undo{background-image:url("../assets/images/undo.svg");}

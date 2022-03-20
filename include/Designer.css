@@ -60,12 +60,14 @@
 .watch_wrapper .led{opacity:0;}
 .watch_wrapper .led.on{opacity:0.7;}
 
-.play{background-color:rgb(255, 252, 85) !important; filter: none; opacity:1; border:none;}
-.play:hover{background-color:rgb(208, 255, 138) !important;}
+.play:hover{background-color:rgb(208, 255, 138) !important; filter: none; opacity: 1;}
 
 .is_playing .play{
 	background-color: greenyellow !important;
 	filter: none;
+}
+.is_playing .play::after{
+	content:"ing";
 }
 .is_playing .play:hover{
 	filter: none;
@@ -78,22 +80,34 @@
 /* ********************************************** */
 
 .connect{
-	padding-right: 25px;
 	display: block;
+	padding-left: 1.8em;
 }
 .connect::before{
 	content: '';
 	width: 10px;
 	height: 10px;
 	top: calc(50% - 5px);
-	right: 8px;
-	background: red;
+	left: 8px;
+	background: black;
 	position: absolute;
 	border-radius: 100%;
 }
-.connect.connected::before{
-	background:greenyellow;
+.connect.is-connecting{background: rgb(230, 230, 230);}
+.connect.is-connecting:after{content:"ing...";}
+.connect.is-connecting:before{
+	animation: pulse-connecting 0.3s linear infinite alternate;
+	filter: invert(100%);
 }
+@keyframes pulse-connecting { from { background: rgb(45, 118, 255); } to { background: rgb(0, 30, 85); }  }
+
+.connect.is-connected:after{content:"ed!";}
+.connect.is-connected:before{
+	background: greenyellow;
+	animation: pulse-connected 0.7s ease-out infinite alternate;
+	filter: invert(100%);
+}
+@keyframes pulse-connected { from { background: rgb(173, 255, 47); } to { background: rgb(104, 172, 1); }  }
 
 
 
