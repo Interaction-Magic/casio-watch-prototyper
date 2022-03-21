@@ -6,6 +6,7 @@ class Designer{
 
 	// Default options are below
 	_default_opts = {
+		is_segment_coupling: true
 	};
 
 	_data = {
@@ -192,6 +193,16 @@ class Designer{
 			data.sequences.push(sequence.get_data());
 		}
 		return data;
+	}
+
+	// Set whether we are doing segment couplinh or not
+	set_segment_coupling(is_set){
+		
+		this.opts.is_segment_coupling = is_set;
+
+		for(let sequence of this._data.sequences){
+			sequence.set_segment_coupling(is_set);
+		}
 	}
 
 	// Overwrites the whole designer with all the provided data
@@ -534,7 +545,8 @@ class Designer{
 			container:		this.dom,
 			name: 			`Sequence ${this._index_counter}`,
 			data: 			null,
-			index:			++this._index_counter
+			index:			++this._index_counter,
+			is_segment_coupling: this.opts.is_segment_coupling 
 		};
 		const sequence = new Sequence({...sequence_opts, ...opts});
 		this._data.sequences.push(sequence);	// Save to the array

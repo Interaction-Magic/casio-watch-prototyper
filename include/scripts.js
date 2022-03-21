@@ -173,7 +173,7 @@ document.addEventListener("DOMContentLoaded", () => {
 		});
 	});
 
-	// Deal with [ersonal interface preferences
+	// Deal with personal interface preferences
 	// These are cosmetic things only
 	const save_preferences = () => {
 		const preferences = {
@@ -207,7 +207,7 @@ document.addEventListener("DOMContentLoaded", () => {
 	}
 	const set_segment_coupling = (is_segment_coupling) => {
 		document.querySelector('.toggle_couple_segments').classList.toggle('is-checked', is_segment_coupling);
-
+		designer.set_segment_coupling(is_segment_coupling);
 	}
 
 	// Load them on page load

@@ -8,7 +8,8 @@ class Sequence{
 	_default_opts = {
 		name: 				"New sequence",
 		template_class: 	'sequence_template',
-		index: 				0
+		index: 				0,
+		is_segment_coupling: true
 	};
 
 	_data = {
@@ -162,6 +163,16 @@ class Sequence{
 		this.set_trigger('light', this._data.triggers.light);
 	}
 
+	// Set whether we are doing segment couplinh or not
+	set_segment_coupling(is_set){
+		
+		this.opts.is_segment_coupling = is_set;
+
+		for(let step of this._data.steps){
+			step.set_segment_coupling(is_set);			
+		}
+	}
+
 	//
 	// Add a new step to the sequence
 	step_add(opts){
@@ -169,7 +180,8 @@ class Sequence{
 		// New step data
 		const step_opts = {
 			before: this.dom.querySelector('.add_step'),
-			index:	++this._index_counter
+			index:	++this._index_counter,
+			is_segment_coupling: this.opts.is_segment_coupling 
 		};
 
 		// Create step

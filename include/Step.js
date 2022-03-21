@@ -7,7 +7,8 @@ class Step{
 	// Default options are below
 	_default_opts = {
 		duration: 500,
-		template_class: 'sequence_step_template'
+		template_class: 'sequence_step_template',
+		is_segment_coupling: true
 	};
 
 	_hover_drag = {
@@ -50,6 +51,30 @@ class Step{
 		digits: ["digit_0", "digit_1", "digit_2", "digit_3", "digit_4", "digit_5", "digit_6", "digit_7", "digit_8", "digit_9"],
 		digit_letters : ["segment_A", "segment_B", "segment_C", "segment_D", "segment_E", "segment_F", "segment_G"]
 	};
+
+	_segment_couples = [
+		[
+			{digit: "digit_1",	segment: "segment_B"},
+			{digit: "digit_1",	segment: "segment_C"}
+		],
+		[
+			{digit: "digit_1",	segment: "segment_E"},
+			{digit: "digit_1",	segment: "segment_F"}
+		],
+		[
+			{digit: "digit_2",	segment: "segment_A"},
+			{digit: "digit_2",	segment: "segment_D"},
+			{digit: "digit_2",	segment: "segment_G"}
+		],
+		[
+			{digit: "digit_4",	segment: "segment_A"},
+			{digit: "digit_4",	segment: "segment_D"}
+		],
+		[
+			{digit: "digit_6",	segment: "segment_A"},
+			{digit: "digit_6",	segment: "segment_D"}
+		]
+	];
 
 	constructor(opts) {
 		// Merge opts with defaults
@@ -166,6 +191,13 @@ class Step{
 					break;
 			}
 		}
+
+		this._update_sequence_from_segments();
+	}
+
+	// Set whether to apply segment coupling or not
+	set_segment_coupling(is_set){
+		this.opts.is_segment_coupling = is_set;
 	}
 
 	// Deletes this step from the DOM
@@ -173,6 +205,32 @@ class Step{
 		this.dom.remove();
 	}
 
+	// Check if this segment is coupled to any others and change those as well
+	_check_and_apply_segment_coupling(segment_dom){
+
+		if(!this.opts.is_segment_coupling){
+			return;
+		}
+
+		if(!segment_dom.dataset.segment){
+			return;
+		}
+
+		const digit = segment_dom.parentNode.classList[0];
+		const segment = `segment_${segment_dom.dataset.segment}`;
+
+		for(let couple of this._segment_couples){
+			for(let seg of couple){
+				if((seg.digit == digit) && (seg.segment == segment)){
+					// Apply it to them all
+					const segment_state = segment_dom.classList.contains("on");
+					for(let seg2 of couple){
+						this.dom.querySelector(`.${seg2.digit} .${seg2.segment}`).classList.toggle('on', segment_state);
+					}
+				}
+			}
+		}
+	}
 
 	// Returns the segment sequence for this step
 	_update_sequence_from_segments(){
@@ -307,6 +365,8 @@ class Step{
 				this._hover_drag.is_active = true;
 
 				segment.classList.toggle("on");
+				this._check_and_apply_segment_coupling(segment);
+
 				segment.classList.remove("hover");
 				this._hover_drag.setting_option = segment.classList.contains("on");
 
@@ -317,11 +377,18 @@ class Step{
 				e.preventDefault();
 				if(this._hover_drag.is_active){
 					if(this._hover_drag.setting_option == "toggle"){
+
 						segment.classList.toggle("on");
+						this._check_and_apply_segment_coupling(segment);
+
 						this._hover_drag.something_changed = true;
 						this._update_sequence_from_segments();
+
 					}else{
+
 						segment.classList.toggle("on", this._hover_drag.setting_option);
+						this._check_and_apply_segment_coupling(segment);
+
 						this._hover_drag.something_changed = true;
 						this._update_sequence_from_segments();
 					}
