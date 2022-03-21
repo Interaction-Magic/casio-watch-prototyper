@@ -162,6 +162,7 @@ document.addEventListener("DOMContentLoaded", () => {
 					break;
 
 				case "red_blue_leds":
+					set_red_blue(document.querySelector('.toggle_red_blue_leds').classList.contains('is-checked'));
 					save_preferences();
 					break;
 					
@@ -187,6 +188,14 @@ document.addEventListener("DOMContentLoaded", () => {
 		// Set toggles
 		document.querySelector('.toggle_couple_segments').classList.toggle('is-checked', preferences.couple_segments);
 		document.querySelector('.toggle_red_blue_leds').classList.toggle('is-checked', preferences.red_blue_leds);
+	
+		// Apply settings
+		set_red_blue(document.querySelector('.toggle_red_blue_leds').classList.contains('is-checked'));
+	}
+
+	const set_red_blue = (is_red_blue) => {
+		document.body.classList.toggle('red_blue_leds', is_red_blue);
+		document.querySelector('.led_0 rect').style.fill = is_red_blue ? "url(#gradient_light_blue)" : "url(#gradient_light_green)";
 	}
 
 	// Load them on page load
