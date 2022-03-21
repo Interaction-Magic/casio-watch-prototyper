@@ -15,7 +15,11 @@ document.addEventListener("DOMContentLoaded", () => {
 	const BT = new BTConnector({
 		namePrefix: "SensorWatch",  // Filter for devices with this name
 		onReceive: (msg) => {
-			console.log(`BT msg: ${msg}`);
+			switch(msg.substring(0,1)){
+				case 'b':
+					handle_hw_button_press(msg.substring(1,2), msg.substring(2,3));
+					break;
+			}
 		},
 		onDisconnect: () => {
 			console.log(`BT disconnected!`);
@@ -85,6 +89,21 @@ document.addEventListener("DOMContentLoaded", () => {
 		dom: document.querySelector(`.watch_button_alarm`),
 		fire: (press) => designer.handle_input("alarm", press) 
 	});
+
+	// Deal with an incoming switch message from the HW watch
+	const handle_hw_button_press = (button, type) => {
+		switch(button){
+			case 'A':
+				(type == 'p') ? alarm.down() : alarm.up();
+				break;
+			case 'L':
+				(type == 'p') ? light.down() : light.up();
+				break;
+			case 'M':
+				(type == 'p') ? mode.down() : mode.up();
+				break;
+		}
+	}
 
 	// Add click handlers to menu buttons
 	document.querySelectorAll("nav a").forEach((link) => {
