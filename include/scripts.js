@@ -158,6 +158,7 @@ document.addEventListener("DOMContentLoaded", () => {
 					break;
 
 				case "couple_segments":
+					set_segment_coupling(document.querySelector('.toggle_couple_segments').classList.contains('is-checked'));
 					save_preferences();
 					break;
 
@@ -184,18 +185,29 @@ document.addEventListener("DOMContentLoaded", () => {
 	}
 	const load_preferences = () => {
 		const preferences = JSON.parse(localStorage.getItem('preferences'));
-	
-		// Set toggles
-		document.querySelector('.toggle_couple_segments').classList.toggle('is-checked', preferences.couple_segments);
-		document.querySelector('.toggle_red_blue_leds').classList.toggle('is-checked', preferences.red_blue_leds);
-	
-		// Apply settings
-		set_red_blue(document.querySelector('.toggle_red_blue_leds').classList.contains('is-checked'));
+
+		if(localStorage.getItem('preferences')){
+			// Apply settings
+			set_red_blue(preferences.red_blue_leds);
+			set_segment_coupling(preferences.couple_segments);
+
+		}else{
+			// Defaults here
+			console.log("Loading default preferences");
+			set_segment_coupling(true);
+			set_red_blue(true);
+		}
 	}
 
 	const set_red_blue = (is_red_blue) => {
+		document.querySelector('.toggle_red_blue_leds').classList.toggle('is-checked', is_red_blue);
+
 		document.body.classList.toggle('red_blue_leds', is_red_blue);
 		document.querySelector('.led_0 rect').style.fill = is_red_blue ? "url(#gradient_light_blue)" : "url(#gradient_light_green)";
+	}
+	const set_segment_coupling = (is_segment_coupling) => {
+		document.querySelector('.toggle_couple_segments').classList.toggle('is-checked', is_segment_coupling);
+
 	}
 
 	// Load them on page load
