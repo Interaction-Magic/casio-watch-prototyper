@@ -189,6 +189,10 @@ class Step{
 				data: {}
 			};
 			for(let letter of this._lcd_segments.digit_letters){
+				if((digit == 'digit_2') && (letter  == 'segment_F')){
+					// Special case we're missing a pixel here
+					continue;
+				}
 				const letter_elm = digit_elm.querySelector(`.${letter}`);
 				digit_data.data[letter] = this._is_segment_on(letter_elm);
 			}
