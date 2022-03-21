@@ -106,7 +106,7 @@ document.addEventListener("DOMContentLoaded", () => {
 	}
 
 	// Add click handlers to menu buttons
-	document.querySelectorAll("nav a").forEach((link) => {
+	document.querySelectorAll("nav a, .checkbox").forEach((link) => {
 		link.addEventListener("click", (e) => {
 			e.preventDefault();
 
@@ -116,6 +116,10 @@ document.addEventListener("DOMContentLoaded", () => {
 				return;
 			}
 			const hash = url_target.substring(url_target.indexOf('#') + 1);
+
+			if(link.classList.contains('checkbox')){
+				link.classList.toggle('is-checked');
+			}
 
 			switch(hash){
 
@@ -148,9 +152,17 @@ document.addEventListener("DOMContentLoaded", () => {
 					document.querySelector('.settings_panel').classList.toggle('hide_settings');
 					break;
 
-				case "clear_cache":	
-					//localStorage.removeItem('undo_stack');
-					//localStorage.removeItem('undo_stack_position');
+				case "reset_all":
+					designer.history_reset();
+					location.reload();
+					break;
+
+				case "couple_segments":
+					save_preferences();
+					break;
+
+				case "red_blue_leds":
+					save_preferences();
 					break;
 					
 			}
@@ -159,8 +171,29 @@ document.addEventListener("DOMContentLoaded", () => {
 		});
 	});
 
+	// Deal with [ersonal interface preferences
+	// These are cosmetic things only
+	const save_preferences = () => {
+		const preferences = {
+			couple_segments: document.querySelector('.toggle_couple_segments').classList.contains('is-checked'),
+			red_blue_leds: document.querySelector('.toggle_red_blue_leds').classList.contains('is-checked')
+		}
+
+		localStorage.setItem('preferences', JSON.stringify(preferences));
+	}
+	const load_preferences = () => {
+		const preferences = JSON.parse(localStorage.getItem('preferences'));
+	
+		// Set toggles
+		document.querySelector('.toggle_couple_segments').classList.toggle('is-checked', preferences.couple_segments);
+		document.querySelector('.toggle_red_blue_leds').classList.toggle('is-checked', preferences.red_blue_leds);
+	}
+
+	// Load them on page load
+	load_preferences();
+
 	// Receive input file from upload
-	let upload_file = () => {
+	const upload_file = () => {
 		const helper_link = document.createElement('input');
 		helper_link.type = "file";
 		helper_link.accept = "text/plain";
@@ -188,7 +221,7 @@ document.addEventListener("DOMContentLoaded", () => {
 	}
 	
 	// Generate downloadable text file of data
-	let download_file = () => {
+	const download_file = () => {
 
 		let data = JSON.stringify(designer.get_data());
 	

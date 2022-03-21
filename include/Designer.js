@@ -176,6 +176,9 @@ class Designer{
 			this.load_in_data(undoundo_data);
 		}
 	}
+	history_reset(){
+		this.undo.reset_storage();
+	}
 
 	// Retrieves array of all data for current setup
 	get_data(){

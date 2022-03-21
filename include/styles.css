@@ -95,6 +95,7 @@ nav .export{background-image:url("../assets/images/share.svg");}
 nav .copy{background-image:url("../assets/images/copy.svg");}
 nav .delete{background-image:url("../assets/images/delete.svg");}
 nav .settings{background-image:url("../assets/images/settings.svg");}
+nav .reset{background-image:url("../assets/images/loop.svg");}
 
 
 select{
@@ -117,6 +118,18 @@ select:focus{
 	color: black;
 }
 
+.checkbox{
+	position: relative;
+	text-decoration: none;
+	color: black;
+	padding: 0.4em 0.5em 0.4em 2em;
+	margin-bottom: 0.2em;
+	background: url('../assets/images/checkbox_empty.svg') left 50% / 26px no-repeat;
+	display: block;
+}
+.checkbox.is-checked{background-image: url('../assets/images/checkbox_full.svg');}
+.checkbox:focus{transform: translateY(2px);}
+
 /* ********************************************** */
 /* Logo menu */
 /* ********************************************** */
@@ -128,7 +141,7 @@ select:focus{
 	position: relative;
 	left: 0;
 	right: 0;
-	background: rgb(255,255,255,0.9);
+	background: rgb(255,255,255,1);
 	color: black;
 	margin-bottom: 10px;
 	z-index: 500;
@@ -164,17 +177,19 @@ select:focus{
 
 .settings_panel{
 	position: absolute;
-	background: rgb(255,255,255,0.9);
-   inset: 100px 10px auto auto;
+	background: rgb(255,255,255,1);
+   inset: 98px 10px auto auto;
 	padding: 10px;
+	flex-direction: column;
+	align-items: flex-start;
+	display: flex;
 }
 .settings_panel.hide_settings{
 	display: none;
 }
-.settings_panel nav{
-	flex-direction: column;
-	align-items: flex-start;
-}
+
+.settings_panel nav{margin-top: 5px;}
+.settings_panel nav a{font-size: 14px;}
 
 /* ********************************************** */
 /* Sequences nav menu */
