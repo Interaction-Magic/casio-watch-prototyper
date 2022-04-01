@@ -201,13 +201,13 @@ document.addEventListener("DOMContentLoaded", () => {
 		helper_link.addEventListener("change", (e) => {
 
 			if(e.target.files[0]){
-				console.log(e.target.files[0]);
+				const filename = e.target.files[0].name;
 				let reader = new FileReader();
 				reader.readAsText(e.target.files[0]);
 
-				reader.onload = function() {
+				reader.onload = () => {
 					designer.load_in_data(JSON.parse(reader.result));
-					alert(`Imported: ${e.target.files[0].name}`);
+					alert(`Imported: ${filename}`);
 					designer.history_save();
 				};
 				
