@@ -15,6 +15,7 @@ document.addEventListener("DOMContentLoaded", () => {
 	const BT = new BTConnector({
 		namePrefix: "SensorWatch",  // Filter for devices with this name
 		onReceive: (msg) => {
+			console.log(msg);
 			switch(msg.substring(0,1)){
 				case 'b':
 					handle_hw_button_press(msg.substring(1,2), msg.substring(2,3));
@@ -117,10 +118,6 @@ document.addEventListener("DOMContentLoaded", () => {
 			}
 			const hash = url_target.substring(url_target.indexOf('#') + 1);
 
-			if(link.classList.contains('checkbox')){
-				link.classList.toggle('is-checked');
-			}
-
 			switch(hash){
 
 				case "play":
@@ -156,16 +153,6 @@ document.addEventListener("DOMContentLoaded", () => {
 					designer.history_reset();
 					location.reload();
 					break;
-
-				case "couple_segments":
-					set_segment_coupling(document.querySelector('.toggle_couple_segments').classList.contains('is-checked'));
-					save_preferences();
-					break;
-
-				case "red_blue_leds":
-					set_red_blue(document.querySelector('.toggle_red_blue_leds').classList.contains('is-checked'));
-					save_preferences();
-					break;
 					
 			}
 			
@@ -173,45 +160,30 @@ document.addEventListener("DOMContentLoaded", () => {
 		});
 	});
 
-	// Deal with personal interface preferences
-	// These are cosmetic things only
-	const save_preferences = () => {
-		const preferences = {
-			couple_segments: document.querySelector('.toggle_couple_segments').classList.contains('is-checked'),
-			red_blue_leds: document.querySelector('.toggle_red_blue_leds').classList.contains('is-checked')
-		}
+	// Heres all the personal preferences
+	const preferences = new Preferences({
+		preferences: [
+			{
+				name:	"red_blue_leds",
+				toggle_link: document.querySelector(".toggle_red_blue_leds"),
+				default: true,
+				set: (state) => {
+					document.body.classList.toggle('red_blue_leds', state);
+					document.querySelector('.led_0 rect').style.fill = state ? "url(#gradient_light_blue)" : "url(#gradient_light_green)";
+				}
+			},
+			{
+				name: "couple_segments",
+				toggle_link: document.querySelector(".toggle_couple_segments"),
+				default: true,
+				set: (state) => {
+					designer.set_segment_coupling(state);
+				}
+			}
+		]
+	});
 
-		localStorage.setItem('preferences', JSON.stringify(preferences));
-	}
-	const load_preferences = () => {
-		const preferences = JSON.parse(localStorage.getItem('preferences'));
-
-		if(localStorage.getItem('preferences')){
-			// Apply settings
-			set_red_blue(preferences.red_blue_leds);
-			set_segment_coupling(preferences.couple_segments);
-
-		}else{
-			// Defaults here
-			console.log("Loading default preferences");
-			set_segment_coupling(true);
-			set_red_blue(true);
-		}
-	}
-
-	const set_red_blue = (is_red_blue) => {
-		document.querySelector('.toggle_red_blue_leds').classList.toggle('is-checked', is_red_blue);
-
-		document.body.classList.toggle('red_blue_leds', is_red_blue);
-		document.querySelector('.led_0 rect').style.fill = is_red_blue ? "url(#gradient_light_blue)" : "url(#gradient_light_green)";
-	}
-	const set_segment_coupling = (is_segment_coupling) => {
-		document.querySelector('.toggle_couple_segments').classList.toggle('is-checked', is_segment_coupling);
-		designer.set_segment_coupling(is_segment_coupling);
-	}
-
-	// Load them on page load
-	load_preferences();
+	preferences.load();
 
 	// Receive input file from upload
 	const upload_file = () => {
