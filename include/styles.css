@@ -96,6 +96,7 @@ nav .copy{background-image:url("../assets/images/copy.svg");}
 nav .delete{background-image:url("../assets/images/delete.svg");}
 nav .settings{background-image:url("../assets/images/settings.svg");}
 nav .reset{background-image:url("../assets/images/loop.svg");}
+nav .warning{background-image:url("../assets/images/warning.svg");}
 
 
 select{
