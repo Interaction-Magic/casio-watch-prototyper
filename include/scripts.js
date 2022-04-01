@@ -179,6 +179,14 @@ document.addEventListener("DOMContentLoaded", () => {
 				set: (state) => {
 					designer.set_segment_coupling(state);
 				}
+			},
+			{
+				name: "sound",
+				toggle_link: document.querySelector(".toggle_show_sound"),
+				default: false,
+				set: (state) => {
+					document.body.classList.toggle('show_sound', state);
+				}
 			}
 		]
 	});
