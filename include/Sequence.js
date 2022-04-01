@@ -114,6 +114,10 @@ class Sequence{
 	//
 	// Calculate which step of the animation we are on, based on the start time and current time
 	get_current_step(start_time, time_now = Date.now()){
+
+		if(this._data.steps.length <= 0){
+			return false;
+		}
 		
 		const time_point = (time_now-start_time) % this._total_duration;
 

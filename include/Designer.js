@@ -521,16 +521,17 @@ class Designer{
 
 		// Get data for current step of active sequence and display it
 		const step = this._data.current_sequence.get_current_step(this._animation.start_time);
-		
-		// Highlight the step
-		document.querySelectorAll('.sequence_step').forEach((step_dom) => {
-			step_dom.classList.remove('active');
-		});
-		step.get_dom().classList.add('active');
+		if(step){
+			// Highlight the step
+			document.querySelectorAll('.sequence_step').forEach((step_dom) => {
+				step_dom.classList.remove('active');
+			});
+			step.get_dom().classList.add('active');
 
-		// Render this step
-		const step_data = step.get_data();
-		this.render_to_live_view(step_data);
+			// Render this step
+			const step_data = step.get_data();
+			this.render_to_live_view(step_data);
+		}
  
 		// Call again if we want to :)
 		if(this._animation.is_playing){
