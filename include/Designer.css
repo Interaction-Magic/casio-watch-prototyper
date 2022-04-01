@@ -252,14 +252,14 @@ main{
 /* ********************************************** */
 
 .sequence_step{
-	margin: 40px 10px 40px 0;
+	margin: 10px 10px 40px 0;
 	position: relative;
 }
 
 .watch_face{
 	background: rgba(255,255,255,0.4);
 	width: 300px;
-	padding: 10px;
+	padding: 10px 10px 10px 30px;
 	border-radius: 12px;
 	position: relative;
 	z-index: 20;
@@ -273,7 +273,7 @@ main{
 	border-radius: 12px;
 	position: absolute;
 	left: 0;
-	top :-30px;
+	top :0px;
 	bottom: -30px;
 	right: 0;
 	z-index: 10;
@@ -286,6 +286,15 @@ main{
 	outline: 2px solid greenyellow;
 }
 
+.step_leds{
+	position: absolute;
+	inset: 0 auto 0 0;
+	display: flex;
+	flex-direction: column;
+	z-index: 100;
+	padding: 18px 0 18px 12px;
+}
+
 .step_hardware{
 	display: flex;
 	align-items: center;
@@ -296,27 +305,34 @@ main{
 	text-decoration: none;
 	text-indent: -9404px;
 	background: white;
-	width: 15px;
-	height: 15px;
-	border-radius: 100%;
-	border: 3px solid;
-	margin-right: 4px;
+	width: 12px;
+	flex-grow: 1;
+	margin: 2.5px 0;
+	opacity: 0.25;
+
+	--led-green: rgba(172, 255, 48, 0.8);
+	--led-red: rgba(253, 10, 10, 0.8);
+	--led-blue: rgba(22, 244, 255, 0.8);
 }
 
-.led_0{border-color: rgba(172,255,48,0.3); background:rgba(172, 255, 48, 0.15);}
-.led_1{border-color: rgba(253,10,10,0.3); background:rgba(253, 10, 10, 0.15);}
+.led_0{background: var(--led-green); border-radius: 6px 6px 0 0;}
+.led_1{background: var(--led-red); border-radius: 0 0 6px 6px;}
+.red_blue_leds  .led_0{background: var(--led-blue);}
+.red_blue_leds  .led_1{background: var(--led-red);}
 
-.led_0:hover, .led_0.on:hover{border-color: white;}
-.led_1:hover, .led_1.on:hover{border-color: white;}
+.led_0.on{box-shadow: 0 0 25px 4px var(--led-green);}
+.led_1.on{box-shadow: 0 0 25px 4px var(--led-red);}
+.red_blue_leds .led_0.on{box-shadow: 0 0 25px 4px var(--led-blue);}
+.red_blue_leds .led_1.on{box-shadow: 0 0 25px 4px var(--led-red);}
 
-.led_0.on{border-color: rgba(172,255,48,1); background:rgba(172, 255, 48, 0.8);}
-.led_1.on{border-color: rgba(253,10,10,1); background:rgba(253, 10, 10, 0.8);}
+.led_0:hover, .led_0.on:hover{}
+.led_1:hover, .led_1.on:hover{}
 
-.red_blue_leds  .led_0{border-color: rgba(22, 244, 255,0.3); background:rgba(22, 244, 255, 0.15);}
-.red_blue_leds  .led_1{border-color: rgba(253,10,10,0.3); background:rgba(253, 10, 10, 0.15);}
-.red_blue_leds  .led_0.on{border-color: rgb(22, 244, 255); background:rgba(22, 244, 255, 0.8);}
-.red_blue_leds  .led_1.on{border-color: rgba(253,10,10,1); background:rgba(253, 10, 10, 0.8);}
+.led_button.on{opacity: 1;}
 
+
+.buzzer{display: none;}
+.show_sound .buzzer{display: block;}
 
 .step_parameters{
 	padding: 0 0 0 15px;

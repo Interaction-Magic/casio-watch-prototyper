@@ -27,7 +27,7 @@
 			<section class="settings_panel hide_settings">
 				<a href="#couple_segments" class="checkbox toggle_couple_segments">Coupled segments</a>
 				<a href="#red_blue_leds" class="checkbox toggle_red_blue_leds">Use Red/Blue LEDs</a>
-				<a href="#red_blue_leds" class="checkbox toggle_show_sound">Show sound</a>
+				<a href="#red_blue_leds" class="checkbox toggle_show_sound" style="display: none;">Show sound</a>
 				<nav>
 					<a href="#reset_all" class="reset">Delete all and reset</a>
 				</nav>
@@ -261,10 +261,12 @@
 			<div class="watch_face">
 				<svg class="segments" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="300 540 660 300"></svg>
 			</div>
+			<div class="step_leds">
+				<a data-colour="led_0" class="led_button led_0" href="#led_0">LED 0</a>
+				<a data-colour="led_1" class="led_button led_1" href="#led_1">LED 1</a>
+			</div>
 			<div class="step_data">
-				<div class="step_hardware">
-					<a data-colour="led_0" class="led_button led_0" href="#led_0">LED 0</a>
-					<a data-colour="led_1" class="led_button led_1" href="#led_1">LED 1</a>
+				<div class="step_buzzer">
 					<select name="buzzer" class="buzzer">
 						<option value="0">No sound</option>
 						<option value=58.27>A1#</option>
