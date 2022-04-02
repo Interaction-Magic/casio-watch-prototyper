@@ -330,7 +330,7 @@ class Step{
 		// ////////////////
 		// Set handler for duration editing
 		this.dom.querySelector(".duration").addEventListener('keydown', (e) => {
-			if(e.key === 'Enter'){
+			if(e.key === 'Enter' && !e.ctrlKey && !e.metaKey){
 				e.preventDefault();
 			  	e.target.blur();
 			}
@@ -339,7 +339,6 @@ class Step{
 			e.preventDefault();
 			if(parseInt(e.target.innerHTML) != this._data.duration){
 				this.set_duration(parseInt(e.target.innerHTML));
-				e.target.innerHTML = this._data.duration; // update back 
 				this._fire_update();
 			}
 		});
