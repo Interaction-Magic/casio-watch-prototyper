@@ -1,6 +1,6 @@
 # ⌚ Casio Watch Prototyper
 
-> Try the tool here: https://watch.interactionmagic.com/
+**Try it here --> https://watch.interactionmagic.com/**
 
 ![Example animation playing in tool](https://watch.interactionmagic.com/readme/example-gif.gif)
 
