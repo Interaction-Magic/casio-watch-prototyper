@@ -107,7 +107,7 @@ document.addEventListener("DOMContentLoaded", () => {
 	}
 
 	// Add click handlers to menu buttons
-	document.querySelectorAll("nav a, .checkbox").forEach((link) => {
+	document.querySelectorAll("nav a, .checkbox, .add_sequence").forEach((link) => {
 		link.addEventListener("click", (e) => {
 			e.preventDefault();
 
@@ -133,8 +133,14 @@ document.addEventListener("DOMContentLoaded", () => {
 					break;
 
 				case "add_sequence":
-					designer.sequence_add();
+					const new_sequence = designer.sequence_add().dom;
 					designer.history_save();
+
+					// Scroll it into view
+					window.scrollTo({
+						top: new_sequence.offsetTop,
+						behavior: 'smooth'
+					 });
 					break;
 
 				case "import":

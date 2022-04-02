@@ -20,9 +20,11 @@
 				<h1><a href="https://www.crowdsupply.com/oddly-specific-objects/sensor-watch">Sensor Watch</a> Prototyper</h1>
 			</div>
 			<nav class="right_align inverted">
-				<a href="#undo" class="undo icon_only">Undo (-1)</a>
-				<a href="#undoundo" class="undoundo icon_only">Redo (+1)</a>
-				<a href="#settings" class="settings icon_only">Settings</a>
+				<a title="Import from txt file" href="#import" class="import">Import</a>
+				<a title="Export to txt file" href="#export" class="export">Export</a>
+				<a title="Undo" href="#undo" class="undo icon_only">Undo (-1)</a>
+				<a title="Redo" href="#undoundo" class="undoundo icon_only">Redo (+1)</a>
+				<a title="Settings" href="#settings" class="settings icon_only">Settings</a>
 			</nav>
 			<section class="settings_panel hide_settings">
 				<a href="#couple_segments" class="checkbox toggle_couple_segments">Coupled segments</a>
@@ -36,16 +38,12 @@
 		<div class="wrapper">
 			<div class="sequences_nav">
 				<nav class="lighter">
-					<a href="#add_sequence" class="add">Sequence</a>
-					<a href="#import" class="import">Import</a>
-					<a href="#export" class="export">Export</a>
-				</nav>
-				<nav class="lighter right_align">
 					<a href="#play" class="play">Play</a>
 					<a href="#connect" class="connect">Connect</a>
 				</nav>
 			</div>
 			<main class="sequences"></main>
+			<a href="#add_sequence" class="add_sequence">+ Add Sequence</a>
 		</div>
 		<div class="live_output">
 			<div class="watch_wrapper">
