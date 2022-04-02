@@ -603,9 +603,9 @@ class Designer{
 
 		// Undo & redo keyboard handlers
 		document.addEventListener("keydown", (e) =>{
-			if (e.key == 'z' && e.ctrlKey){
+			if (e.key == 'z' && (e.ctrlKey || e.metaKey)){
 				this.history_undo();
-			}else	if (e.key == 'y' && e.ctrlKey){
+			}else	if (e.key == 'y' && (e.ctrlKey || e.metaKey)){
 				this.history_undoundo();
 			}
 		});
