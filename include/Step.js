@@ -332,16 +332,16 @@ class Step{
 		this.dom.querySelector(".duration").addEventListener('keydown', (e) => {
 			if(e.key === 'Enter'){
 				e.preventDefault();
-				this.set_duration(parseInt(e.target.innerHTML));
 			  	e.target.blur();
-				this._fire_update();
 			}
 		});
 		this.dom.querySelector(".duration").addEventListener("blur", (e) => {
 			e.preventDefault();
-			this.set_duration(parseInt(e.target.innerHTML));
-			e.target.innerHTML = this._data.duration; // update back 
-			this._fire_update();
+			if(parseInt(e.target.innerHTML) != this._data.duration){
+				this.set_duration(parseInt(e.target.innerHTML));
+				e.target.innerHTML = this._data.duration; // update back 
+				this._fire_update();
+			}
 		});
 
 
