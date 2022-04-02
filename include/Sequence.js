@@ -202,14 +202,12 @@ class Sequence{
 		// Add special event handler to capture Ctrl+Enter to update all step times
 		new_step.get_dom().querySelector(".duration").addEventListener('keydown', (e) => {
 			if (e.key == 'Enter' && (e.ctrlKey || e.metaKey)) {
-				if(parseInt(e.target.innerHTML) != this._data.duration){
-					const new_duration = parseInt(e.target.innerHTML);
-					for(let step of this._data.steps){
-						step.set_duration(new_duration);
-					}
-					this._fire_update();
-					e.target.blur();
+				const new_duration = parseInt(e.target.innerHTML);
+				for(let step of this._data.steps){
+					step.set_duration(new_duration);
 				}
+				this._fire_update();
+				e.target.blur();
 			}
 		});
 
