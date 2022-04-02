@@ -133,14 +133,8 @@ document.addEventListener("DOMContentLoaded", () => {
 					break;
 
 				case "add_sequence":
-					const new_sequence = designer.sequence_add();
+					designer.sequence_add().get_dom().scrollIntoView({behavior: "smooth"});
 					designer.history_save();
-
-					// Scroll it into view
-					window.scrollTo({
-						top: new_sequence.get_dom().offsetTop,
-						behavior: 'smooth'
-					 });
 					break;
 
 				case "import":

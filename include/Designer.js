@@ -666,16 +666,10 @@ class Designer{
 					sq_clone_data.index = ++this._index_counter;
 					sq_clone_data.name += ` [${this._index_counter}]`;
 
-					const new_sequence = this.sequence_add({
+					this.sequence_add({
 						after: this_sequence,
 						data: sq_clone_data
-					});
-
-					// Scroll it into view
-					window.scrollTo({
-						top: new_sequence.get_dom().offsetTop,
-						behavior: 'smooth'
-					 });
+					}).get_dom().scrollIntoView({behavior: "smooth"});
 
 					this.history_save();
 					e.target.blur();
