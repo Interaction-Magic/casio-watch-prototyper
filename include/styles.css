@@ -163,6 +163,7 @@ select:focus{
 	margin:0 0 0 10px;
 	font-size: 22px;
 	font-weight: 300;
+	line-height: 1em;
 }
 .logo_menu h1 a{
 	color: black;
@@ -170,6 +171,9 @@ select:focus{
 }
 .logo_menu h1 a:hover{
 	text-decoration: underline;
+}
+.logo_menu h1 .subline{
+	font-size: 14px;
 }
 
 /* ********************************************** */
