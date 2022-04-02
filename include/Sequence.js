@@ -203,12 +203,6 @@ class Sequence{
 		this._recalculate_step_order();
 		this._update_total_duration();
 
-		// Scroll it into view
-		window.scrollTo({
-			top: new_step.get_dom().offsetTop,
-			behavior: 'smooth'
-		});
-
 		return new_step;
 	}
 
@@ -278,8 +272,15 @@ class Sequence{
 		// Add some event handlers across the whole sequence
 		this.dom.querySelector(".add_step").addEventListener("click", (e) => {
 			e.preventDefault();
-			this.step_add();
+			const new_step = this.step_add();
 			this._fire_update();
+
+			// Scroll it into view
+			window.scrollTo({
+				top: new_step.get_dom().offsetTop,
+				behavior: 'smooth'
+			});
+
 		});
 		this.dom.addEventListener("click", (e) => {
 			e.preventDefault();
@@ -299,7 +300,14 @@ class Sequence{
 					const step_clone_data = JSON.parse(JSON.stringify(this._get_step_from_index(this_step.dataset.index).get_data()));
 					step_clone_data.index = ++this._index_counter;
 					step_clone_data.after = this_step;
-					this.step_add(step_clone_data);
+					const new_step = this.step_add(step_clone_data);
+
+					// Scroll it into view
+					window.scrollTo({
+						top: new_step.get_dom().offsetTop,
+						behavior: 'smooth'
+					});
+
 					this._fire_update();
 					e.target.blur();
 					break;
