@@ -333,6 +333,12 @@ class Step{
 			if(e.key === 'Enter' && !e.ctrlKey && !e.metaKey){
 				e.preventDefault();
 			  	e.target.blur();
+			}else if(e.key === 'ArrowUp'){
+				e.preventDefault();
+				e.target.innerHTML = parseInt(e.target.innerHTML)+50;
+			}else if(e.key === 'ArrowDown'){
+				e.preventDefault();
+				e.target.innerHTML = parseInt(e.target.innerHTML)-50;
 			}
 		});
 		this.dom.querySelector(".duration").addEventListener("blur", (e) => {
