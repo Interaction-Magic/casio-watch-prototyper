@@ -2,6 +2,8 @@
 
 > Try the tool here: https://watch.interactionmagic.com/
 
+![Example animation playing in tool](https://watch.interactionmagic.com/readme/example-gif.gif)
+
 This is an interaction design tool for the Casio F91-W watch.
 
 It can be used in connection with the [Sensor Watch](https://www.crowdsupply.com/oddly-specific-objects/sensor-watch) project by [Joey Castillo](https://twitter.com/josecastillo) to update the watch display in realtime.
