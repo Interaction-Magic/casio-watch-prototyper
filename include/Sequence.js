@@ -203,6 +203,12 @@ class Sequence{
 		this._recalculate_step_order();
 		this._update_total_duration();
 
+		// Scroll it into view
+		window.scrollTo({
+			top: new_step.get_dom().offsetTop,
+			behavior: 'smooth'
+		});
+
 		return new_step;
 	}
 

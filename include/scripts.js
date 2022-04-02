@@ -133,12 +133,12 @@ document.addEventListener("DOMContentLoaded", () => {
 					break;
 
 				case "add_sequence":
-					const new_sequence = designer.sequence_add().dom;
+					const new_sequence = designer.sequence_add();
 					designer.history_save();
 
 					// Scroll it into view
 					window.scrollTo({
-						top: new_sequence.offsetTop,
+						top: new_sequence.get_dom().offsetTop,
 						behavior: 'smooth'
 					 });
 					break;
